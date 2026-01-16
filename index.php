@@ -4,9 +4,9 @@ require_once 'config/database.php';
 // Redirect if already logged in
 if (isLoggedIn()) {
     if (hasRole('admin') || hasRole('manager')) {
-        header('Location: admin_dashboard.php');
+        header('Location: admin/dashboard.php');
     } else {
-        header('Location: trainee_dashboard.php');
+        header('Location: trainee/dashboard.php');
     }
     exit();
 }
@@ -83,6 +83,7 @@ if (isLoggedIn()) {
             display: flex;
             align-items: center;
             gap: 10px;
+            text-decoration: none;
         }
 
         .logo i {
@@ -105,6 +106,51 @@ if (isLoggedIn()) {
 
         .nav-menu a:hover {
             color: var(--primary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: var(--gray-700);
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .badge-info {
+            background: #3498db;
+            color: white;
         }
 
         .btn {
@@ -446,7 +492,7 @@ if (isLoggedIn()) {
             text-align: center;
         }
 
-        /* CTA Section */
+        /* CTA disappearing */
         .cta-section {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
@@ -473,8 +519,58 @@ if (isLoggedIn()) {
 
         /* Responsive */
         @media (max-width: 992px) {
+            .header-content {
+                padding: 16px 20px;
+            }
+
             .nav-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--white);
+                flex-direction: column;
+                gap: 12px;
+                align-items: center;
+                padding: 32px 0;
+                box-shadow: var(--shadow-lg);
+                z-index: 999;
                 display: none;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-menu a {
+                font-size: 17px;
+                padding: 14px 40px;
+                border-radius: 8px;
+                width: auto;
+                text-align: center;
+            }
+
+            .nav-menu a:hover {
+                background: var(--primary-lighter);
+                color: var(--primary);
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .header-right {
+                gap: 12px;
+            }
+
+            .user-info {
+                gap: 12px;
+                font-size: 14px;
+            }
+
+            .user-info .btn {
+                padding: 8px 16px;
+                font-size: 13px;
             }
 
             .hero h1 {
@@ -530,18 +626,58 @@ if (isLoggedIn()) {
 <body>
     <div class="header">
         <div class="header-content">
-            <div class="logo">
-                <i class="fas fa-shield-alt"></i>
-                CyberAware
-            </div>
+            <?php if (isLoggedIn()): ?>
+                <a href="<?php echo (hasRole('admin') || hasRole('manager')) ? 'admin_dashboard.php' : 'trainee_dashboard.php'; ?>" class="logo">
+                    <i class="fas fa-shield-alt"></i> CyberAware
+                </a>
+            <?php else: ?>
+                <a href="index.php" class="logo">
+                    <i class="fas fa-shield-alt"></i> CyberAware
+                </a>
+            <?php endif; ?>
+            
             <nav class="nav-menu">
-                <a href="#features">Features</a>
-                <a href="#about">About</a>
-                <a href="compliance.php">Compliance</a>
-                <a href="contact.php">Contact</a>
+                <?php if (isLoggedIn()): ?>
+                    <?php if (hasRole('admin') || hasRole('manager')): ?>
+                        <a href="admin_dashboard.php">Dashboard</a>
+                        <a href="create_campaign.php">Campaigns</a>
+                        <a href="manage_users.php">Users</a>
+                        <a href="phishing_templates.php">Templates</a>
+                        <a href="reports.php">Reports</a>
+                    <?php else: ?>
+                        <a href="trainee_dashboard.php">Dashboard</a>
+                        <a href="my_progress.php">My Progress</a>
+                        <a href="modules.php">Training Modules</a>
+                    <?php endif; ?>
+                    <a href="compliance.php">Compliance</a>
+                    <a href="help.php">Help</a>
+                <?php else: ?>
+                    <a href="#features">Features</a>
+                    <a href="about.php">About</a>
+                    <a href="compliance.php">Compliance</a>
+                    <a href="contact.php">Contact</a>
+                <?php endif; ?>
             </nav>
-            <div>
-                <a href="pages/login.php" class="btn btn-primary">Login</a>
+
+            <div class="header-right">
+                <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="user-info">
+                    <?php if (isLoggedIn()): ?>
+                        <span>👤 <?php echo htmlspecialchars($_SESSION['full_name']); ?></span>
+                        <span class="badge <?php 
+                            echo hasRole('admin') ? 'badge-danger' : 
+                                (hasRole('manager') ? 'badge-warning' : 'badge-info'); 
+                        ?>">
+                            <?php echo strtoupper($_SESSION['role']); ?>
+                        </span>
+                        <a href="logout.php" class="btn btn-secondary">Logout</a>
+                    <?php else: ?>
+                        <a href="pages/login.php" class="btn btn-primary">Login</a>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </div>
@@ -553,7 +689,7 @@ if (isLoggedIn()) {
         <h1>CyberAware</h1>
         <p>Empower your team to recognize and defend against cyber threats</p>
         <div class="hero-buttons">
-            <a href="pages/login.php" class="hero-btn hero-btn-primary">
+            <a href="login.php" class="hero-btn hero-btn-primary">
                 <i class="fas fa-rocket"></i>
                 Get Started
             </a>
@@ -571,7 +707,7 @@ if (isLoggedIn()) {
                 Our Mission
             </h2>
             <p>
-                <strong>This platform is designed to simulate common cyberattack scenarios for employee awareness and training,
+                <strong>This platform is designed to simulate cyberattack scenarios for employee awareness and training,
                 helping users recognize, avoid, and report threats.</strong>
             </p>
             <p class="subtitle">
@@ -641,7 +777,7 @@ if (isLoggedIn()) {
                     <div class="stat-label">Training Modules</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">15min</div>
+                    <div class="stat-number">2h15min</div>
                     <div class="stat-label">Avg Completion Time</div>
                 </div>
                 <div class="stat-item">
@@ -711,5 +847,39 @@ if (isLoggedIn()) {
     </div>
     
     <?php include 'includes/footer.php'; ?>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menu-toggle');
+            if (menuToggle) {
+                const navMenu = document.querySelector('.nav-menu');
+                const icon = menuToggle.querySelector('i');
+
+                menuToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+
+                    if (navMenu.classList.contains('active')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                        document.body.style.overflow = '';
+                    }
+                });
+
+                // Close menu when a link is clicked
+                document.querySelectorAll('.nav-menu a').forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        navMenu.classList.remove('active');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                        document.body.style.overflow = '';
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>

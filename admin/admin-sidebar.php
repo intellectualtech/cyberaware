@@ -57,8 +57,6 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
     </ul>
 </aside>
 
-
-
 <style>
     :root {
         --primary: #FF8C42;
