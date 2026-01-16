@@ -1,15 +1,16 @@
+
 <?php
 // Database Configuration
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', 'David');
-define('DB_NAME', 'awareness');
+define('DB_NAME', 'cyberaware;');
 
 // Create database connection
 function getDBConnection() {
     try {
         $conn = new PDO(
-            "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
+            "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME ,
             DB_USER,
             DB_PASS,
             [
