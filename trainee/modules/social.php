@@ -246,9 +246,13 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
     <style>
         /* Your existing <style> block - unchanged */
         :root {
-            --primary: #FF8C42;
-            --primary-dark: #E67A2E;
-            --primary-light: #FFF4ED;
+            --cyber-yellow: #FFD60A;
+            --cyber-gold: #FFC300;
+            --dark-navy: #0F1419;
+            --dark-slate: #1A1E2E;
+            --primary: #FFD60A;
+            --primary-dark: #FFC300;
+            --primary-light: #FFF8DC;
             --success: #10b981;
             --success-light: #d1fae5;
             --success-dark: #047857;
@@ -296,12 +300,13 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
 
         /* Page Header */
         .page-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--dark-slate) 100%);
             border-radius: var(--radius);
             padding: 2.5rem 2rem;
             margin-bottom: 2.5rem;
             box-shadow: var(--shadow-md);
             color: white;
+            border-left: 8px solid var(--cyber-yellow);
         }
 
         .page-header h2 {
@@ -330,7 +335,7 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
             padding: 1.5rem;
             border-radius: var(--radius);
             box-shadow: var(--shadow-sm);
-            border: 1px solid var(--gray-200);
+            border-left: 5px solid var(--cyber-yellow);
             transition: all 0.2s;
         }
 

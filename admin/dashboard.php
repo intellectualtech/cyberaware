@@ -94,28 +94,29 @@ $current_page = 'dashboard';
 
     <style>
         :root {
-            --primary: #FF8C42;
-            --primary-dark: #E67A2E;
-            --primary-light: #FFF4ED;
-            --primary-lighter: #FFEAD9;
-            --success: #00A65A;
-            --warning: #F39C12;
-            --danger: #DD4B39;
-            --dark: #2C2C2C;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-300: #D4D4D4;
-            --gray-400: #B8B8B8;
-            --gray-500: #9E9E9E;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1e293b;
+            /* Primary Brand Colors */
+            --cyber-yellow: #FFD60A;
+            --cyber-gold: #FFC300;
+            --cyber-light: #FFF8DC;
             --white: #FFFFFF;
+            
+            /* Security Dark Tones */
+            --dark-navy: #0F1419;
+            --dark-slate: #1A1E2E;
+            --charcoal: #2D3142;
+            
+            /* Accent Colors */
+            --shield-green: #10B981;
+            --alert-red: #EF4444;
+            --info-blue: #3B82F6;
+            
+            /* Shadows & Effects */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --shadow-yellow: 0 0 20px rgba(255, 214, 10, 0.3);
+            
             --sidebar-width: 260px;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             --radius: 12px;
         }
 
@@ -127,8 +128,8 @@ $current_page = 'dashboard';
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--gray-100);
-            color: var(--dark);
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--dark-slate) 100%);
+            color: var(--white);
             line-height: 1.6;
         }
 
@@ -139,25 +140,34 @@ $current_page = 'dashboard';
         }
 
         .header {
-            background: var(--white);
-            border-bottom: 1px solid var(--gray-200);
-            padding: 20px 32px;
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--charcoal) 100%);
+            border-bottom: 5px solid var(--cyber-yellow);
+            padding: 30px 32px;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 8px 32px rgba(255, 214, 10, 0.15);
         }
 
         .page-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--dark);
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--cyber-yellow);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title i {
+            font-size: 36px;
+            color: var(--cyber-gold);
         }
 
         .page-subtitle {
-            font-size: 13px;
-            color: var(--gray-600);
-            margin-top: 2px;
-            font-weight: 400;
+            font-size: 14px;
+            color: rgba(255, 214, 10, 0.7);
+            margin-top: 6px;
+            font-weight: 500;
         }
 
         .container {
@@ -165,217 +175,360 @@ $current_page = 'dashboard';
             width: 100%;
         }
 
+        /* Threat Level Indicator */
+        .threat-banner {
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.1) 0%, rgba(255, 214, 10, 0.05) 100%);
+            border: 2px solid var(--cyber-yellow);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .threat-indicator {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: radial-gradient(circle, var(--cyber-yellow) 0%, var(--cyber-gold) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: var(--dark-navy);
+            box-shadow: 0 0 30px rgba(255, 214, 10, 0.4);
+        }
+
+        .threat-content h3 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--cyber-yellow);
+            margin-bottom: 6px;
+        }
+
+        .threat-content p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
         /* Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
             margin-bottom: 32px;
         }
 
         .stat-card {
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            padding: 24px;
-            transition: all 0.2s;
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.08) 0%, rgba(255, 214, 10, 0.02) 100%);
+            border: 2px solid rgba(255, 214, 10, 0.3);
+            border-left: 5px solid var(--cyber-yellow);
+            border-radius: 14px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 214, 10, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
         }
 
         .stat-card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(255, 214, 10, 0.25);
+            transform: translateY(-8px);
+            border-color: var(--cyber-gold);
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.15) 0%, rgba(255, 214, 10, 0.05) 100%);
+        }
+
+        .stat-card.critical {
+            border-left-color: var(--alert-red);
+            border-color: rgba(239, 68, 68, 0.3);
         }
 
         .stat-card.warning {
-            border-left: 5px solid var(--warning);
+            border-left-color: #F59E0B;
+            border-color: rgba(245, 158, 11, 0.3);
         }
 
         .stat-card.success {
-            border-left: 5px solid var(--success);
+            border-left-color: var(--shield-green);
+            border-color: rgba(16, 185, 129, 0.3);
         }
 
         .stat-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
         }
 
         .stat-label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--gray-600);
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(255, 214, 10, 0.9);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .stat-icon.primary { background: var(--primary-lighter); color: var(--primary); }
-        .stat-icon.success { background: #E8F5E9; color: var(--success); }
-        .stat-icon.warning { background: #FFF3E0; color: var(--warning); }
-        .stat-icon.danger { background: #FFEBEE; color: var(--danger); }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 4px;
-        }
-
-        .stat-description {
-            font-size: 13px;
-            color: var(--gray-600);
-        }
-
-        /* Action Buttons */
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-
-        .action-card {
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            padding: 24px;
-            text-align: center;
-            transition: all 0.2s;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .action-card:hover {
-            border-color: var(--primary);
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .action-icon {
             width: 56px;
             height: 56px;
-            background: var(--primary-light);
-            color: var(--primary);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
-            margin: 0 auto 16px;
+            font-size: 28px;
+        }
+
+        .stat-icon.primary { 
+            background: linear-gradient(135deg, var(--cyber-yellow) 0%, var(--cyber-gold) 100%);
+            color: var(--dark-navy);
+            box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4);
+        }
+        .stat-icon.success { 
+            background: linear-gradient(135deg, var(--shield-green) 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        .stat-icon.warning { 
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+        .stat-icon.danger { 
+            background: linear-gradient(135deg, var(--alert-red) 0%, #DC2626 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .stat-value {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--cyber-yellow);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 10px rgba(255, 214, 10, 0.3);
+        }
+
+        .stat-description {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Security Cards Grid */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.08) 0%, rgba(255, 214, 10, 0.02) 100%);
+            border: 2px solid rgba(255, 214, 10, 0.3);
+            border-left: 6px solid var(--cyber-yellow);
+            border-radius: 14px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 214, 10, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .action-card:hover {
+            border-color: var(--cyber-gold);
+            box-shadow: 0 12px 40px rgba(255, 214, 10, 0.25);
+            transform: translateY(-10px);
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.15) 0%, rgba(255, 214, 10, 0.05) 100%);
+        }
+
+        .action-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, var(--cyber-yellow) 0%, var(--cyber-gold) 100%);
+            color: var(--dark-navy);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 24px;
+            box-shadow: 0 8px 24px rgba(255, 214, 10, 0.3);
+            position: relative;
+            z-index: 1;
         }
 
         .action-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 8px;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--cyber-yellow);
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
         }
 
         .action-description {
-            font-size: 13px;
-            color: var(--gray-600);
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.75);
+            position: relative;
+            z-index: 1;
         }
 
-        /* Campaign Card */
+        /* Campaign/Threat Assessment Card */
         .campaign-card {
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            padding: 28px;
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.08) 0%, rgba(255, 214, 10, 0.02) 100%);
+            border: 2px solid rgba(255, 214, 10, 0.3);
+            border-left: 6px solid var(--cyber-yellow);
+            border-radius: 14px;
+            padding: 36px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .campaign-card::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -30%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 214, 10, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
         }
 
         .campaign-header {
-            margin-bottom: 24px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid rgba(255, 214, 10, 0.2);
+            position: relative;
+            z-index: 1;
         }
 
         .campaign-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 4px;
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--cyber-yellow);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .campaign-title i {
+            font-size: 28px;
+            color: var(--cyber-gold);
         }
 
         .campaign-subtitle {
-            font-size: 13px;
-            color: var(--gray-600);
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .campaign-info {
             display: grid;
             gap: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .info-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px;
-            background: var(--gray-50);
-            border-radius: 6px;
+            padding: 20px;
+            background: rgba(255, 214, 10, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid var(--cyber-yellow);
+            border: 1px solid rgba(255, 214, 10, 0.15);
         }
 
         .info-label {
             font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-700);
+            font-weight: 700;
+            color: var(--cyber-yellow);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .info-value {
-            font-size: 14px;
-            color: var(--dark);
-            font-weight: 500;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 600;
         }
 
         .progress-container {
-            margin-top: 12px;
+            margin-top: 16px;
+            position: relative;
+            z-index: 1;
         }
 
         .progress-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 14px;
         }
 
         .progress-label {
-            font-size: 13px;
-            color: var(--gray-600);
-            font-weight: 500;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
         }
 
         .progress-percent {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--primary);
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--cyber-yellow);
+            text-shadow: 0 0 15px rgba(255, 214, 10, 0.4);
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
-            background: var(--gray-200);
-            border-radius: 4px;
+            height: 14px;
+            background: rgba(255, 214, 10, 0.08);
+            border-radius: 10px;
             overflow: hidden;
+            border: 2px solid rgba(255, 214, 10, 0.25);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            border-radius: 4px;
+            background: linear-gradient(90deg, var(--cyber-yellow) 0%, var(--cyber-gold) 100%);
+            border-radius: 10px;
             transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 214, 10, 0.5);
         }
 
         @media (max-width: 992px) {
@@ -394,11 +547,11 @@ $current_page = 'dashboard';
             }
 
             .header {
-                padding: 16px 20px;
+                padding: 20px;
             }
 
             .page-title {
-                font-size: 20px;
+                font-size: 24px;
             }
         }
 
@@ -420,102 +573,113 @@ $current_page = 'dashboard';
     <main class="main-content">
         <header class="header">
             <div>
-                <h2 class="page-title">Training Platform Overview</h2>
-                <p class="page-subtitle">Security Awareness & Phishing Simulation Dashboard</p>
+                <h2 class="page-title"><i class="fas fa-shield-alt"></i>Security Operations Center</h2>
+                <p class="page-subtitle">Threat Assessment & Security Awareness Metrics</p>
             </div>
         </header>
 
         <div class="container">
-            <!-- Stats Grid -->
+            <!-- Threat Level Banner -->
+            <div class="threat-banner">
+                <div class="threat-indicator">
+                    <i class="fas fa-exclamation"></i>
+                </div>
+                <div class="threat-content">
+                    <h3>Current Threat Posture</h3>
+                    <p>Monitor organizational security awareness and identify at-risk employees for targeted intervention</p>
+                </div>
+            </div>
+
+            <!-- Security Metrics Grid -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-header">
-                        <span class="stat-label">Trained Employees</span>
+                        <span class="stat-label">🛡️ Protected Users</span>
                         <div class="stat-icon primary">
-                            <i class="fas fa-users"></i>
+                            <i class="fas fa-shield-alt"></i>
                         </div>
                     </div>
                     <div class="stat-value"><?= number_format($total_employees) ?></div>
-                    <div class="stat-description">Active trainees enrolled</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span class="stat-label">Active Campaigns</span>
-                        <div class="stat-icon success">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value"><?= $active_campaigns ?></div>
-                    <div class="stat-description">Currently running</div>
-                </div>
-
-                <div class="stat-card <?= $avg_click_rate > 15 ? 'warning' : 'success' ?>">
-                    <div class="stat-header">
-                        <span class="stat-label">Avg. Click Rate</span>
-                        <div class="stat-icon warning">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value"><?= $avg_click_rate ?>%</div>
-                    <div class="stat-description">Phishing simulation clicks</div>
+                    <div class="stat-description">Active threat-aware users</div>
                 </div>
 
                 <div class="stat-card success">
                     <div class="stat-header">
-                        <span class="stat-label">Avg. Report Rate</span>
+                        <span class="stat-label">🎯 Active Exercises</span>
                         <div class="stat-icon success">
-                            <i class="fas fa-check-circle"></i>
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value"><?= $active_campaigns ?></div>
+                    <div class="stat-description">Live security simulations</div>
+                </div>
+
+                <div class="stat-card <?= $avg_click_rate > 15 ? 'critical' : 'success' ?>">
+                    <div class="stat-header">
+                        <span class="stat-label">⚠️ Threat Fall Rate</span>
+                        <div class="stat-icon <?= $avg_click_rate > 15 ? 'danger' : 'success' ?>">
+                            <i class="fas fa-virus"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value"><?= $avg_click_rate ?>%</div>
+                    <div class="stat-description">Users vulnerable to phishing</div>
+                </div>
+
+                <div class="stat-card success">
+                    <div class="stat-header">
+                        <span class="stat-label">✓ Defense Rate</span>
+                        <div class="stat-icon success">
+                            <i class="fas fa-check-shield"></i>
                         </div>
                     </div>
                     <div class="stat-value"><?= $avg_report_rate ?>%</div>
                     <div class="stat-description">Users reporting threats</div>
                 </div>
 
-                <div class="stat-card <?= $high_risk_users > 0 ? 'warning' : '' ?>">
+                <div class="stat-card <?= $high_risk_users > 0 ? 'critical' : 'success' ?>">
                     <div class="stat-header">
-                        <span class="stat-label">High-Risk Users</span>
-                        <div class="stat-icon danger">
-                            <i class="fas fa-user-shield"></i>
+                        <span class="stat-label">🔴 Critical Risk</span>
+                        <div class="stat-icon <?= $high_risk_users > 0 ? 'danger' : 'success' ?>">
+                            <i class="fas fa-user-times"></i>
                         </div>
                     </div>
                     <div class="stat-value"><?= $high_risk_users ?></div>
-                    <div class="stat-description">Risk score above 60</div>
+                    <div class="stat-description">Users requiring immediate training</div>
                 </div>
             </div>
 
-            <!-- Action Cards -->
+            <!-- Threat Management Actions -->
             <div class="action-grid">
                 <a href="campaigns.php" class="action-card">
                     <div class="action-icon">
-                        <i class="fas fa-tasks"></i>
+                        <i class="fas fa-virus"></i>
                     </div>
-                    <div class="action-title">Manage Campaigns</div>
-                    <div class="action-description">Create, edit, and monitor training campaigns</div>
+                    <div class="action-title">Manage Threat Campaigns</div>
+                    <div class="action-description">Launch, monitor & control active threat simulations</div>
                 </a>
 
                 <a href="department-scores.php" class="action-card">
                     <div class="action-icon">
-                        <i class="fas fa-chart-line"></i>
+                        <i class="fas fa-chart-radar"></i>
                     </div>
-                    <div class="action-title">View Department Scores</div>
-                    <div class="action-description">Analyze performance by department and team</div>
+                    <div class="action-title">Risk Assessment Report</div>
+                    <div class="action-description">Analyze threat exposure by department & role</div>
                 </a>
 
                 <a href="export-report.php" class="action-card">
                     <div class="action-icon">
-                        <i class="fas fa-download"></i>
+                        <i class="fas fa-file-contract"></i>
                     </div>
-                    <div class="action-title">Export Summary Report</div>
-                    <div class="action-description">Download comprehensive analytics and insights</div>
+                    <div class="action-title">Compliance Export</div>
+                    <div class="action-description">Generate security compliance & audit reports</div>
                 </a>
             </div>
 
-            <!-- Current Campaign -->
+            <!-- Current Campaign / Active Threat -->
             <div class="campaign-card">
                 <div class="campaign-header">
-                    <h3 class="campaign-title">Current Active Campaign</h3>
-                    <p class="campaign-subtitle">Real-time campaign performance and completion status</p>
+                    <h3 class="campaign-title"><i class="fas fa-crosshairs"></i>Active Threat Simulation</h3>
+                    <p class="campaign-subtitle">Current security exercise performance and completion metrics</p>
                 </div>
 
                 <div class="campaign-info">
@@ -525,16 +689,16 @@ $current_page = 'dashboard';
                     </div>
 
                     <div class="info-row">
-                        <span class="info-label">End Date:</span>
+                        <span class="info-label">Simulation End Date:</span>
                         <span class="info-value"><?= htmlspecialchars($campaign_end_date) ?></span>
                     </div>
 
                     <div class="info-row">
                         <div style="flex: 1;">
-                            <div class="info-label" style="margin-bottom: 8px;">Campaign Progress:</div>
+                            <div class="info-label" style="margin-bottom: 10px;">User Completion Rate:</div>
                             <div class="progress-container">
                                 <div class="progress-header">
-                                    <span class="progress-label"><?= $campaign_completed_users ?> of <?= number_format($total_employees) ?> employees completed</span>
+                                    <span class="progress-label"><?= $campaign_completed_users ?> of <?= number_format($total_employees) ?> users trained</span>
                                     <span class="progress-percent"><?= $campaign_progress ?>%</span>
                                 </div>
                                 <div class="progress-bar">

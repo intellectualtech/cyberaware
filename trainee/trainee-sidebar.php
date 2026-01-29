@@ -78,9 +78,11 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
 
 <style>
     :root {
-        --primary: #FF8C42;
-        --primary-dark: #E67A2E;
-        --primary-light: #FFF4ED;
+        --cyber-yellow: #FFD60A;
+        --cyber-gold: #FFC300;
+        --dark-navy: #0F1419;
+        --dark-slate: #1A1E2E;
+        --white: #FFFFFF;
         --gray-50: #f8fafc;
         --gray-100: #f1f5f9;
         --gray-200: #e2e8f0;
@@ -94,8 +96,8 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
 
     .sidebar {
         width: var(--sidebar-width);
-        background: white;
-        border-right: 1px solid var(--gray-200);
+        background: var(--dark-navy);
+        border-right: 5px solid var(--cyber-yellow);
         box-shadow: var(--shadow-md);
         position: fixed;
         height: 100vh;
@@ -108,19 +110,19 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
 
     .sidebar-header {
         padding: 0 1.8rem 2rem;
-        border-bottom: 1px solid var(--gray-200);
+        border-bottom: 1px solid rgba(255, 214, 10, 0.2);
         margin-bottom: 1.5rem;
     }
 
     .sidebar-header h1 {
         font-size: 1.6rem;
         font-weight: 700;
-        color: var(--primary-dark);
+        color: var(--cyber-yellow);
         margin: 0;
     }
 
     .sidebar-header p {
-        color: var(--gray-600);
+        color: rgba(255, 214, 10, 0.7);
         font-size: 0.95rem;
         margin: 0.3rem 0 0 0;
     }
@@ -139,22 +141,24 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         display: flex;
         align-items: center;
         padding: 0.9rem 1.8rem;
-        color: var(--gray-700);
+        color: rgba(255, 255, 255, 0.7);
         text-decoration: none;
         font-weight: 500;
-        transition: all 0.2s;
+        transition: all 0.3s;
         border-left: 3px solid transparent;
     }
 
     .sidebar-nav a:hover {
-        background: var(--gray-100);
+        background: rgba(255, 214, 10, 0.1);
+        color: var(--cyber-yellow);
+    }
         color: var(--primary-dark);
     }
 
     .sidebar-nav a.active {
-        background: var(--primary-light);
-        color: var(--primary);
-        border-left-color: var(--primary);
+        background: rgba(255, 214, 10, 0.15);
+        color: var(--cyber-yellow);
+        border-left-color: var(--cyber-yellow);
         font-weight: 600;
     }
 

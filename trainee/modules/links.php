@@ -242,10 +242,14 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
 
     <style>
         :root {
-            --primary: #FF8C42;
-            --primary-dark: #E67A2E;
-            --primary-light: #FFF4ED;
-            --primary-lighter: #FFEAD9;
+            --cyber-yellow: #FFD60A;
+            --cyber-gold: #FFC300;
+            --dark-navy: #0F1419;
+            --dark-slate: #1A1E2E;
+            --primary: #FFD60A;
+            --primary-dark: #FFC300;
+            --primary-light: #FFF8DC;
+            --primary-lighter: #FFF8DC;
             --success: #00A65A;
             --warning: #F39C12;
             --danger: #DD4B39;
@@ -312,6 +316,7 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
             padding: 1.5rem;
             border-radius: var(--radius);
             box-shadow: var(--shadow-sm);
+            border-left: 5px solid var(--cyber-yellow);
         }
 
         .progress-bar {

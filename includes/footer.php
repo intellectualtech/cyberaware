@@ -47,11 +47,11 @@
 
 <style>
     .footer {
-        background: var(--gray-800, #1e293b);
+        background: var(--dark-navy, #0F1419);
         color: var(--gray-200, #e2e8f0);
         padding: 48px 32px 32px;
         margin-top: 80px;
-        border-top: 4px solid var(--primary, #FF8C42);
+        border-top: 5px solid var(--cyber-yellow, #FFD60A);
     }
 
     .footer-container {
@@ -70,7 +70,7 @@
         gap: 12px;
         font-size: 28px;
         font-weight: 700;
-        color: var(--primary, #FF8C42);
+        color: var(--cyber-yellow, #FFD60A);
         margin-bottom: 12px;
     }
 
@@ -80,7 +80,7 @@
 
     .footer-tagline {
         font-size: 15px;
-        color: var(--gray-400, #B8B8B8);
+        color: rgba(255, 214, 10, 0.7);
         font-weight: 500;
     }
 
@@ -96,12 +96,12 @@
         color: var(--gray-300, #D4D4D4);
         font-weight: 500;
         padding: 8px 16px;
-        background: rgba(255, 140, 66, 0.1);
+        background: rgba(255, 214, 10, 0.1);
         border-radius: 20px;
     }
 
     .footer-compliance i {
-        color: var(--primary, #FF8C42);
+        color: var(--cyber-yellow, #FFD60A);
         font-size: 16px;
     }
 
@@ -119,7 +119,7 @@
         text-decoration: none;
         font-size: 14px;
         font-weight: 500;
-        transition: color 0.2s;
+        transition: all 0.3s;
         display: inline-flex;
         align-items: center;
         gap: 6px;
@@ -128,8 +128,8 @@
     }
 
     .footer-links a:hover {
-        color: var(--primary, #FF8C42);
-        background: rgba(255, 140, 66, 0.1);
+        color: var(--cyber-yellow, #FFD60A);
+        background: rgba(255, 214, 10, 0.15);
     }
 
     .footer-links a i {

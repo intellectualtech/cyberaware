@@ -225,14 +225,18 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
     <style>
         /* Style merged from original attachments.php (danger theme) + needed elements from phishing.php */
         :root {
-            --primary: #FF8C42;
-            --primary-dark: #E67A2E;
+            --cyber-yellow: #FFD60A;
+            --cyber-gold: #FFC300;
+            --dark-navy: #0F1419;
+            --dark-slate: #1A1E2E;
+            --primary: #FFD60A;
+            --primary-dark: #FFC300;
             --success: #10b981;
             --success-light: #d1fae5;
             --danger: #dc2626;
             --danger-light: #fef2f2;
-            --warning: #f59e0b;
-            --warning-light: #fef3c7;
+            --warning: #FFD60A;
+            --warning-light: #FFF8DC;
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
@@ -249,23 +253,24 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
         .main-content { margin-left: var(--sidebar-width); padding: 2.5rem 2rem; min-height: 100vh; }
         .container { max-width: 1100px; margin: 0 auto; }
         .page-header {
-            background: linear-gradient(135deg, var(--danger), #b91c1c);
+            background: linear-gradient(135deg, var(--dark-navy), var(--dark-slate));
             border-radius: var(--radius);
             padding: 3rem 2.5rem;
             margin-bottom: 2.5rem;
             box-shadow: var(--shadow-md);
             color: white;
             text-align: center;
+            border-left: 8px solid var(--cyber-yellow);
         }
         .page-header h2 { font-size: 2.4rem; font-weight: 700; margin-bottom: 0.8rem; }
         .page-header p { font-size: 1.2rem; opacity: 0.95; }
         .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
-        .stat-card { background: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow-sm); text-align: center; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow-sm); text-align: center; border-left: 5px solid var(--cyber-yellow); }
         .stat-card .stat-label { font-size: 0.9rem; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-        .stat-card .stat-value { font-size: 2.2rem; font-weight: 700; color: var(--danger); margin: 0.5rem 0; }
+        .stat-card .stat-value { font-size: 2.2rem; font-weight: 700; color: var(--cyber-yellow); margin: 0.5rem 0; }
         .module-progress { margin-bottom: 2rem; }
         .progress-bar { height: 10px; background: var(--gray-200); border-radius: 5px; overflow: hidden; margin-top: 0.5rem; }
-        .progress-fill { height: 100%; background: var(--danger); width: <?= $module_progress ?>%; transition: width 0.8s ease; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--cyber-yellow), var(--cyber-gold)); width: <?= $module_progress ?>%; transition: width 0.8s ease; }
         .video-intro { margin-bottom: 2.5rem; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-md); }
         .video-intro video { width: 100%; max-height: 500px; object-fit: cover; }
         .email-wrapper { background: white; border-radius: var(--radius); box-shadow: var(--shadow-md); overflow: hidden; margin-bottom: 2rem; }
@@ -277,7 +282,7 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
         .email-subject { font-size: 1.5rem; font-weight: 700; padding: 1.5rem 2rem; background: white; border-bottom: 1px solid var(--gray-200); }
         .email-body { padding: 2.5rem 2rem; text-align: center; font-size: 1.1rem; line-height: 1.8; }
         .attachment-section { padding: 2.5rem 2rem; background: linear-gradient(to bottom, white, var(--gray-50)); }
-        .attachment-warning-banner { background: var(--warning-light); border: 2px solid var(--warning); border-radius: var(--radius); padding: 1.2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; color: #92400e; font-weight: 600; }
+        .attachment-warning-banner { background: var(--warning-light); border: 2px solid var(--cyber-yellow); border-radius: var(--radius); padding: 1.2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; color: #6B4C0F; font-weight: 600; }
         .attachment-item { max-width: 550px; margin: 0 auto; padding: 2rem; background: white; border: 3px dashed var(--danger); border-radius: var(--radius); text-align: center; cursor: pointer; transition: all 0.3s; }
         .attachment-item:hover { background: var(--danger-light); transform: scale(1.02); box-shadow: 0 10px 30px rgba(220, 38, 38, 0.2); }
         .attachment-icon { font-size: 4rem; color: var(--danger); margin-bottom: 1rem; }
@@ -300,9 +305,9 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
         .dynamic-content h3 { font-size: 1.8rem; color: var(--danger); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; }
         .chapter-nav { display: flex; justify-content: space-between; align-items: center; margin: 3rem 0; padding: 1.5rem; background: white; border-radius: 12px; box-shadow: var(--shadow-sm); }
         .chapter-info { font-size: 1.2rem; font-weight: 600; }
-        .nav-btn { padding: 0.9rem 1.8rem; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; opacity: 0.5; pointer-events: none; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .nav-btn { padding: 0.9rem 1.8rem; background: var(--primary); color: var(--dark-navy); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; opacity: 0.5; pointer-events: none; display: inline-flex; align-items: center; gap: 0.5rem; }
         .nav-btn.enabled { opacity: 1; pointer-events: auto; }
-        .nav-btn.enabled:hover { background: var(--primary-dark); }
+        .nav-btn.enabled:hover { background: var(--cyber-gold); }
         .nav-btn.prev { background: var(--gray-600); }
         .nav-btn.prev.enabled:hover { background: var(--gray-700); }
         @media (max-width: 992px) {

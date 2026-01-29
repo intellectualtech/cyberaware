@@ -50,14 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #FF8C42;
-            --primary-dark: #E67A2E;
-            --primary-light: #FFF4ED;
-            --primary-lighter: #FFEAD9;
-            --success: #00A65A;
-            --warning: #F39C12;
-            --danger: #DD4B39;
-            --dark: #2C2C2C;
+            --cyber-yellow: #FFD60A;
+            --cyber-gold: #FFC300;
+            --cyber-light: #FFF8DC;
+            --white: #FFFFFF;
+            --dark-navy: #0F1419;
+            --dark-slate: #1A1E2E;
+            --charcoal: #2D3142;
+            --shield-green: #10B981;
+            --alert-red: #EF4444;
+            --info-blue: #3B82F6;
             --gray-50: #f8fafc;
             --gray-100: #f1f5f9;
             --gray-200: #e2e8f0;
@@ -67,10 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             --gray-600: #475569;
             --gray-700: #334155;
             --gray-800: #1e293b;
-            --white: #FFFFFF;
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
-            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.2);
+            --shadow-yellow: 0 0 20px rgba(255, 214, 10, 0.3);
         }
 
         * {
@@ -88,8 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         /* Header */
         .header {
-            background: var(--white);
-            border-bottom: 1px solid var(--gray-200);
+            background: var(--dark-navy);
+            border-bottom: 5px solid var(--cyber-yellow);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -108,11 +110,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .logo {
             font-size: 24px;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--cyber-yellow);
             display: flex;
             align-items: center;
             gap: 10px;
             text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .logo:hover {
+            color: var(--cyber-gold);
+            text-shadow: 0 0 15px rgba(255, 214, 10, 0.4);
         }
 
         .logo i {
@@ -126,15 +134,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .nav-menu a {
-            color: var(--gray-700);
+            color: var(--white);
             text-decoration: none;
             font-weight: 500;
             font-size: 15px;
-            transition: color 0.2s;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 4px;
         }
 
-        .nav-menu a:hover, .nav-menu a.active {
-            color: var(--primary);
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--cyber-yellow);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after, .nav-menu a.active::after {
+            width: 100%;
         }
 
         .header-right {
@@ -166,14 +187,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .btn-primary {
-            background: var(--primary);
-            color: white;
+            background: var(--dark-navy);
+            color: var(--cyber-yellow);
+            border: 2px solid var(--cyber-yellow);
         }
 
         .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+            background: var(--cyber-yellow);
+            color: var(--dark-navy);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-yellow);
         }
 
         /* Container */
@@ -185,13 +208,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--dark-slate) 100%);
             color: white;
             padding: 120px 40px;
             text-align: center;
             border-radius: 16px;
             margin-bottom: 80px;
             box-shadow: var(--shadow-lg);
+            border-left: 8px solid var(--cyber-yellow);
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 214, 10, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
         }
 
         .hero h1 {

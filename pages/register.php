@@ -73,21 +73,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <style>
         :root {
-            --primary: #FF8C42;
-            --primary-dark: #E67A2E;
-            --primary-light: #FFF4ED;
-            --primary-lighter: #FFEAD9;
-            --success: #00A65A;
-            --danger: #DD4B39;
-            --dark: #2C2C2C;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1e293b;
+            /* Primary Brand Colors */
+            --cyber-yellow: #FFD60A;
+            --cyber-gold: #FFC300;
+            --cyber-light: #FFF8DC;
             --white: #FFFFFF;
-            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
+            
+            /* Security Dark Tones */
+            --dark-navy: #0F1419;
+            --dark-slate: #1A1E2E;
+            --charcoal: #2D3142;
+            
+            /* Accent Colors */
+            --shield-green: #10B981;
+            --alert-red: #EF4444;
+            --info-blue: #3B82F6;
+            
+            /* Shadows & Effects */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --shadow-yellow: 0 0 20px rgba(255, 214, 10, 0.3);
         }
 
         * {
@@ -98,67 +104,99 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--dark-slate) 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            color: var(--gray-800);
+            color: var(--dark-navy);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 214, 10, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -10%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 214, 10, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
         }
 
         .register-container {
             background: var(--white);
-            padding: 48px;
-            border-radius: 16px;
-            box-shadow: var(--shadow-lg);
+            padding: 50px 45px;
+            border-radius: 18px;
+            box-shadow: var(--shadow-lg), var(--shadow-yellow);
             max-width: 520px;
             width: 100%;
+            position: relative;
+            z-index: 1;
+            border-left: 5px solid var(--cyber-yellow);
         }
 
         .logo-container {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 35px;
         }
 
         .logo-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--dark-slate) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 16px;
+            margin: 0 auto 18px;
+            border: 3px solid var(--cyber-yellow);
+            box-shadow: 0 8px 25px rgba(255, 214, 10, 0.2);
         }
 
         .logo-icon i {
-            font-size: 40px;
-            color: white;
+            font-size: 48px;
+            color: var(--cyber-yellow);
         }
 
         h1 {
             text-align: center;
-            color: var(--primary);
-            font-size: 32px;
-            font-weight: 700;
+            color: var(--dark-navy);
+            font-size: 36px;
+            font-weight: 800;
             margin-bottom: 8px;
         }
 
         .subtitle {
             text-align: center;
-            color: var(--gray-600);
-            font-size: 15px;
-            margin-bottom: 32px;
+            color: var(--charcoal);
+            font-size: 16px;
+            margin-bottom: 35px;
+            font-weight: 500;
         }
 
         .alert {
-            padding: 14px 16px;
-            border-radius: 8px;
+            padding: 15px 18px;
+            border-radius: 10px;
             margin-bottom: 24px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-size: 14px;
             font-weight: 500;
             line-height: 1.5;
@@ -170,32 +208,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .alert-danger {
-            background: #FFEBEE;
-            color: var(--danger);
-            border-left: 4px solid var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--alert-red);
+            border-left: 4px solid var(--alert-red);
         }
 
         .alert-success {
-            background: #E8F5E9;
-            color: var(--success);
-            border-left: 4px solid var(--success);
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--shield-green);
+            border-left: 4px solid var(--shield-green);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            color: var(--gray-700);
-            font-weight: 600;
-            font-size: 14px;
+            margin-bottom: 10px;
+            color: var(--dark-navy);
+            font-weight: 700;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .required {
-            color: var(--danger);
-            margin-left: 2px;
+            color: var(--alert-red);
+            margin-left: 4px;
         }
 
         .input-wrapper {
@@ -207,63 +247,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--gray-600);
-            font-size: 16px;
+            color: var(--cyber-yellow);
+            font-size: 18px;
         }
 
         input,
         select {
             width: 100%;
-            padding: 14px 16px 14px 48px;
-            border: 2px solid var(--gray-200);
-            border-radius: 8px;
+            padding: 14px 16px 14px 50px;
+            border: 2px solid #E5E7EB;
+            border-radius: 10px;
             font-size: 15px;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             font-family: 'Inter', sans-serif;
+            color: var(--dark-navy);
         }
 
         select {
-            padding-left: 48px;
+            padding-left: 50px;
             cursor: pointer;
-            background-color: white;
+            background-color: var(--white);
+        }
+
+        input::placeholder,
+        select::placeholder {
+            color: var(--charcoal);
         }
 
         input:focus,
         select:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-lighter);
+            border-color: var(--cyber-yellow);
+            box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.15);
+            background: rgba(255, 214, 10, 0.02);
         }
 
         small {
             display: block;
-            margin-top: 6px;
-            color: var(--gray-600);
+            margin-top: 8px;
+            color: var(--charcoal);
             font-size: 13px;
+            font-weight: 500;
+        }
+
+        small i {
+            color: var(--cyber-yellow);
+            margin-right: 4px;
         }
 
         .btn {
             width: 100%;
             padding: 16px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--dark-slate) 100%);
+            color: var(--cyber-yellow);
+            border: 2px solid var(--cyber-yellow);
+            border-radius: 10px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+            background: var(--cyber-yellow);
+            color: var(--dark-navy);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 214, 10, 0.3);
         }
 
         .btn i {
@@ -271,45 +327,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .links {
-            margin-top: 24px;
+            margin-top: 28px;
             text-align: center;
             font-size: 14px;
             line-height: 1.8;
+            color: var(--dark-navy);
         }
 
         .links a {
-            color: var(--primary);
+            color: var(--dark-navy);
             text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .links a:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
+            color: var(--cyber-yellow);
         }
 
         .divider {
             margin: 0 4px;
-            color: var(--gray-400);
+            color: #E5E7EB;
         }
 
         @media (max-width: 576px) {
             .register-container {
-                padding: 32px 24px;
+                padding: 35px 24px;
             }
 
             h1 {
-                font-size: 28px;
+                font-size: 30px;
             }
 
             .logo-icon {
-                width: 70px;
-                height: 70px;
+                width: 80px;
+                height: 80px;
             }
 
             .logo-icon i {
-                font-size: 35px;
+                font-size: 40px;
             }
         }
     </style>

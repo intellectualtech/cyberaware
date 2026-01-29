@@ -186,33 +186,46 @@ if ($overall_progress == 100) {
 
     <style>
         :root {
-            --primary: #FF8C42;
-            --primary-dark: #E67A2E;
-            --primary-light: #FFF4ED;
-            --success: #00A65A;
-            --warning: #F39C12;
-            --danger: #DD4B39;
-            --dark: #2C2C2C;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-600: #475569;
-            --gray-700: #334155;
+            /* Primary Brand Colors */
+            --cyber-yellow: #FFD60A;
+            --cyber-gold: #FFC300;
+            --cyber-light: #FFF8DC;
+            --white: #FFFFFF;
+            
+            /* Security Dark Tones */
+            --dark-navy: #0F1419;
+            --dark-slate: #1A1E2E;
+            --charcoal: #2D3142;
+            
+            /* Accent Colors */
+            --shield-green: #10B981;
+            --alert-red: #EF4444;
+            --info-blue: #3B82F6;
+            
+            /* Light Theme for Trainee Learning Platform */
+            --light-bg: #F8F9FF;
+            --light-accent: #F3F5FF;
+            --card-bg: #FFFFFF;
+            --text-dark: #1A1E2E;
+            --text-muted: #5A6B7C;
+            --border-light: rgba(15, 20, 25, 0.06);
+            
             --sidebar-width: 260px;
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--gray-100);
-            color: var(--dark);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--light-accent) 100%);
+            color: var(--dark-navy);
+            line-height: 1.6;
         }
 
         .main-content {
             margin-left: var(--sidebar-width);
             min-height: 100vh;
-            padding: 2rem;
+            padding: 0;
         }
 
         @media (max-width: 992px) {
@@ -220,74 +233,175 @@ if ($overall_progress == 100) {
         }
 
         .header {
-            background: white;
-            border-bottom: 1px solid var(--gray-200);
-            padding: 20px 32px;
+            background: linear-gradient(135deg, var(--white) 0%, #F8FAFB 100%);
+            border-bottom: 1px solid rgba(15, 20, 25, 0.08);
+            padding: 28px 40px;
             position: sticky;
             top: 0;
             z-index: 90;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
         }
 
-        .page-title { font-size: 24px; font-weight: 600; }
-        .page-subtitle { font-size: 13px; color: var(--gray-600); margin-top: 4px; }
+        .page-title { 
+            font-size: 32px; 
+            font-weight: 700; 
+            color: var(--dark-navy);
+            letter-spacing: -0.5px;
+        }
+        .page-subtitle { 
+            font-size: 15px; 
+            color: var(--text-muted); 
+            margin-top: 6px; 
+            font-weight: 400;
+        }
 
-        .container { padding: 32px; }
+        .container { padding: 40px 40px; }
 
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
         }
 
         .info-card {
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            padding: 24px;
+            background: var(--white);
+            border: 2px solid rgba(255, 214, 10, 0.1);
+            border-radius: 16px;
+            padding: 28px;
             text-align: center;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            border-color: var(--cyber-yellow);
+            box-shadow: 0 8px 32px rgba(255, 214, 10, 0.12);
+            transform: translateY(-4px);
         }
 
         .info-card i {
-            font-size: 32px;
-            color: var(--primary);
-            margin-bottom: 12px;
+            font-size: 40px;
+            color: var(--cyber-yellow);
+            margin-bottom: 14px;
+            display: block;
         }
 
-        .info-label { font-size: 14px; color: var(--gray-600); font-weight: 500; }
-        .info-value { font-size: 18px; font-weight: 600; margin-top: 8px; }
+        .info-label { 
+            font-size: 13px; 
+            color: var(--text-muted); 
+            font-weight: 600; 
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 8px;
+        }
+        .info-value { 
+            font-size: 24px; 
+            font-weight: 700; 
+            color: var(--dark-navy);
+            margin-top: 8px;
+        }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
             margin-bottom: 32px;
         }
 
         .stat-card {
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            padding: 24px;
+            background: var(--white);
+            border: 2px solid var(--border-light);
+            border-radius: 14px;
+            padding: 28px;
             text-align: center;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--cyber-yellow), var(--cyber-gold));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
         }
 
         .stat-card i {
             font-size: 28px;
-            color: var(--primary);
+            color: var(--cyber-yellow);
             margin-bottom: 12px;
+            display: block;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.12) 0%, rgba(255, 195, 0, 0.06) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
         }
 
-        .stat-value { font-size: 32px; font-weight: 700; color: var(--dark); }
-        .stat-label { font-size: 14px; color: var(--gray-600); margin-top: 8px; }
+        .stat-value { 
+            font-size: 40px; 
+            font-weight: 800; 
+            color: var(--cyber-yellow); 
+            line-height: 1;
+        }
+        .stat-label { 
+            font-size: 13px; 
+            color: var(--text-muted); 
+            font-weight: 600;
+            margin-top: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
         .overall-card {
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            padding: 32px;
+            background: var(--white);
+            border: 2px solid var(--border-light);
+            border-radius: 18px;
+            padding: 40px;
             text-align: center;
             margin-bottom: 32px;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .overall-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .overall-card h3 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--dark-navy);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            letter-spacing: -0.3px;
+            justify-content: center;
+        }
+
+        .overall-card h3 i {
+            color: var(--cyber-yellow);
+            font-size: 32px;
+        }
+
+        .overall-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 16px;
         }
 
         .progress-container {
@@ -299,28 +413,32 @@ if ($overall_progress == 100) {
             justify-content: space-between;
             margin-bottom: 12px;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700;
+            color: var(--dark-navy);
         }
 
         .progress-bar {
-            height: 16px;
-            background: var(--gray-200);
-            border-radius: 8px;
+            height: 10px;
+            background: #E8EDF5;
+            border-radius: 10px;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            border-radius: 8px;
-            transition: width 1.5s ease;
+            background: linear-gradient(90deg, var(--cyber-yellow), var(--cyber-gold));
+            border-radius: 10px;
+            transition: width 1.2s ease;
+            box-shadow: 0 0 8px rgba(255, 214, 10, 0.4);
         }
 
         .progress-percent {
-            font-size: 48px;
-            font-weight: 700;
-            color: var(--primary);
-            margin: 16px 0;
+            font-size: 64px;
+            font-weight: 800;
+            color: var(--cyber-yellow);
+            margin: 32px 0;
+            text-shadow: 0 2px 8px rgba(255, 214, 10, 0.15);
+            line-height: 1;
         }
 
         .risk-badge {
@@ -328,59 +446,85 @@ if ($overall_progress == 100) {
             align-items: center;
             gap: 10px;
             padding: 12px 24px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
         }
 
-        .risk-low { background: #dcfce7; color: #166534; }
-        .risk-medium { background: #fffbeb; color: #92400e; }
-        .risk-high { background: #fee2e2; color: #991b1b; }
+        .risk-badge i {
+            font-size: 18px;
+        }
+
+        .risk-low { 
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--shield-green);
+        }
+        .risk-medium { 
+            background: rgba(245, 158, 11, 0.12);
+            color: #F59E0B;
+        }
+        .risk-high { 
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--alert-red);
+        }
 
         .modules-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
             gap: 24px;
         }
 
         .module-card {
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            padding: 24px;
+            background: var(--white);
+            border: 2px solid var(--border-light);
+            border-radius: 18px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
         }
 
         .module-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .module-title {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark-navy);
+            margin-bottom: 8px;
         }
 
         .module-desc {
             font-size: 14px;
-            color: var(--gray-600);
+            color: var(--text-muted);
             margin-top: 8px;
+            line-height: 1.5;
         }
 
         .chapters-info {
             font-size: 14px;
-            color: var(--gray-600);
-            margin-bottom: 12px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-weight: 600;
         }
 
         .module-progress {
-            margin: 16px 0;
+            margin: 20px 0;
         }
 
         .module-progress-bar {
             height: 10px;
-            background: var(--gray-200);
+            background: #E8EDF5;
             border-radius: 5px;
             overflow: hidden;
             margin-top: 8px;
@@ -388,7 +532,7 @@ if ($overall_progress == 100) {
 
         .module-progress-fill {
             height: 100%;
-            background: var(--primary);
+            background: linear-gradient(90deg, var(--cyber-yellow), var(--cyber-gold));
             border-radius: 5px;
             transition: width 0.8s ease;
         }
@@ -402,41 +546,116 @@ if ($overall_progress == 100) {
         }
 
         .stat-small {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--primary-dark);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--cyber-yellow);
         }
 
         .stat-small-label {
             font-size: 13px;
-            color: var(--gray-600);
-            margin-top: 4px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .start-btn {
             display: block;
-            margin-top: 20px;
-            padding: 12px;
-            background: var(--primary);
-            color: white;
+            margin-top: 24px;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--cyber-yellow) 0%, var(--cyber-gold) 100%);
+            color: var(--dark-navy);
             text-align: center;
-            border-radius: 8px;
-            font-weight: 600;
+            border-radius: 10px;
+            font-weight: 700;
             text-decoration: none;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            box-shadow: 0 4px 15px rgba(255, 214, 10, 0.2);
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .start-btn:hover {
-            background: var(--primary-dark);
+            background: linear-gradient(135deg, var(--cyber-gold) 0%, var(--cyber-yellow) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
         }
 
         .completed-badge {
-            background: var(--success);
-            color: white;
-            padding: 6px 12px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--shield-green);
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                padding: 24px 24px;
+            }
+
+            .stats-grid,
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .module-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .overall-card {
+                padding: 28px;
+            }
+
+            .page-title {
+                font-size: 26px;
+            }
+
+            .module-title {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-title {
+                font-size: 22px;
+            }
+
+            .progress-percent {
+                font-size: 48px;
+            }
+
+            .stat-value {
+                font-size: 32px;
+            }
+
+            .overall-card h3 {
+                font-size: 22px;
+            }
+
+            .module-title {
+                font-size: 18px;
+            }
+
+            .module-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+
+            .stat-small {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
@@ -447,8 +666,8 @@ if ($overall_progress == 100) {
 <main class="main-content">
     <header class="header">
         <div>
-            <h2 class="page-title">My Training Progress</h2>
-            <p class="page-subtitle">Hello <?= htmlspecialchars($name) ?>, track your security awareness journey</p>
+            <h2 class="page-title">Learning Progress</h2>
+            <p class="page-subtitle">Track your cybersecurity training achievements</p>
         </div>
     </header>
 
@@ -466,7 +685,7 @@ if ($overall_progress == 100) {
                 <div class="info-label">Current Campaign</div>
                 <div class="info-value"><?= htmlspecialchars($campaign_name) ?></div>
                 <?php if ($current_campaign): ?>
-                <div style="font-size:13px; color:var(--gray-600); margin-top:8px;">
+                <div style="font-size:13px; color:var(--text-muted); margin-top:8px;">
                     <?= htmlspecialchars($campaign_dates) ?>
                 </div>
                 <?php endif; ?>
@@ -476,49 +695,47 @@ if ($overall_progress == 100) {
         <!-- Overall Stats -->
         <div class="stats-grid">
             <div class="stat-card">
-                <i class="fas fa-chart-pie"></i>
-                <div class="stat-value"><?= $overall_progress ?>%</div>
-                <div class="stat-label">Overall Chapter Progress</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-tasks"></i>
-                <div class="stat-value"><?= $global_completed_chapters ?> / <?= $global_total_chapters ?></div>
-                <div class="stat-label">Chapters Completed</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-check-double"></i>
-                <div class="stat-value"><?= $completed_modules_count ?> / <?= $total_modules ?></div>
-                <div class="stat-label">Modules Completed</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-trophy"></i>
-                <div class="stat-value"><?= $overall_avg_score ?>%</div>
-                <div class="stat-label">Avg Score (Completed Modules)</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-shield-alt"></i>
-                <div class="stat-value">
-                    <div class="risk-badge risk-<?= $risk_class ?>">
-                        <i class="fas fa-<?= $risk_class === 'low' ? 'check' : ($risk_class === 'medium' ? 'exclamation-triangle' : 'times') ?>"></i>
-                        <?= $risk_level ?> Risk
-                    </div>
+                <div class="stat-icon">
+                    <i class="fas fa-chart-pie"></i>
                 </div>
-                <div class="stat-label">Security Risk Level</div>
+                <div class="stat-value"><?= $overall_progress ?>%</div>
+                <div class="stat-label">Overall Progress</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <div class="stat-value"><?= $global_completed_chapters ?>/<?= $global_total_chapters ?></div>
+                <div class="stat-label">Chapters Done</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="stat-value"><?= $completed_modules_count ?>/<?= $total_modules ?></div>
+                <div class="stat-label">Courses Done</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-value"><?= $overall_avg_score ?>%</div>
+                <div class="stat-label">Avg Score</div>
             </div>
         </div>
 
         <!-- Overall Progress Visualization -->
         <div class="overall-card">
-            <h3 style="font-size:22px; margin-bottom:20px;">
-                <i class="fas fa-chart-line"></i> Overall Chapter Progress
+            <h3>
+                <i class="fas fa-chart-line"></i> Learning Journey
             </h3>
-            <p style="color:var(--gray-600); margin-bottom:20px;">
-                Based on completed chapters across all modules (video watched + activity passed)
+            <p>
+                Your progress across all courses and chapters
             </p>
 
             <div class="progress-container">
                 <div class="progress-header">
-                    <span>Completion Progress</span>
+                    <span>Overall Proficiency</span>
                     <span><?= $overall_progress ?>%</span>
                 </div>
                 <div class="progress-bar">
@@ -526,11 +743,16 @@ if ($overall_progress == 100) {
                 </div>
                 <div class="progress-percent"><?= $overall_progress ?>%</div>
             </div>
+
+            <div class="risk-badge risk-<?= $risk_class ?>" style="margin-top: 28px;">
+                <i class="fas fa-<?= $risk_class === 'low' ? 'shield-alt' : ($risk_class === 'medium' ? 'exclamation-triangle' : 'alert-circle') ?>"></i>
+                Risk Level: <?= $risk_level ?>
+            </div>
         </div>
 
         <!-- Module Breakdown -->
-        <h3 style="font-size:22px; margin:40px 0 24px;">
-            <i class="fas fa-list-alt"></i> Module Details
+        <h3 style="font-size: 26px; font-weight: 700; margin: 48px 0 32px; color: var(--dark-navy); display: flex; align-items: center; gap: 14px; letter-spacing: -0.3px;">
+            <i class="fas fa-book" style="color: var(--cyber-yellow); font-size: 32px;"></i> Course Breakdown
         </h3>
 
         <div class="modules-grid">
@@ -552,12 +774,12 @@ if ($overall_progress == 100) {
                 </div>
 
                 <div class="chapters-info">
-                    Chapters Completed: <strong><?= $det['comp_chap'] ?> / <?= $det['total_chap'] ?></strong>
+                    Progress: <strong><?= $det['comp_chap'] ?> / <?= $det['total_chap'] ?> Chapters</strong>
                 </div>
 
                 <div class="module-progress">
-                    <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;">
-                        <span>Progress</span>
+                    <div style="display:flex; justify-content:space-between; font-size:14px; font-weight: 600; margin-bottom:8px; color: var(--dark-navy);">
+                        <span>Proficiency</span>
                         <span><?= $det['chap_progress'] ?>%</span>
                     </div>
                     <div class="module-progress-bar">
@@ -590,12 +812,12 @@ if ($overall_progress == 100) {
         </div>
 
         <?php if ($current_campaign): ?>
-        <div class="overall-card" style="margin-top:40px;">
-            <h3 style="font-size:20px;">
-                <i class="fas fa-bullhorn"></i> Current Campaign: <?= htmlspecialchars($campaign_name) ?>
+        <div class="overall-card" style="margin-top: 48px;">
+            <h3>
+                <i class="fas fa-rocket"></i> Current Exercise
             </h3>
-            <p style="margin:16px 0; color:var(--gray-700);"><?= htmlspecialchars($campaign_desc) ?></p>
-            <p style="color:var(--gray-600);">Duration: <?= htmlspecialchars($campaign_dates) ?></p>
+            <p style="margin: 16px 0;"><?= htmlspecialchars($campaign_desc) ?></p>
+            <p style="color: var(--text-muted);">Duration: <?= htmlspecialchars($campaign_dates) ?></p>
         </div>
         <?php endif; ?>
     </div>
