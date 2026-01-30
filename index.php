@@ -22,17 +22,26 @@ if (isLoggedIn()) {
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
         :root {
-            /* Primary Brand Colors */
-            --cyber-yellow: #FFD60A;
-            --cyber-gold: #FFC300;
-            --cyber-light: #FFF8DC;
+            /* Primary Brand Colors (Orange / White / Grey theme) */
+            --cyber-yellow: #FF8C42;
+            --primary: #FF8C42;
+            --cyber-gold: #FF8C42;
             --white: #FFFFFF;
-            
-            /* Security Dark Tones */
-            --dark-navy: #0F1419;
-            --dark-slate: #1A1E2E;
-            --charcoal: #2D3142;
-            
+            --cyber-light: #F3F4F6;
+
+            /* Grey Tones */
+            --grey-50: #F3F4F6;
+            --grey-100: #E5E7EB;
+            --grey-300: #D1D5DB;
+            --grey-500: #6B7280;
+            --grey-700: #374151;
+            --text-dark: #111827;
+
+            /* Legacy/dark variable for existing usage */
+            --dark-navy: #111827;
+            --dark-slate: #374151;
+            --charcoal: #6B7280;
+
             /* Accent Colors */
             --shield-green: #10B981;
             --alert-red: #EF4444;
@@ -42,7 +51,7 @@ if (isLoggedIn()) {
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
             --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
             --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.2);
-            --shadow-yellow: 0 0 20px rgba(255, 214, 10, 0.3);
+            --shadow-yellow: 0 0 20px rgba(var(--primary-rgb),0.3);
         }
 
         * {
@@ -91,7 +100,7 @@ if (isLoggedIn()) {
 
         .logo:hover {
             transform: scale(1.05);
-            text-shadow: 0 0 10px rgba(255, 214, 10, 0.5);
+            text-shadow: 0 0 10px rgba(var(--primary-rgb),0.5);
         }
 
         .logo i {
@@ -127,7 +136,7 @@ if (isLoggedIn()) {
         }
 
         .nav-menu a:hover {
-            background: rgba(255, 214, 10, 0.1);
+            background: rgba(var(--primary-rgb),0.1);
             color: var(--cyber-yellow);
         }
 
@@ -173,7 +182,7 @@ if (isLoggedIn()) {
         }
 
         .badge-warning {
-            background: rgba(255, 214, 10, 0.2);
+            background: rgba(var(--primary-rgb),0.2);
             color: var(--cyber-gold);
             border: 1px solid var(--cyber-gold);
         }
@@ -206,7 +215,7 @@ if (isLoggedIn()) {
             background: var(--cyber-yellow);
             color: var(--dark-navy);
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 214, 10, 0.3);
+            box-shadow: 0 8px 20px rgba(var(--primary-rgb),0.3);
         }
 
         .btn-secondary {
@@ -249,7 +258,7 @@ if (isLoggedIn()) {
             right: -100px;
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.15) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -260,14 +269,14 @@ if (isLoggedIn()) {
             left: -50px;
             width: 250px;
             height: 250px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.1) 0%, transparent 70%);
             border-radius: 50%;
         }
 
         .hero-icon {
             width: 120px;
             height: 120px;
-            background: rgba(255, 214, 10, 0.15);
+            background: rgba(var(--primary-rgb),0.15);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -332,7 +341,7 @@ if (isLoggedIn()) {
 
         .hero-btn-primary:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(255, 214, 10, 0.4);
+            box-shadow: 0 15px 40px rgba(var(--primary-rgb),0.4);
         }
 
         .hero-btn-secondary {
@@ -378,7 +387,7 @@ if (isLoggedIn()) {
             right: -50%;
             width: 250px;
             height: 250px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.15) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -415,18 +424,18 @@ if (isLoggedIn()) {
         }
 
         .value-badge {
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.1) 0%, rgba(255, 195, 0, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.1) 0%, rgba(var(--primary-rgb),0.05) 100%);
             padding: 28px 24px;
             border-radius: 12px;
             text-align: center;
-            border: 2px solid rgba(255, 214, 10, 0.2);
+            border: 2px solid rgba(var(--primary-rgb),0.2);
             transition: all 0.3s ease;
         }
 
         .value-badge:hover {
             transform: translateY(-8px);
             border-color: var(--cyber-yellow);
-            box-shadow: 0 12px 30px rgba(255, 214, 10, 0.15);
+            box-shadow: 0 12px 30px rgba(var(--primary-rgb),0.15);
         }
 
         .value-badge i {
@@ -482,14 +491,14 @@ if (isLoggedIn()) {
         .org-stat-item {
             text-align: center;
             padding: 30px;
-            background: rgba(255, 214, 10, 0.05);
+            background: rgba(var(--primary-rgb),0.05);
             border-radius: 12px;
-            border: 1px solid rgba(255, 214, 10, 0.15);
+            border: 1px solid rgba(var(--primary-rgb),0.15);
             transition: all 0.3s ease;
         }
 
         .org-stat-item:hover {
-            background: rgba(255, 214, 10, 0.1);
+            background: rgba(var(--primary-rgb),0.1);
             transform: translateY(-8px);
             border-color: var(--cyber-yellow);
         }
@@ -499,7 +508,7 @@ if (isLoggedIn()) {
             font-weight: 800;
             margin-bottom: 12px;
             color: var(--cyber-yellow);
-            text-shadow: 0 4px 10px rgba(255, 214, 10, 0.3);
+            text-shadow: 0 4px 10px rgba(var(--primary-rgb),0.3);
         }
 
         .org-stat-label {
@@ -534,7 +543,7 @@ if (isLoggedIn()) {
             right: -50px;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.1) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -784,7 +793,7 @@ if (isLoggedIn()) {
             right: -50%;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.1) 0%, transparent 70%);
             transition: all 0.3s ease;
         }
 
@@ -802,7 +811,7 @@ if (isLoggedIn()) {
         .feature-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.2) 0%, rgba(255, 195, 0, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.2) 0%, rgba(var(--primary-rgb),0.1) 100%);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -855,7 +864,7 @@ if (isLoggedIn()) {
             left: -100px;
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.15) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -880,14 +889,14 @@ if (isLoggedIn()) {
         .stat-item {
             text-align: center;
             padding: 30px;
-            background: rgba(255, 214, 10, 0.05);
+            background: rgba(var(--primary-rgb),0.05);
             border-radius: 12px;
-            border: 1px solid rgba(255, 214, 10, 0.15);
+            border: 1px solid rgba(var(--primary-rgb),0.15);
             transition: all 0.3s ease;
         }
 
         .stat-item:hover {
-            background: rgba(255, 214, 10, 0.1);
+            background: rgba(var(--primary-rgb),0.1);
             transform: translateY(-8px);
             border-color: var(--cyber-yellow);
         }
@@ -897,7 +906,7 @@ if (isLoggedIn()) {
             font-weight: 800;
             margin-bottom: 12px;
             color: var(--cyber-yellow);
-            text-shadow: 0 4px 10px rgba(255, 214, 10, 0.3);
+            text-shadow: 0 4px 10px rgba(var(--primary-rgb),0.3);
         }
 
         .stat-label {
@@ -959,7 +968,7 @@ if (isLoggedIn()) {
             right: -50%;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.1) 0%, transparent 70%);
             transition: all 0.3s ease;
         }
 
@@ -977,7 +986,7 @@ if (isLoggedIn()) {
         .module-icon {
             width: 70px;
             height: 70px;
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.2) 0%, rgba(255, 195, 0, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.2) 0%, rgba(var(--primary-rgb),0.1) 100%);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -1211,7 +1220,7 @@ if (isLoggedIn()) {
         .module-icon {
             width: 70px;
             height: 70px;
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.2) 0%, rgba(255, 195, 0, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.2) 0%, rgba(var(--primary-rgb),0.1) 100%);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -1283,7 +1292,7 @@ if (isLoggedIn()) {
             right: -100px;
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.15) 0%, transparent 70%);
             border-radius: 50%;
         }
 

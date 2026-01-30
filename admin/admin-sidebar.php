@@ -59,41 +59,61 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
 
 <style>
     :root {
-        --cyber-yellow: #FFD60A;
-        --cyber-gold: #FFC300;
-        --dark-navy: #0F1419;
-        --dark-slate: #1A1E2E;
+        --cyber-yellow: #FF8C42;
+        --primary: #FF8C42;
+        --cyber-gold: #FF8C42;
         --white: #FFFFFF;
-        --gray-50: #f8fafc;
-        --gray-100: #f1f5f9;
-        --gray-200: #e2e8f0;
-        --gray-600: #475569;
-        --gray-700: #334155;
-        --gray-800: #1e293b;
+        --cyber-light: #F3F4F6;
+        --dark-navy: #111827;
+        --dark-slate: #374151;
+        --grey-50: #F3F4F6;
+        --grey-100: #E5E7EB;
+        --grey-200: #D1D5DB;
+        --grey-600: #475569;
+        --grey-700: #374151;
+        --grey-800: #1e293b;
         --sidebar-width: 260px;
-        --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
+        --shadow-md: 0 6px 18px rgba(0,0,0,0.09);
         --radius: 12px;
     }
 
     .sidebar {
-        width: var(--sidebar-width);
-        background: var(--dark-navy);
-        border-right: 5px solid var(--cyber-yellow);
-        box-shadow: var(--shadow-md);
         position: fixed;
-        height: 100vh;
-        overflow-y: auto;
-        padding: 2rem 0;
-        z-index: 100;
         left: 0;
-        top: 0;
+        right: 0;
+        bottom: 0;
+        height: var(--sidebar-height);
+        background: var(--grey-800);
+        border-top: 4px solid var(--primary);
+        box-shadow: 0 -8px 30px rgba(0,0,0,0.12);
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        z-index: 1000;
+        padding: 0 12px;
     }
 
     .sidebar-header {
-        padding: 0 1.8rem 2rem;
-        border-bottom: 1px solid rgba(255, 214, 10, 0.2);
-        margin-bottom: 1.5rem;
+        display: none;
     }
+
+    .sidebar a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        color: var(--white);
+        text-decoration: none;
+        font-size: 13px;
+        padding: 8px 10px;
+        border-radius: 8px;
+    }
+
+    .sidebar a i { font-size: 18px; }
+
+    .sidebar a.active { color: var(--primary); }
+
+    .sidebar .footer-note { display:none; }
 
     .sidebar-header h1 {
         font-size: 1.6rem;
@@ -103,7 +123,7 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
     }
 
     .sidebar-header p {
-        color: rgba(255, 214, 10, 0.7);
+        color: rgba(var(--primary-rgb),0.9);
         font-size: 0.95rem;
         margin: 0.3rem 0 0 0;
     }
@@ -112,39 +132,45 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         list-style: none;
         padding: 0;
         margin: 0;
+        display: flex; /* horizontal layout by default */
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
     }
 
     .sidebar-nav li {
-        margin: 0.4rem 0;
+        margin: 0;
     }
 
     .sidebar-nav a {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        padding: 0.9rem 1.8rem;
-        color: rgba(255, 255, 255, 0.7);
+        padding: 0.6rem 0.9rem;
+        color: rgba(255, 255, 255, 0.85);
         text-decoration: none;
         font-weight: 500;
         transition: all 0.3s;
-        border-left: 3px solid transparent;
+        border-top: 3px solid transparent;
+        background: transparent;
     }
 
     .sidebar-nav a:hover {
-        background: rgba(255, 214, 10, 0.1);
-        color: var(--cyber-yellow);
+        background: rgba(var(--primary-rgb),0.12);
+        color: var(--white);
     }
 
     .sidebar-nav a.active {
-        background: rgba(255, 214, 10, 0.15);
-        color: var(--cyber-yellow);
-        border-left-color: var(--cyber-yellow);
+        background: rgba(var(--primary-rgb),0.18);
+        color: var(--primary);
+        border-left-color: var(--primary);
         font-weight: 600;
     }
 
     .sidebar-nav a i {
-        margin-right: 1rem;
-        font-size: 1.1rem;
-        width: 20px;
+        margin: 0 0 0.3rem 0;
+        font-size: 1.2rem;
+        width: auto;
         text-align: center;
     }
 

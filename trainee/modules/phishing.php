@@ -204,12 +204,14 @@ $module_progress = $total_chapters > 0 ? round(($completed_chapters / $total_cha
     <style>
         /* Your full original <style> from the provided code - unchanged */
         :root {
-            --cyber-yellow: #FFD60A;
-            --cyber-gold: #FFC300;
-            --cyber-light: #FFF8DC;
-            --dark-navy: #0F1419;
-            --dark-slate: #1A1E2E;
-            --charcoal: #2D3142;
+            --cyber-yellow: #FF8C42;
+            --primary: #FF8C42;
+            --cyber-gold: #FF8C42;
+            --white: #FFFFFF;
+            --cyber-light: #F3F4F6;
+            --dark-navy: #111827;
+            --dark-slate: #374151;
+            --charcoal: #6B7280;
             --shield-green: #10B981;
             --alert-red: #EF4444;
             --info-blue: #3B82F6;
@@ -220,7 +222,7 @@ $module_progress = $total_chapters > 0 ? round(($completed_chapters / $total_cha
             --info-light: #eff6ff;
             --danger: #dc2626;
             --danger-light: #fef2f2;
-            --warning: #f59e0b;
+            --warning: var(--cyber-yellow);
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
@@ -232,9 +234,10 @@ $module_progress = $total_chapters > 0 ? round(($completed_chapters / $total_cha
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --shadow-yellow: 0 0 20px rgba(255, 214, 10, 0.3);
+            --shadow-yellow: 0 0 20px rgba(var(--primary-rgb),0.3);
             --radius: 8px;
             --sidebar-width: 260px;
+            --sidebar-height: 72px;
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -248,7 +251,7 @@ $module_progress = $total_chapters > 0 ? round(($completed_chapters / $total_cha
         }
 
         .main-content {
-            margin-left: var(--sidebar-width);
+            margin-bottom: var(--sidebar-height);
             padding: 2.5rem 2rem;
             min-height: 100vh;
         }

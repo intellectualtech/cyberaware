@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: var(--gray-100);
             color: #1e293b;
         }
-        .main-content { margin-left: var(--sidebar-width); min-height: 100vh; }
+        .main-content { margin-bottom: var(--sidebar-height); min-height: 100vh; }
         .header {
             background: white;
             border-bottom: 1px solid var(--gray-200);
@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(255,140,66,0.15);
+            box-shadow: 0 0 0 3px rgba(var(--primary-rgb),0.15);
         }
         textarea { min-height: 100px; resize: vertical; }
         .checkbox-group {

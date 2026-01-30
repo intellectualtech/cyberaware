@@ -186,31 +186,35 @@ if ($overall_progress == 100) {
 
     <style>
         :root {
-            /* Primary Brand Colors */
-            --cyber-yellow: #FFD60A;
-            --cyber-gold: #FFC300;
-            --cyber-light: #FFF8DC;
+            /* Primary Brand Colors (Orange / White / Grey theme) */
+            --cyber-yellow: #FF8C42;
+            --primary: #FF8C42;
+            --cyber-gold: #FF8C42;
             --white: #FFFFFF;
-            
-            /* Security Dark Tones */
-            --dark-navy: #0F1419;
-            --dark-slate: #1A1E2E;
-            --charcoal: #2D3142;
-            
-            /* Accent Colors */
-            --shield-green: #10B981;
-            --alert-red: #EF4444;
-            --info-blue: #3B82F6;
-            
+            --cyber-light: #F3F4F6;
+
+            /* Grey Tones */
+            --grey-50: #F3F4F6;
+            --grey-100: #E5E7EB;
+            --grey-300: #D1D5DB;
+            --grey-500: #6B7280;
+            --grey-700: #374151;
+            --text-dark: #111827;
+
+            --dark-navy: #111827;
+            --dark-slate: #374151;
+            --charcoal: #6B7280;
+
             /* Light Theme for Trainee Learning Platform */
             --light-bg: #F8F9FF;
             --light-accent: #F3F5FF;
             --card-bg: #FFFFFF;
-            --text-dark: #1A1E2E;
-            --text-muted: #5A6B7C;
-            --border-light: rgba(15, 20, 25, 0.06);
-            
+            --text-dark: #111827;
+            --text-muted: #6B7280;
+            --border-light: rgba(17,24,39,0.06);
+
             --sidebar-width: 260px;
+            --sidebar-height: 72px;
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -223,13 +227,13 @@ if ($overall_progress == 100) {
         }
 
         .main-content {
-            margin-left: var(--sidebar-width);
+            margin-bottom: var(--sidebar-height);
             min-height: 100vh;
             padding: 0;
         }
 
         @media (max-width: 992px) {
-            .main-content { margin-left: 0; padding-bottom: 80px; }
+            .main-content { margin-left: 0; padding-bottom: calc(var(--sidebar-height) + 8px); }
         }
 
         .header {
@@ -266,7 +270,7 @@ if ($overall_progress == 100) {
 
         .info-card {
             background: var(--white);
-            border: 2px solid rgba(255, 214, 10, 0.1);
+            border: 2px solid rgba(var(--primary-rgb),0.1);
             border-radius: 16px;
             padding: 28px;
             text-align: center;
@@ -276,7 +280,7 @@ if ($overall_progress == 100) {
 
         .info-card:hover {
             border-color: var(--cyber-yellow);
-            box-shadow: 0 8px 32px rgba(255, 214, 10, 0.12);
+            box-shadow: 0 8px 32px rgba(var(--primary-rgb),0.12);
             transform: translateY(-4px);
         }
 
@@ -343,7 +347,7 @@ if ($overall_progress == 100) {
             display: block;
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.12) 0%, rgba(255, 195, 0, 0.06) 100%);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.12) 0%, rgba(var(--primary-rgb),0.06) 100%);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -429,7 +433,7 @@ if ($overall_progress == 100) {
             background: linear-gradient(90deg, var(--cyber-yellow), var(--cyber-gold));
             border-radius: 10px;
             transition: width 1.2s ease;
-            box-shadow: 0 0 8px rgba(255, 214, 10, 0.4);
+            box-shadow: 0 0 8px rgba(var(--primary-rgb),0.4);
         }
 
         .progress-percent {
@@ -437,7 +441,7 @@ if ($overall_progress == 100) {
             font-weight: 800;
             color: var(--cyber-yellow);
             margin: 32px 0;
-            text-shadow: 0 2px 8px rgba(255, 214, 10, 0.15);
+            text-shadow: 0 2px 8px rgba(var(--primary-rgb),0.15);
             line-height: 1;
         }
 
@@ -463,7 +467,7 @@ if ($overall_progress == 100) {
         }
         .risk-medium { 
             background: rgba(245, 158, 11, 0.12);
-            color: #F59E0B;
+            color: var(--cyber-yellow);
         }
         .risk-high { 
             background: rgba(239, 68, 68, 0.12);
@@ -572,7 +576,7 @@ if ($overall_progress == 100) {
             text-decoration: none;
             transition: all 0.3s ease;
             font-size: 15px;
-            box-shadow: 0 4px 15px rgba(255, 214, 10, 0.2);
+            box-shadow: 0 4px 15px rgba(var(--primary-rgb),0.2);
             border: none;
             cursor: pointer;
             text-transform: uppercase;
@@ -582,7 +586,7 @@ if ($overall_progress == 100) {
         .start-btn:hover {
             background: linear-gradient(135deg, var(--cyber-gold) 0%, var(--cyber-yellow) 100%);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
+            box-shadow: 0 8px 25px rgba(var(--primary-rgb),0.3);
         }
 
         .completed-badge {

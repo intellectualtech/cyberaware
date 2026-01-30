@@ -127,15 +127,16 @@ try {
     <style>
         :root {
             /* Primary Brand Colors */
-            --cyber-yellow: #FFD60A;
-            --cyber-gold: #FFC300;
-            --cyber-light: #FFF8DC;
+            --cyber-yellow: #FF8C42;
+            --primary: #FF8C42;
+            --cyber-gold: #FF8C42;
             --white: #FFFFFF;
+            --cyber-light: #F3F4F6;
             
             /* Security Dark Tones */
-            --dark-navy: #0F1419;
-            --dark-slate: #1A1E2E;
-            --charcoal: #2D3142;
+            --dark-navy: #111827;
+            --dark-slate: #374151;
+            --charcoal: #6B7280;
             
             /* Accent Colors */
             --shield-green: #10B981;
@@ -143,12 +144,13 @@ try {
             --info-blue: #3B82F6;
             
             /* Shadows & Effects */
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.2);
-            --shadow-yellow: 0 0 20px rgba(255, 214, 10, 0.3);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.09);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
+            --shadow-accent: 0 6px 24px rgba(var(--primary-rgb),0.12);
             
             --sidebar-width: 260px;
+            --sidebar-height: 72px;
             --radius: 14px;
         }
 
@@ -166,7 +168,7 @@ try {
         }
 
         .main-content {
-            margin-left: var(--sidebar-width);
+            margin-bottom: var(--sidebar-height);
             min-height: 100vh;
             padding: 0;
         }
@@ -174,7 +176,7 @@ try {
         @media (max-width: 992px) {
             .main-content {
                 margin-left: 0;
-                padding-bottom: 80px;
+                padding-bottom: calc(var(--sidebar-height) + 8px);
             }
         }
 
@@ -219,14 +221,14 @@ try {
             padding: 28px;
             border-radius: 16px;
             text-align: center;
-            border: 2px solid rgba(255, 214, 10, 0.1);
+            border: 2px solid rgba(var(--primary-rgb),0.1);
             box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
         }
 
         .info-item:hover {
             border-color: var(--cyber-yellow);
-            box-shadow: 0 8px 32px rgba(255, 214, 10, 0.12);
+            box-shadow: 0 8px 32px rgba(var(--primary-rgb),0.12);
             transform: translateY(-4px);
         }
 
@@ -290,7 +292,7 @@ try {
         .stat-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.12) 0%, rgba(255, 195, 0, 0.06) 100%);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.12) 0%, rgba(var(--primary-rgb),0.06) 100%);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -333,35 +335,34 @@ try {
             }
         }
 
-        /* Progress Card - Learning Path */
+/* Progress Card - Learning Path (LinkedIn-style) */
         .card {
             background: var(--white);
-            border: 2px solid rgba(15, 20, 25, 0.06);
-            border-radius: 18px;
-            padding: 40px;
-            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.25s ease;
+            border: 1px solid var(--border-light);
         }
 
-        .card:hover {
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-        }
+        .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-6px); }
 
-        .card h3 {
-            font-size: 26px;
-            font-weight: 700;
-            margin-bottom: 32px;
-            color: var(--dark-navy);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            letter-spacing: -0.3px;
-        }
+        .card h3 { display:none; }
 
-        .card h3 i {
-            color: var(--cyber-yellow);
-            font-size: 32px;
-        }
+        /* Local LinkedIn-like header used inside markup */
+        .card .card-header { margin-bottom: 14px; }
+        .card .card-header .avatar { background: linear-gradient(135deg, rgba(var(--primary-rgb),0.08), rgba(var(--primary-rgb),0.02)); color:var(--primary); width:44px; height:44px; border-radius:50%; display:grid; place-items:center; font-size:18px; }
+        .card .card-meta .title { font-size: 16px; font-weight: 700; }
+        .card .card-meta .muted { font-size: 13px; color: var(--grey-500); }
+
+        .card .card-body { padding: 8px 0 12px; }
+        .card .card-actions { display:flex; gap:10px; justify-content:flex-end; }
+        .module-list { padding:0; list-style:none; margin:0; display:flex; flex-direction:column; gap:10px; }
+        .module-list li { margin:0; }
+        .module-link { display:flex; align-items:center; justify-content:space-between; gap:12px; text-decoration:none; color:var(--text-dark); padding:10px 12px; border-radius:10px; }
+        .module-link .left { display:flex; align-items:center; gap:12px; }
+        .module-link .left i { font-size:18px; color:var(--primary); }
+        .module-link:hover { box-shadow: var(--shadow-sm); transform: translateY(-3px); }
 
         /* Progress Visualization */
         .progress-section {
@@ -390,7 +391,7 @@ try {
             background: linear-gradient(90deg, var(--cyber-yellow) 0%, var(--cyber-gold) 100%);
             border-radius: 10px;
             transition: width 1.2s ease;
-            box-shadow: 0 0 8px rgba(255, 214, 10, 0.4);
+            box-shadow: 0 0 8px rgba(var(--primary-rgb),0.4);
         }
 
         .progress-value {
@@ -399,7 +400,7 @@ try {
             font-weight: 800;
             color: var(--cyber-yellow);
             margin: 32px 0;
-            text-shadow: 0 2px 8px rgba(255, 214, 10, 0.15);
+            text-shadow: 0 2px 8px rgba(var(--primary-rgb),0.15);
             line-height: 1;
         }
 
@@ -451,7 +452,7 @@ try {
         }
         .risk-medium { 
             background: rgba(245, 158, 11, 0.12);
-            color: #F59E0B;
+            color: var(--cyber-yellow);
         }
         .risk-high { 
             background: rgba(239, 68, 68, 0.12);
@@ -495,7 +496,7 @@ try {
             color: var(--dark-navy);
             border-left-color: var(--dark-navy);
             transform: translateX(6px);
-            box-shadow: 0 8px 24px rgba(255, 214, 10, 0.2);
+            box-shadow: 0 8px 24px rgba(var(--primary-rgb),0.2);
         }
 
         .module-link:hover i {
@@ -506,7 +507,7 @@ try {
         .advice-box {
             margin-top: 32px;
             padding: 24px;
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.08) 0%, rgba(255, 195, 0, 0.03) 100%);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.08) 0%, rgba(var(--primary-rgb),0.03) 100%);
             border-radius: 12px;
             border-left: 5px solid var(--cyber-yellow);
             line-height: 1.8;
@@ -529,7 +530,7 @@ try {
             border-radius: 12px;
             margin-top: 28px;
             border-left: 5px solid var(--cyber-yellow);
-            border: 2px solid rgba(255, 214, 10, 0.15);
+            border: 2px solid rgba(var(--primary-rgb),0.15);
         }
 
         .campaign-info h4 {
@@ -643,96 +644,123 @@ try {
         </div>
 
         <div class="dashboard-grid">
-            <!-- Learning Progress Card -->
+            <!-- Learning Progress Card (LinkedIn-style) -->
             <div class="card">
-                <h3>
-                    <i class="fas fa-graduation-cap"></i>
-                    Learning Progress
-                </h3>
-
-                <div class="progress-section">
-                    <div class="progress-header">
-                        <span>Overall Proficiency</span>
-                        <span><?= $understanding ?>%</span>
+                <div class="card-header">
+                    <div class="card-avatar"><i class="fas fa-user-graduate"></i></div>
+                    <div class="card-meta">
+                        <div class="title">Learning Progress</div>
+                        <div class="muted">Updated: <?= htmlspecialchars($last_activity) ?></div>
                     </div>
-                    <div class="progress-bar-outer">
-                        <div class="progress-fill" style="width: <?= $understanding ?>%"></div>
-                    </div>
-                    <div class="progress-value"><?= $understanding ?>%</div>
-                </div>
-
-                <div class="meta-info">
-                    <div class="meta-item">
-                        <span>Courses Completed</span>
-                        <strong><?= $completed ?>/<?= $total_modules ?></strong>
-                    </div>
-                    <div class="meta-item">
-                        <span>Last Activity</span>
-                        <strong><?= htmlspecialchars($last_activity) ?></strong>
+                    <div style="margin-left:auto;">
+                        <button class="btn-ghost">Export</button>
                     </div>
                 </div>
 
-                <div class="risk-badge risk-<?= $risk_class ?>">
-                    <i class="fas fa-shield-alt"></i>
-                    Risk Level: <?= $risk_level ?>
+                <div class="card-body">
+                    <div class="progress-section">
+                        <div class="progress-header">
+                            <span>Overall Proficiency</span>
+                            <span><?= $understanding ?>%</span>
+                        </div>
+                        <div class="progress-bar-outer">
+                            <div class="progress-fill" style="width: <?= $understanding ?>%"></div>
+                        </div>
+                        <div class="progress-value"><?= $understanding ?>%</div>
+                    </div>
+
+                    <div class="meta-info">
+                        <div class="meta-item">
+                            <span>Courses Completed</span>
+                            <strong><?= $completed ?>/<?= $total_modules ?></strong>
+                        </div>
+                        <div class="meta-item">
+                            <span>Last Activity</span>
+                            <strong><?= htmlspecialchars($last_activity) ?></strong>
+                        </div>
+                    </div>
+
+                    <div class="risk-badge risk-<?= $risk_class ?>">
+                        <i class="fas fa-shield-alt"></i>
+                        Risk Level: <?= $risk_level ?>
+                    </div>
+
+                    <!-- Assigned Campaign Details -->
+                    <?php if ($current_campaign): ?>
+                    <div class="campaign-info">
+                        <h4><i class="fas fa-rocket"></i> Current Exercise</h4>
+                        <p><strong>Name:</strong> <?= htmlspecialchars($campaign_desc) ?></p>
+                        <p><strong>Duration:</strong> <?= htmlspecialchars($campaign_dates) ?></p>
+                    </div>
+                    <?php else: ?>
+                    <div class="campaign-info">
+                        <p>No active exercise is currently assigned to your department. Check back soon!</p>
+                    </div>
+                    <?php endif; ?>
                 </div>
 
-                <!-- Assigned Campaign Details -->
-                <?php if ($current_campaign): ?>
-                <div class="campaign-info">
-                    <h4><i class="fas fa-rocket"></i> Current Exercise</h4>
-                    <p><strong>Name:</strong> <?= htmlspecialchars($campaign_desc) ?></p>
-                    <p><strong>Duration:</strong> <?= htmlspecialchars($campaign_dates) ?></p>
+                <div class="card-actions">
+                    <button class="btn">View Progress</button>
+                    <button class="btn-ghost">Share</button>
                 </div>
-                <?php else: ?>
-                <div class="campaign-info">
-                    <p>No active exercise is currently assigned to your department. Check back soon!</p>
-                </div>
-                <?php endif; ?>
             </div>
 
-            <!-- Available Courses -->
+            <!-- Available Courses (LinkedIn-style rows) -->
             <div class="card">
-                <h3>
-                    <i class="fas fa-book-open"></i>
-                    Course Catalog
-                </h3>
-                <ul class="module-list">
-                    <li>
-                        <a href="modules/phishing.php" class="module-link">
-                            <i class="fas fa-envelope"></i>
-                            <span>Phishing Recognition</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="modules/credentials.php" class="module-link">
-                            <i class="fas fa-key"></i>
-                            <span>Fake Login Pages</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="modules/social.php" class="module-link">
-                            <i class="fas fa-phone-alt"></i>
-                            <span>Social Engineering</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="modules/attachments.php" class="module-link">
-                            <i class="fas fa-paperclip"></i>
-                            <span>Dangerous Attachments</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="modules/links.php" class="module-link">
-                            <i class="fas fa-link"></i>
-                            <span>Suspicious Links</span>
-                        </a>
-                    </li>
-                </ul>
+                <div class="card-header">
+                    <div class="card-avatar"><i class="fas fa-book-open"></i></div>
+                    <div class="card-meta">
+                        <div class="title">Course Catalog</div>
+                        <div class="muted">Choose a course to begin or resume</div>
+                    </div>
+                    <div style="margin-left:auto;">
+                        <button class="btn-ghost">Browse All</button>
+                    </div>
+                </div>
 
-                <div class="advice-box">
-                    <strong><i class="fas fa-bulb"></i> Next Steps:</strong>
-                    <?= $recommendation ?>
+                <div class="card-body">
+                    <ul class="module-list">
+                        <li>
+                            <a href="modules/phishing.php" class="module-link">
+                                <div class="left"><i class="fas fa-envelope"></i><span class="title">Phishing Recognition</span></div>
+                                <div><button class="btn">Start</button></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="modules/credentials.php" class="module-link">
+                                <div class="left"><i class="fas fa-key"></i><span class="title">Fake Login Pages</span></div>
+                                <div><button class="btn">Start</button></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="modules/social.php" class="module-link">
+                                <div class="left"><i class="fas fa-phone-alt"></i><span class="title">Social Engineering</span></div>
+                                <div><button class="btn">Start</button></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="modules/attachments.php" class="module-link">
+                                <div class="left"><i class="fas fa-paperclip"></i><span class="title">Dangerous Attachments</span></div>
+                                <div><button class="btn">Start</button></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="modules/links.php" class="module-link">
+                                <div class="left"><i class="fas fa-link"></i><span class="title">Suspicious Links</span></div>
+                                <div><button class="btn">Start</button></div>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="advice-box">
+                        <strong><i class="fas fa-bulb"></i> Next Steps:</strong>
+                        <?= $recommendation ?>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-ghost">Manage Learning Path</button>
+                    <button class="btn">Enroll</button>
                 </div>
             </div>
         </div>

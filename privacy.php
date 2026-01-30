@@ -24,29 +24,30 @@ if (isLoggedIn()) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --cyber-yellow: #FFD60A;
-            --cyber-gold: #FFC300;
-            --cyber-light: #FFF8DC;
+            --cyber-yellow: #FF8C42;
+            --primary: #FF8C42;
+            --cyber-gold: #FF8C42;
             --white: #FFFFFF;
-            --dark-navy: #0F1419;
-            --dark-slate: #1A1E2E;
-            --charcoal: #2D3142;
+            --cyber-light: #F3F4F6;
+            --dark-navy: #111827;
+            --dark-slate: #374151;
+            --charcoal: #6B7280;
             --shield-green: #10B981;
             --alert-red: #EF4444;
             --info-blue: #3B82F6;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-300: #D4D4D4;
-            --gray-400: #B8B8B8;
-            --gray-500: #9E9E9E;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1e293b;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.2);
-            --shadow-yellow: 0 0 20px rgba(255, 214, 10, 0.3);
+            --grey-50: #F3F4F6;
+            --grey-100: #E5E7EB;
+            --grey-200: #D1D5DB;
+            --grey-300: #C8CBD1;
+            --grey-400: #B8B8B8;
+            --grey-500: #9E9E9E;
+            --grey-600: #475569;
+            --grey-700: #374151;
+            --grey-800: #1e293b;
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+            --shadow-md: 0 6px 18px rgba(0,0,0,0.09);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+            --shadow-accent: 0 6px 24px rgba(var(--primary-rgb),0.12);
         }
 
         * {
@@ -94,7 +95,7 @@ if (isLoggedIn()) {
         
         .logo:hover {
             color: var(--cyber-gold);
-            text-shadow: 0 0 15px rgba(255, 214, 10, 0.4);
+            text-shadow: 0 0 15px rgba(var(--primary-rgb),0.4);
         }
 
         .logo i {
@@ -200,7 +201,7 @@ if (isLoggedIn()) {
             right: -50px;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.15) 0%, transparent 70%);
             border-radius: 50%;
         }
 

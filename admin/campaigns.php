@@ -106,7 +106,7 @@ $campaigns = $stmt->fetchAll(PDO::FETCH_ASSOC);
             background: var(--gray-100);
             color: var(--gray-700);
         }
-        .main-content { margin-left: var(--sidebar-width); min-height: 100vh; }
+        .main-content { margin-bottom: var(--sidebar-height); min-height: 100vh; }
         .header {
             background: white;
             border-bottom: 1px solid var(--gray-200);

@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .main-content {
-            margin-left: var(--sidebar-width);
+            margin-bottom: var(--sidebar-height);
             padding: 3rem 2rem;
             min-height: 100vh;
         }

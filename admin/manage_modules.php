@@ -118,9 +118,10 @@ if (!$selected_module && !empty($modules)) {
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
             --sidebar-width: 260px;
+            --sidebar-height: 72px;
         }
         body { font-family:'Inter',sans-serif; background:var(--gray-100); margin:0; }
-        .main-content { margin-left: var(--sidebar-width); padding:2rem; }
+        .main-content { margin-bottom: var(--sidebar-height); padding:2rem; }
         .container { max-width:1200px; margin:0 auto; }
         .card { background:white; padding:2rem; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:2rem; }
         .message { padding:1rem; border-radius:8px; margin-bottom:1.5rem; }

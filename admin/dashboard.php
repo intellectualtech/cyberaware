@@ -94,17 +94,16 @@ $current_page = 'dashboard';
 
     <style>
         :root {
-            /* Primary Brand Colors */
-            --cyber-yellow: #FFD60A;
-            --cyber-gold: #FFC300;
-            --cyber-light: #FFF8DC;
+            --cyber-yellow: #FF8C42;
+            --primary: #FF8C42;
+            --cyber-gold: #FF8C42;
             --white: #FFFFFF;
-            
-            /* Security Dark Tones */
-            --dark-navy: #0F1419;
-            --dark-slate: #1A1E2E;
-            --charcoal: #2D3142;
-            
+            --cyber-light: #F3F4F6;
+
+            --dark-navy: #111827;
+            --dark-slate: #374151;
+            --charcoal: #6B7280;
+
             /* Accent Colors */
             --shield-green: #10B981;
             --alert-red: #EF4444;
@@ -114,7 +113,7 @@ $current_page = 'dashboard';
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
             --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
             --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.2);
-            --shadow-yellow: 0 0 20px rgba(255, 214, 10, 0.3);
+            --shadow-yellow: 0 0 20px rgba(var(--primary-rgb),0.3);
             
             --sidebar-width: 260px;
             --radius: 12px;
@@ -135,7 +134,7 @@ $current_page = 'dashboard';
 
         /* Main Content */
         .main-content {
-            margin-left: var(--sidebar-width);
+            margin-bottom: var(--sidebar-height);
             min-height: 100vh;
         }
 
@@ -146,7 +145,7 @@ $current_page = 'dashboard';
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 8px 32px rgba(255, 214, 10, 0.15);
+            box-shadow: 0 8px 32px rgba(var(--primary-rgb),0.15);
         }
 
         .page-title {
@@ -165,7 +164,7 @@ $current_page = 'dashboard';
 
         .page-subtitle {
             font-size: 14px;
-            color: rgba(255, 214, 10, 0.7);
+            color: rgba(var(--primary-rgb),0.7);
             margin-top: 6px;
             font-weight: 500;
         }
@@ -177,7 +176,7 @@ $current_page = 'dashboard';
 
         /* Threat Level Indicator */
         .threat-banner {
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.1) 0%, rgba(255, 214, 10, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.1) 0%, rgba(var(--primary-rgb),0.05) 100%);
             border: 2px solid var(--cyber-yellow);
             border-radius: 14px;
             padding: 24px;
@@ -197,7 +196,7 @@ $current_page = 'dashboard';
             justify-content: center;
             font-size: 40px;
             color: var(--dark-navy);
-            box-shadow: 0 0 30px rgba(255, 214, 10, 0.4);
+            box-shadow: 0 0 30px rgba(var(--primary-rgb),0.4);
         }
 
         .threat-content h3 {
@@ -221,8 +220,8 @@ $current_page = 'dashboard';
         }
 
         .stat-card {
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.08) 0%, rgba(255, 214, 10, 0.02) 100%);
-            border: 2px solid rgba(255, 214, 10, 0.3);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.08) 0%, rgba(var(--primary-rgb),0.02) 100%);
+            border: 2px solid rgba(var(--primary-rgb),0.3);
             border-left: 5px solid var(--cyber-yellow);
             border-radius: 14px;
             padding: 28px;
@@ -239,16 +238,20 @@ $current_page = 'dashboard';
             right: -50%;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.1) 0%, transparent 70%);
             border-radius: 50%;
         }
 
         .stat-card:hover {
-            box-shadow: 0 12px 40px rgba(255, 214, 10, 0.25);
+            box-shadow: 0 14px 48px rgba(0,0,0,0.12);
             transform: translateY(-8px);
-            border-color: var(--cyber-gold);
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.15) 0%, rgba(255, 214, 10, 0.05) 100%);
+            border-color: rgba(var(--primary-rgb),0.25);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.08) 0%, rgba(var(--primary-rgb),0.02) 100%);
         }
+
+        .stat-card .stat-header { align-items:center; }
+        .stat-card .stat-header .action { margin-left:auto; }
+        .stat-card .stat-header .action .btn { padding:6px 10px; border-radius:8px; font-size:13px; }
 
         .stat-card.critical {
             border-left-color: var(--alert-red);
@@ -256,7 +259,7 @@ $current_page = 'dashboard';
         }
 
         .stat-card.warning {
-            border-left-color: #F59E0B;
+            border-left-color: var(--cyber-yellow);
             border-color: rgba(245, 158, 11, 0.3);
         }
 
@@ -277,7 +280,7 @@ $current_page = 'dashboard';
         .stat-label {
             font-size: 12px;
             font-weight: 700;
-            color: rgba(255, 214, 10, 0.9);
+            color: rgba(var(--primary-rgb),0.9);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -295,7 +298,7 @@ $current_page = 'dashboard';
         .stat-icon.primary { 
             background: linear-gradient(135deg, var(--cyber-yellow) 0%, var(--cyber-gold) 100%);
             color: var(--dark-navy);
-            box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4);
+            box-shadow: 0 4px 15px rgba(var(--primary-rgb),0.4);
         }
         .stat-icon.success { 
             background: linear-gradient(135deg, var(--shield-green) 0%, #059669 100%);
@@ -303,7 +306,7 @@ $current_page = 'dashboard';
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
         .stat-icon.warning { 
-            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            background: linear-gradient(135deg, var(--cyber-yellow) 0%, rgba(var(--primary-rgb),0.85) 100%);
             color: white;
             box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
         }
@@ -320,7 +323,7 @@ $current_page = 'dashboard';
             margin-bottom: 8px;
             position: relative;
             z-index: 1;
-            text-shadow: 0 0 10px rgba(255, 214, 10, 0.3);
+            text-shadow: 0 0 10px rgba(var(--primary-rgb),0.3);
         }
 
         .stat-description {
@@ -339,8 +342,8 @@ $current_page = 'dashboard';
         }
 
         .action-card {
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.08) 0%, rgba(255, 214, 10, 0.02) 100%);
-            border: 2px solid rgba(255, 214, 10, 0.3);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.08) 0%, rgba(var(--primary-rgb),0.02) 100%);
+            border: 2px solid rgba(var(--primary-rgb),0.3);
             border-left: 6px solid var(--cyber-yellow);
             border-radius: 14px;
             padding: 32px;
@@ -362,15 +365,15 @@ $current_page = 'dashboard';
             right: -50%;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.08) 0%, transparent 70%);
             border-radius: 50%;
         }
 
         .action-card:hover {
             border-color: var(--cyber-gold);
-            box-shadow: 0 12px 40px rgba(255, 214, 10, 0.25);
+            box-shadow: 0 12px 40px rgba(var(--primary-rgb),0.25);
             transform: translateY(-10px);
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.15) 0%, rgba(255, 214, 10, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.15) 0%, rgba(var(--primary-rgb),0.05) 100%);
         }
 
         .action-icon {
@@ -384,7 +387,7 @@ $current_page = 'dashboard';
             justify-content: center;
             font-size: 36px;
             margin: 0 auto 24px;
-            box-shadow: 0 8px 24px rgba(255, 214, 10, 0.3);
+            box-shadow: 0 8px 24px rgba(var(--primary-rgb),0.3);
             position: relative;
             z-index: 1;
         }
@@ -407,8 +410,8 @@ $current_page = 'dashboard';
 
         /* Campaign/Threat Assessment Card */
         .campaign-card {
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.08) 0%, rgba(255, 214, 10, 0.02) 100%);
-            border: 2px solid rgba(255, 214, 10, 0.3);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.08) 0%, rgba(var(--primary-rgb),0.02) 100%);
+            border: 2px solid rgba(var(--primary-rgb),0.3);
             border-left: 6px solid var(--cyber-yellow);
             border-radius: 14px;
             padding: 36px;
@@ -424,14 +427,14 @@ $current_page = 'dashboard';
             right: -30%;
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.05) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.05) 0%, transparent 70%);
             border-radius: 50%;
         }
 
         .campaign-header {
             margin-bottom: 32px;
             padding-bottom: 24px;
-            border-bottom: 2px solid rgba(255, 214, 10, 0.2);
+            border-bottom: 2px solid rgba(var(--primary-rgb),0.2);
             position: relative;
             z-index: 1;
         }
@@ -468,10 +471,10 @@ $current_page = 'dashboard';
             justify-content: space-between;
             align-items: center;
             padding: 20px;
-            background: rgba(255, 214, 10, 0.05);
+            background: rgba(var(--primary-rgb),0.05);
             border-radius: 10px;
             border-left: 4px solid var(--cyber-yellow);
-            border: 1px solid rgba(255, 214, 10, 0.15);
+            border: 1px solid rgba(var(--primary-rgb),0.15);
         }
 
         .info-label {
@@ -511,16 +514,16 @@ $current_page = 'dashboard';
             font-size: 18px;
             font-weight: 900;
             color: var(--cyber-yellow);
-            text-shadow: 0 0 15px rgba(255, 214, 10, 0.4);
+            text-shadow: 0 0 15px rgba(var(--primary-rgb),0.4);
         }
 
         .progress-bar {
             width: 100%;
             height: 14px;
-            background: rgba(255, 214, 10, 0.08);
+            background: rgba(var(--primary-rgb),0.08);
             border-radius: 10px;
             overflow: hidden;
-            border: 2px solid rgba(255, 214, 10, 0.25);
+            border: 2px solid rgba(var(--primary-rgb),0.25);
         }
 
         .progress-fill {
@@ -528,7 +531,7 @@ $current_page = 'dashboard';
             background: linear-gradient(90deg, var(--cyber-yellow) 0%, var(--cyber-gold) 100%);
             border-radius: 10px;
             transition: width 0.3s ease;
-            box-shadow: 0 0 10px rgba(255, 214, 10, 0.5);
+            box-shadow: 0 0 10px rgba(var(--primary-rgb),0.5);
         }
 
         @media (max-width: 992px) {
@@ -598,6 +601,7 @@ $current_page = 'dashboard';
                         <div class="stat-icon primary">
                             <i class="fas fa-shield-alt"></i>
                         </div>
+                        <div class="action"><button class="btn-ghost">View</button></div>
                     </div>
                     <div class="stat-value"><?= number_format($total_employees) ?></div>
                     <div class="stat-description">Active threat-aware users</div>
@@ -609,7 +613,8 @@ $current_page = 'dashboard';
                         <div class="stat-icon success">
                             <i class="fas fa-bullseye"></i>
                         </div>
-                    </div>
+                        <div class="action"><button class="btn-ghost">Manage</button></div>
+                    </div> 
                     <div class="stat-value"><?= $active_campaigns ?></div>
                     <div class="stat-description">Live security simulations</div>
                 </div>
@@ -620,6 +625,7 @@ $current_page = 'dashboard';
                         <div class="stat-icon <?= $avg_click_rate > 15 ? 'danger' : 'success' ?>">
                             <i class="fas fa-virus"></i>
                         </div>
+                        <div class="action"><button class="btn-ghost">Inspect</button></div>
                     </div>
                     <div class="stat-value"><?= $avg_click_rate ?>%</div>
                     <div class="stat-description">Users vulnerable to phishing</div>
@@ -631,6 +637,7 @@ $current_page = 'dashboard';
                         <div class="stat-icon success">
                             <i class="fas fa-check-shield"></i>
                         </div>
+                        <div class="action"><button class="btn-ghost">Details</button></div>
                     </div>
                     <div class="stat-value"><?= $avg_report_rate ?>%</div>
                     <div class="stat-description">Users reporting threats</div>
@@ -642,6 +649,7 @@ $current_page = 'dashboard';
                         <div class="stat-icon <?= $high_risk_users > 0 ? 'danger' : 'success' ?>">
                             <i class="fas fa-user-times"></i>
                         </div>
+                        <div class="action"><button class="btn-ghost">Review</button></div>
                     </div>
                     <div class="stat-value"><?= $high_risk_users ?></div>
                     <div class="stat-description">Users requiring immediate training</div>

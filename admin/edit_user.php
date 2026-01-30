@@ -175,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             --white: #FFFFFF;
             --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
             --sidebar-width: 260px;
+            --sidebar-height: 72px;
             --radius: 12px;
         }
 
@@ -192,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .main-content {
-            margin-left: var(--sidebar-width);
+            margin-bottom: var(--sidebar-height);
             padding: 3rem 2rem;
             min-height: 100vh;
         }

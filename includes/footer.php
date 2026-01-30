@@ -47,11 +47,11 @@
 
 <style>
     .footer {
-        background: var(--dark-navy, #0F1419);
+        background: var(--dark-navy, #111827);
         color: var(--gray-200, #e2e8f0);
         padding: 48px 32px 32px;
         margin-top: 80px;
-        border-top: 5px solid var(--cyber-yellow, #FFD60A);
+        border-top: 5px solid var(--cyber-yellow, #FF8C42);
     }
 
     .footer-container {
@@ -70,7 +70,7 @@
         gap: 12px;
         font-size: 28px;
         font-weight: 700;
-        color: var(--cyber-yellow, #FFD60A);
+        color: var(--cyber-yellow, #FF8C42);
         margin-bottom: 12px;
     }
 
@@ -80,7 +80,7 @@
 
     .footer-tagline {
         font-size: 15px;
-        color: rgba(255, 214, 10, 0.7);
+        color: rgba(var(--primary-rgb),0.78);
         font-weight: 500;
     }
 
@@ -96,12 +96,12 @@
         color: var(--gray-300, #D4D4D4);
         font-weight: 500;
         padding: 8px 16px;
-        background: rgba(255, 214, 10, 0.1);
+        background: rgba(var(--primary-rgb),0.08);
         border-radius: 20px;
     }
 
     .footer-compliance i {
-        color: var(--cyber-yellow, #FFD60A);
+        color: var(--cyber-yellow, #FF8C42);
         font-size: 16px;
     }
 
@@ -128,8 +128,8 @@
     }
 
     .footer-links a:hover {
-        color: var(--cyber-yellow, #FFD60A);
-        background: rgba(255, 214, 10, 0.15);
+        color: var(--cyber-yellow, #FF8C42);
+        background: rgba(var(--primary-rgb),0.12);
     }
 
     .footer-links a i {
@@ -202,4 +202,51 @@
             font-size: 13px;
         }
     }
+
+<!-- Scroll-activated Nav Popup (Injected) -->
+<div id="nav-popup" class="nav-popup" aria-hidden="true" role="dialog" aria-label="Quick navigation">
+    <a class="nav-item" href="/cyberaware/index.php"><i class="fas fa-home"></i><span>Home</span></a>
+    <a class="nav-item" href="/cyberaware/training.php"><i class="fas fa-graduation-cap"></i><span>Training</span></a>
+    <a class="nav-item" href="/cyberaware/trainee/dashboard.php"><i class="fas fa-chart-line"></i><span>Progress</span></a>
+    <a class="nav-item" href="/cyberaware/compliance.php"><i class="fas fa-clipboard-check"></i><span>Compliance</span></a>
+    <button id="nav-popup-close" class="nav-popup-close" aria-label="Close quick navigation"><i class="fas fa-times"></i></button>
+</div>
+
+<script>
+(function(){
+    var popup = document.getElementById('nav-popup');
+    var closeBtn = document.getElementById('nav-popup-close');
+    var timeoutId = null;
+
+    function showPopup() {
+        if (!popup) return;
+        popup.classList.add('show');
+        popup.setAttribute('aria-hidden','false');
+        if (timeoutId) clearTimeout(timeoutId);
+        timeoutId = setTimeout(hidePopup, 2200);
+    }
+
+    function hidePopup() {
+        if (!popup) return;
+        popup.classList.remove('show');
+        popup.setAttribute('aria-hidden','true');
+    }
+
+    // Show on any wheel movement (up or down)
+    window.addEventListener('wheel', function(e){
+        try {
+            showPopup();
+        } catch(err) { /* ignore */ }
+    }, { passive: true });
+
+    if (closeBtn) closeBtn.addEventListener('click', hidePopup);
+
+    document.addEventListener('click', function(e){
+        if (!popup.classList.contains('show')) return;
+        if (!popup.contains(e.target) && !e.target.closest('.sidebar')) {
+            hidePopup();
+        }
+    });
+})();
+</script>
 </style>

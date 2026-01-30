@@ -84,7 +84,7 @@ $current_page = 'department-scores';
 
         /* Main Content */
         .main-content {
-            margin-left: var(--sidebar-width);
+            margin-bottom: var(--sidebar-height);
             min-height: 100vh;
         }
 

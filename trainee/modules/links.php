@@ -242,29 +242,30 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
 
     <style>
         :root {
-            --cyber-yellow: #FFD60A;
-            --cyber-gold: #FFC300;
-            --dark-navy: #0F1419;
-            --dark-slate: #1A1E2E;
-            --primary: #FFD60A;
-            --primary-dark: #FFC300;
-            --primary-light: #FFF8DC;
-            --primary-lighter: #FFF8DC;
-            --success: #00A65A;
+            --cyber-yellow: #FF8C42;
+            --primary: #FF8C42;
+            --cyber-gold: #FF8C42;
+            --white: #FFFFFF;
+            --cyber-light: #F3F4F6;
+            --dark-navy: #111827;
+            --dark-slate: #374151;
+            --primary-dark: #E65F00;
+            --primary-light: #FFF4ED;
+            --success: #10b981;
             --warning: #F39C12;
             --danger: #DD4B39;
             --dark: #2C2C2C;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-300: #cbd5e1;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1e293b;
-            --white: #FFFFFF;
+            --grey-50: #F3F4F6;
+            --grey-100: #E5E7EB;
+            --grey-200: #D1D5DB;
+            --grey-300: #C8CBD1;
+            --grey-600: #475569;
+            --grey-700: #374151;
+            --grey-800: #1e293b;
             --sidebar-width: 260px;
+            --sidebar-height: 72px;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
+            --shadow-md: 0 6px 18px rgba(0,0,0,0.09);
             --radius: 14px;
         }
 
@@ -278,13 +279,13 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
         }
 
         .main-content {
-            margin-left: var(--sidebar-width);
+            margin-bottom: var(--sidebar-height);
             min-height: 100vh;
             padding: 2rem;
         }
 
         @media (max-width: 992px) {
-            .main-content { margin-left: 0; padding-bottom: 80px; }
+            .main-content { margin-left: 0; padding-bottom: calc(var(--sidebar-height) + 8px); }
         }
 
         .header {

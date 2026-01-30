@@ -246,13 +246,13 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
     <style>
         /* Your existing <style> block - unchanged */
         :root {
-            --cyber-yellow: #FFD60A;
-            --cyber-gold: #FFC300;
-            --dark-navy: #0F1419;
-            --dark-slate: #1A1E2E;
-            --primary: #FFD60A;
-            --primary-dark: #FFC300;
-            --primary-light: #FFF8DC;
+            --cyber-yellow: #FF8C42;
+            --primary: #FF8C42;
+            --cyber-gold: #FF8C42;
+            --white: #FFFFFF;
+            --cyber-light: #F3F4F6;
+            --dark-navy: #111827;
+            --dark-slate: #374151;
             --success: #10b981;
             --success-light: #d1fae5;
             --success-dark: #047857;
@@ -260,21 +260,20 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
             --info-light: #eff6ff;
             --danger: #dc2626;
             --danger-light: #fef2f2;
-            --warning: #f59e0b;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
+            --warning: var(--cyber-yellow);
+            --grey-50: #F3F4F6;
+            --grey-100: #E5E7EB;
+            --grey-200: #D1D5DB;
+            --grey-600: #4b5563;
+            --grey-700: #374151;
+            --grey-800: #1f2937;
+            --grey-900: #111827;
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.09);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
             --radius: 8px;
             --sidebar-width: 260px;
+            --sidebar-height: 72px;
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -288,8 +287,7 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
         }
 
         .main-content {
-            margin-left: var(--sidebar-width);
-            padding: 2.5rem 2rem;
+            margin-bottom: var(--sidebar-height);
             min-height: 100vh;
         }
 
@@ -402,7 +400,7 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 140, 66, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.1) 0%, transparent 70%);
             animation: pulse 3s ease-in-out infinite;
         }
 
@@ -428,7 +426,7 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
             justify-content: center;
             font-size: 2.5rem;
             color: white;
-            box-shadow: 0 8px 24px rgba(255, 140, 66, 0.4);
+            box-shadow: 0 8px 24px rgba(var(--primary-rgb),0.4);
         }
 
         .caller-info {
@@ -451,13 +449,13 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
 
         .caller-label {
             display: inline-block;
-            background: rgba(255, 140, 66, 0.1);
+            background: rgba(var(--primary-rgb),0.1);
             color: var(--primary-dark);
             padding: 0.4rem 1rem;
             border-radius: 20px;
             font-size: 0.9rem;
             font-weight: 600;
-            border: 1px solid rgba(255, 140, 66, 0.3);
+            border: 1px solid rgba(var(--primary-rgb),0.3);
         }
 
         .call-duration {
@@ -554,7 +552,7 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
             background: var(--primary-light);
             border-color: var(--primary);
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(255, 140, 66, 0.2);
+            box-shadow: 0 6px 16px rgba(var(--primary-rgb),0.2);
         }
 
         .option-btn:hover i {

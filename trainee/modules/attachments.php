@@ -225,32 +225,35 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
     <style>
         /* Style merged from original attachments.php (danger theme) + needed elements from phishing.php */
         :root {
-            --cyber-yellow: #FFD60A;
-            --cyber-gold: #FFC300;
-            --dark-navy: #0F1419;
-            --dark-slate: #1A1E2E;
-            --primary: #FFD60A;
-            --primary-dark: #FFC300;
+            --cyber-yellow: #FF8C42;
+            --primary: #FF8C42;
+            --cyber-gold: #FF8C42;
+            --white: #FFFFFF;
+            --cyber-light: #F3F4F6;
+            --dark-navy: #111827;
+            --dark-slate: #374151;
+            --primary-dark: #E65F00;
             --success: #10b981;
             --success-light: #d1fae5;
             --danger: #dc2626;
             --danger-light: #fef2f2;
-            --warning: #FFD60A;
-            --warning-light: #FFF8DC;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --warning: #FF8C42;
+            --warning-light: #FFF4ED;
+            --grey-50: #F3F4F6;
+            --grey-100: #E5E7EB;
+            --grey-200: #D1D5DB;
+            --grey-600: #4b5563;
+            --grey-700: #374151;
+            --grey-800: #1f2937;
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+            --shadow-md: 0 6px 18px rgba(0,0,0,0.09);
             --radius: 12px;
             --sidebar-width: 260px;
+            --sidebar-height: 72px;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.6; }
-        .main-content { margin-left: var(--sidebar-width); padding: 2.5rem 2rem; min-height: 100vh; }
+        .main-content { margin-bottom: var(--sidebar-height); padding: 2.5rem 2rem; min-height: 100vh; }
         .container { max-width: 1100px; margin: 0 auto; }
         .page-header {
             background: linear-gradient(135deg, var(--dark-navy), var(--dark-slate));

@@ -62,27 +62,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* Primary Brand Colors */
-            --cyber-yellow: #FFD60A;
-            --cyber-gold: #FFC300;
-            --cyber-light: #FFF8DC;
+            --cyber-yellow: #FF8C42;
+            --primary: #FF8C42;
+            --cyber-gold: #FF8C42;
             --white: #FFFFFF;
-            
-            /* Security Dark Tones */
-            --dark-navy: #0F1419;
-            --dark-slate: #1A1E2E;
-            --charcoal: #2D3142;
-            
-            /* Accent Colors */
+            --cyber-light: #F3F4F6;
+            --dark-navy: #111827;
+            --dark-slate: #374151;
+            --charcoal: #6B7280;
             --shield-green: #10B981;
             --alert-red: #EF4444;
             --info-blue: #3B82F6;
-            
-            /* Shadows & Effects */
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.2);
-            --shadow-yellow: 0 0 20px rgba(255, 214, 10, 0.3);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 6px 18px rgba(0,0,0,0.09);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+            --shadow-accent: 0 6px 24px rgba(var(--primary-rgb),0.12);
         }
 
         * {
@@ -110,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             right: -10%;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.15) 0%, transparent 70%);
             border-radius: 50%;
             z-index: 0;
         }
@@ -122,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             left: -10%;
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.1) 0%, transparent 70%);
             border-radius: 50%;
             z-index: 0;
         }
@@ -154,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             justify-content: center;
             margin: 0 auto 18px;
             border: 3px solid var(--cyber-yellow);
-            box-shadow: 0 8px 25px rgba(255, 214, 10, 0.2);
+            box-shadow: 0 8px 25px rgba(var(--primary-rgb),0.2);
         }
 
         .logo-icon i {
@@ -251,8 +245,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         input:focus {
             outline: none;
             border-color: var(--cyber-yellow);
-            box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.15);
-            background: rgba(255, 214, 10, 0.02);
+            box-shadow: 0 0 0 3px rgba(var(--primary-rgb),0.15);
+            background: rgba(var(--primary-rgb),0.02);
         }
 
         .btn {
@@ -278,7 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: var(--cyber-yellow);
             color: var(--dark-navy);
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 214, 10, 0.3);
+            box-shadow: 0 10px 30px rgba(var(--primary-rgb),0.3);
         }
 
         .btn i {
@@ -311,11 +305,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .demo-credentials {
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.1) 0%, rgba(255, 195, 0, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.1) 0%, rgba(var(--primary-rgb),0.05) 100%);
             padding: 20px;
             border-radius: 10px;
             margin-top: 28px;
-            border: 2px solid rgba(255, 214, 10, 0.3);
+            border: 2px solid rgba(var(--primary-rgb),0.3);
         }
 
         .demo-credentials h3 {

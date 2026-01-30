@@ -107,7 +107,7 @@ $departments = $dept_stmt->fetchAll(PDO::FETCH_ASSOC);
             color: var(--dark);
             line-height: 1.6;
         }
-        .main-content { margin-left: var(--sidebar-width); min-height: 100vh; }
+        .main-content { margin-bottom: var(--sidebar-height); min-height: 100vh; }
         .header {
             background: white;
             border-bottom: 1px solid var(--gray-200);

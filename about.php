@@ -24,17 +24,26 @@ if (isLoggedIn()) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* Primary Brand Colors */
-            --cyber-yellow: #FFD60A;
-            --cyber-gold: #FFC300;
-            --cyber-light: #FFF8DC;
+            /* Primary Brand Colors (Orange / White / Grey theme) */
+            --cyber-yellow: #FF8C42;
+            --primary: #FF8C42;
+            --cyber-gold: #FF8C42;
             --white: #FFFFFF;
-            
-            /* Security Dark Tones */
-            --dark-navy: #0F1419;
-            --dark-slate: #1A1E2E;
-            --charcoal: #2D3142;
-            
+            --cyber-light: #F3F4F6;
+
+            /* Grey Tones */
+            --grey-50: #F3F4F6;
+            --grey-100: #E5E7EB;
+            --grey-300: #D1D5DB;
+            --grey-500: #6B7280;
+            --grey-700: #374151;
+            --text-dark: #111827;
+
+            /* Legacy/dark variable for existing usage */
+            --dark-navy: #111827;
+            --dark-slate: #374151;
+            --charcoal: #6B7280;
+
             /* Accent Colors */
             --shield-green: #10B981;
             --alert-red: #EF4444;
@@ -44,7 +53,7 @@ if (isLoggedIn()) {
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
             --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
             --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.2);
-            --shadow-yellow: 0 0 20px rgba(255, 214, 10, 0.3);
+            --shadow-yellow: 0 0 20px rgba(var(--primary-rgb),0.3);
         }
 
         * {
@@ -93,7 +102,7 @@ if (isLoggedIn()) {
 
         .logo:hover {
             transform: scale(1.05);
-            text-shadow: 0 0 10px rgba(255, 214, 10, 0.5);
+            text-shadow: 0 0 10px rgba(var(--primary-rgb),0.5);
         }
 
         .logo i {
@@ -129,7 +138,7 @@ if (isLoggedIn()) {
         }
 
         .nav-menu a:hover {
-            background: rgba(255, 214, 10, 0.1);
+            background: rgba(var(--primary-rgb),0.1);
             color: var(--cyber-yellow);
         }
 
@@ -165,7 +174,7 @@ if (isLoggedIn()) {
             background: var(--cyber-yellow);
             color: var(--dark-navy);
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 214, 10, 0.3);
+            box-shadow: 0 8px 20px rgba(var(--primary-rgb),0.3);
         }
 
         .container {
@@ -317,7 +326,7 @@ if (isLoggedIn()) {
         .btn-primary:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+            box-shadow: 0 4px 12px rgba(var(--primary-rgb),0.3);
         }
 
         /* Container */
@@ -422,7 +431,7 @@ if (isLoggedIn()) {
             background: var(--white);
             padding: 40px;
             border-radius: 14px;
-            border: 2px solid rgba(255, 214, 10, 0.15);
+            border: 2px solid rgba(var(--primary-rgb),0.2);
             box-shadow: var(--shadow-md);
             text-align: center;
             transition: all 0.3s ease;
@@ -437,7 +446,7 @@ if (isLoggedIn()) {
         .team-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.2) 0%, rgba(255, 195, 0, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.2) 0%, rgba(var(--primary-rgb),0.1) 100%);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -490,7 +499,7 @@ if (isLoggedIn()) {
             right: -100px;
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(255, 214, 10, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--primary-rgb),0.15) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -512,16 +521,16 @@ if (isLoggedIn()) {
         }
 
         .cert-badge {
-            background: rgba(255, 214, 10, 0.1);
+            background: rgba(var(--primary-rgb),0.1);
             padding: 40px;
             border-radius: 14px;
             text-align: center;
-            border: 2px solid rgba(255, 214, 10, 0.2);
+            border: 2px solid rgba(var(--primary-rgb),0.2);
             transition: all 0.3s ease;
         }
 
         .cert-badge:hover {
-            background: rgba(255, 214, 10, 0.15);
+            background: rgba(var(--primary-rgb),0.15);
             border-color: var(--cyber-yellow);
             transform: translateY(-8px);
         }
