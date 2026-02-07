@@ -78,12 +78,12 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
 
 <style>
     :root {
-        /* Primary Brand Colors (Orange / White / Grey theme) */
+        /* Primary Brand Colors (Orange / White) */
         --cyber-yellow: #FF8C42;
         --primary: #FF8C42;
         --cyber-gold: #FF8C42;
         --white: #FFFFFF;
-        --cyber-light: #F3F4F6;
+        --cyber-light: #F7F7FB;
 
         /* Grey Tones */
         --grey-50: #F3F4F6;
@@ -91,14 +91,12 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         --grey-300: #D1D5DB;
         --grey-500: #6B7280;
         --grey-700: #374151;
+        --grey-800: #1f2937;
         --text-dark: #111827;
-
-        --dark-navy: #111827;
-        --dark-slate: #374151;
 
         --sidebar-width: 260px;
         --sidebar-height: 72px;
-        --shadow-md: 0 6px 18px rgba(0,0,0,0.09);
+        --shadow-md: 0 10px 24px rgba(15,23,42,0.12);
         --radius: 12px;
     }
 
@@ -108,14 +106,15 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         right: 0;
         bottom: 0;
         height: var(--sidebar-height);
-        background: var(--grey-800);
-        border-top: 4px solid var(--primary);
-        box-shadow: 0 -8px 30px rgba(0,0,0,0.12);
+        background: rgba(255,255,255,0.96);
+        border-top: 1px solid rgba(15,23,42,0.08);
+        box-shadow: 0 -10px 24px rgba(15,23,42,0.08);
         display: flex;
         align-items: center;
         justify-content: space-around;
         z-index: 1000;
         padding: 0 12px;
+        backdrop-filter: blur(16px);
     }
 
     .sidebar-header { display:none; }
@@ -125,15 +124,16 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         flex-direction: column;
         align-items: center;
         gap: 6px;
-        color: var(--white);
+        color: var(--grey-800);
         text-decoration: none;
-        font-size: 13px;
+        font-size: 12px;
         padding: 8px 10px;
-        border-radius: 8px;
+        border-radius: 999px;
+        transition: all 0.2s ease;
     }
 
     .sidebar a i { font-size: 18px; }
-    .sidebar a.active { color: var(--primary); }
+    .sidebar a.active { color: var(--primary); background: rgba(255,140,66,0.15); }
 
     .sidebar-nav {
         list-style: none;
@@ -154,24 +154,25 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         flex-direction: column;
         align-items: center;
         padding: 0.6rem 0.9rem;
-        color: rgba(255, 255, 255, 0.85);
+        color: rgba(15, 23, 42, 0.75);
         text-decoration: none;
-        font-weight: 500;
-        transition: all 0.3s;
+        font-weight: 600;
+        transition: all 0.2s ease;
         border-top: 3px solid transparent;
         background: transparent;
+        border-radius: 999px;
     }
 
     .sidebar-nav a:hover {
-        background: rgba(var(--primary-rgb),0.12);
-        color: var(--white);
+        background: rgba(255,140,66,0.12);
+        color: var(--text-dark);
     }
 
     .sidebar-nav a.active {
-        background: rgba(var(--primary-rgb),0.18);
+        background: rgba(255,140,66,0.18);
         color: var(--primary);
         border-left-color: var(--primary);
-        font-weight: 600;
+        font-weight: 700;
     }
 
     .sidebar-nav a i {

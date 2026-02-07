@@ -11,165 +11,143 @@ require_once '../config/database.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CyberShield - Security Awareness Training Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
     <style>
+        :root {
+            --primary: #FF8C42;
+            --primary-rgb: 255,140,66;
+            --platinum: #E5E4E2;
+            --ink: #1f2937;
+            --muted: #6b7280;
+            --white: #ffffff;
+            --shadow-sm: 0 10px 24px rgba(15, 23, 42, 0.08);
+            --shadow-md: 0 18px 40px rgba(15, 23, 42, 0.12);
+        }
+
+        body {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(1000px 520px at 15% -10%, #fff1e4 0%, transparent 60%),
+                linear-gradient(135deg, #ffffff 0%, var(--platinum) 100%);
+            color: var(--ink);
+            margin: 0;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(255, 140, 66, 0.2);
+            box-shadow: var(--shadow-sm);
+        }
+
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #ff8c42 0%, #ffd2b3 100%);
+            color: var(--ink);
             padding: 100px 20px;
             text-align: center;
-            border-radius: 15px;
+            border-radius: 24px;
             margin-bottom: 50px;
+            box-shadow: 0 18px 40px rgba(255, 140, 66, 0.22);
         }
-        
+
         .hero h1 {
             font-size: 56px;
             margin-bottom: 20px;
-            color: white;
         }
-        
+
         .hero p {
-            font-size: 24px;
+            font-size: 22px;
             margin-bottom: 30px;
-            opacity: 0.95;
         }
-        
+
         .hero-buttons {
             display: flex;
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
         }
-        
+
         .hero-btn {
             padding: 15px 40px;
             font-size: 18px;
-            border-radius: 8px;
+            border-radius: 999px;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
             transition: all 0.3s;
         }
-        
+
         .hero-btn-primary {
-            background: white;
-            color: #667eea;
+            background: var(--white);
+            color: var(--ink);
         }
-        
-        .hero-btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
-        }
-        
+
         .hero-btn-secondary {
             background: transparent;
-            color: white;
-            border: 2px solid white;
+            color: var(--ink);
+            border: 2px solid rgba(255, 255, 255, 0.9);
         }
-        
-        .hero-btn-secondary:hover {
-            background: white;
-            color: #667eea;
-            transform: translateY(-3px);
-        }
-        
+
         .purpose-statement {
-            background: white;
+            background: var(--white);
             padding: 40px;
-            border-radius: 15px;
+            border-radius: 18px;
             margin: 50px 0;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-sm);
             text-align: center;
         }
-        
+
         .purpose-statement h2 {
-            color: #667eea;
+            color: var(--primary);
             margin-bottom: 20px;
         }
-        
-        .purpose-statement p {
-            font-size: 20px;
-            line-height: 1.8;
-            color: #333;
-        }
-        
+
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             margin: 50px 0;
         }
-        
+
         .feature-card {
-            background: white;
+            background: var(--white);
             padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 140, 66, 0.12);
+            box-shadow: var(--shadow-sm);
             transition: transform 0.3s;
         }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .feature-icon {
-            font-size: 64px;
-            margin-bottom: 20px;
-        }
-        
+
         .feature-card h3 {
-            color: #667eea;
-            margin-bottom: 15px;
+            color: var(--primary);
         }
-        
-        .feature-card p {
-            color: #666;
-            line-height: 1.6;
-        }
-        
+
         .stats-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #ffffff 0%, #fff1e4 100%);
+            color: var(--ink);
             padding: 60px 40px;
-            border-radius: 15px;
+            border-radius: 18px;
             margin: 50px 0;
+            border: 1px solid rgba(255, 140, 66, 0.2);
         }
-        
+
         .stats-section h2 {
             text-align: center;
             font-size: 36px;
             margin-bottom: 40px;
-            color: white;
         }
-        
+
         .stats-grid-home {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 30px;
         }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 48px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .stat-label {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-        
+
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .hero p {
-                font-size: 18px;
-            }
+            .hero h1 { font-size: 36px; }
+            .hero p { font-size: 18px; }
         }
     </style>
 </head>

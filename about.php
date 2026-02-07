@@ -20,7 +20,7 @@ if (isLoggedIn()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About CyberAware – Intellectual Technology</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -30,6 +30,8 @@ if (isLoggedIn()) {
             --cyber-gold: #FF8C42;
             --white: #FFFFFF;
             --cyber-light: #F3F4F6;
+            --primary-rgb: 255,140,66;
+            --platinum: #E5E4E2;
 
             /* Grey Tones */
             --grey-50: #F3F4F6;
@@ -45,7 +47,7 @@ if (isLoggedIn()) {
             --charcoal: #6B7280;
 
             /* Accent Colors */
-            --shield-green: #10B981;
+            --shield-green: #FF8C42;
             --alert-red: #EF4444;
             --info-blue: #3B82F6;
             
@@ -556,6 +558,7 @@ if (isLoggedIn()) {
             font-size: 36px;
             margin-bottom: 30px;
             color: var(--primary-dark);
+        }
 
         .company-info p {
             font-size: 18px;
@@ -699,6 +702,55 @@ if (isLoggedIn()) {
             .cta-section {
                 padding: 60px 24px;
             }
+        }
+
+        /* Orange + White + Platinum Grey refresh */
+        body {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(1000px 520px at 10% -10%, #fff1e4 0%, transparent 60%),
+                linear-gradient(135deg, #ffffff 0%, var(--platinum) 100%);
+            color: var(--dark-navy);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid rgba(255, 140, 66, 0.2);
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-menu a {
+            color: var(--dark-navy);
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            color: var(--primary);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #ff8c42 0%, #ffd2b3 100%);
+            color: var(--dark-navy);
+            border: 1px solid rgba(255, 140, 66, 0.25);
+            box-shadow: 0 18px 40px rgba(255, 140, 66, 0.2);
+        }
+
+        .org-structure,
+        .company-info {
+            background: var(--white);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+        }
+
+        .certifications-section {
+            background: linear-gradient(135deg, #ffffff 0%, #fff1e4 100%);
+            color: var(--dark-navy);
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #ff8c42 0%, #ffb884 100%);
         }
     </style>
 </head>

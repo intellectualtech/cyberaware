@@ -36,8 +36,25 @@ $summary = $stmt->fetch();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Training Results - CyberShield</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
     <style>
+        :root {
+            --primary: #FF8C42;
+            --platinum: #E5E4E2;
+            --ink: #1f2937;
+        }
+
+        body {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(1000px 520px at 12% -10%, #fff1e4 0%, transparent 60%),
+                linear-gradient(135deg, #ffffff 0%, var(--platinum) 100%);
+            color: var(--ink);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+        }
         .results-container {
             max-width: 1000px;
             margin: 0 auto;
@@ -53,7 +70,7 @@ $summary = $stmt->fetch();
         }
         
         .result-correct {
-            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            background: linear-gradient(135deg, #ff8c42 0%, #ffb884 100%);
         }
         
         .result-incorrect {
@@ -127,7 +144,7 @@ $summary = $stmt->fetch();
         .stat-box-value {
             font-size: 36px;
             font-weight: bold;
-            color: #667eea;
+            color: var(--primary);
             margin: 10px 0;
         }
         
@@ -162,7 +179,7 @@ $summary = $stmt->fetch();
                         echo '<span style="color: #e74c3c;">Click the link / Open attachment</span>';
                         break;
                     case 'reported':
-                        echo '<span style="color: #27ae60;">Report as Phishing</span>';
+                        echo '<span style="color: #FF8C42;">Report as Phishing</span>';
                         break;
                     case 'deleted':
                         echo '<span style="color: #f39c12;">Delete the email</span>';
@@ -178,7 +195,7 @@ $summary = $stmt->fetch();
         </div>
         
         <?php if ($action === 'reported'): ?>
-            <div class="feedback-box" style="border-left: 5px solid #27ae60;">
+            <div class="feedback-box" style="border-left: 5px solid #FF8C42;">
                 <h2>✅ Perfect! Here's Why This Was the Right Choice</h2>
                 <p><strong>What You Did Right:</strong></p>
                 <ul>
@@ -305,7 +322,7 @@ $summary = $stmt->fetch();
                 </div>
                 <div class="stat-box">
                     <div class="stat-box-label">Threats Reported</div>
-                    <div class="stat-box-value" style="color: #27ae60;"><?php echo $summary['phishing_reports']; ?></div>
+                    <div class="stat-box-value" style="color: #FF8C42;"><?php echo $summary['phishing_reports']; ?></div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-box-label">Phishing Clicks</div>
@@ -316,7 +333,7 @@ $summary = $stmt->fetch();
                 <div class="stat-box">
                     <div class="stat-box-label">Risk Level</div>
                     <div class="stat-box-value" style="color: <?php 
-                        echo $summary['risk_score'] < 30 ? '#27ae60' : ($summary['risk_score'] < 70 ? '#f39c12' : '#e74c3c'); 
+                        echo $summary['risk_score'] < 30 ? '#FF8C42' : ($summary['risk_score'] < 70 ? '#f39c12' : '#e74c3c'); 
                     ?>">
                         <?php 
                         echo $summary['risk_score'] < 30 ? 'Low' : ($summary['risk_score'] < 70 ? 'Medium' : 'High'); 

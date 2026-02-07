@@ -62,6 +62,7 @@ try {
     ];
 
     $completed = (int)$stats['completed_sessions'];
+    $total_sessions = (int)$stats['total_sessions'];
     $total_modules = 5; // Adjust if you add more modules
     $progress_percent = $total_modules > 0 ? round(($completed / $total_modules) * 100) : 0;
 
@@ -70,6 +71,29 @@ try {
         : 'No activity yet';
 
     $understanding = $stats['avg_score'] !== null ? round((float)$stats['avg_score']) : 0;
+
+    $xp = max(0, ($completed * 140) + ($understanding * 6));
+    if ($understanding >= 80) {
+        $tier = 'Gold';
+        $tier_class = 'tier-gold';
+        $momentum = 'On a roll';
+    } elseif ($understanding >= 60) {
+        $tier = 'Silver';
+        $tier_class = 'tier-silver';
+        $momentum = 'Steady climb';
+    } else {
+        $tier = 'Bronze';
+        $tier_class = 'tier-bronze';
+        $momentum = 'New explorer';
+    }
+
+    $hero_message = $completed > 0
+        ? "You're building sharp instincts one module at a time."
+        : "Kick off your journey with a quick win today.";
+
+    $next_goal = $completed < $total_modules
+        ? "Next badge: complete " . ($completed + 1) . " of " . $total_modules . " modules."
+        : "Top badge earned. Revisit any module to stay sharp.";
 
     $recommendation = "You're making good progress — keep going!";
     if ($understanding < 50) {
@@ -121,37 +145,23 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CyberAware - Dashboard</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         :root {
-            /* Primary Brand Colors */
-            --cyber-yellow: #FF8C42;
-            --primary: #FF8C42;
-            --cyber-gold: #FF8C42;
-            --white: #FFFFFF;
-            --cyber-light: #F3F4F6;
-            
-            /* Security Dark Tones */
-            --dark-navy: #111827;
-            --dark-slate: #374151;
-            --charcoal: #6B7280;
-            
-            /* Accent Colors */
-            --shield-green: #10B981;
-            --alert-red: #EF4444;
-            --info-blue: #3B82F6;
-            
-            /* Shadows & Effects */
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.09);
-            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
-            --shadow-accent: 0 6px 24px rgba(var(--primary-rgb),0.12);
-            
-            --sidebar-width: 260px;
+            --brand-a: #FF8C42;
+            --brand-b: #FFA969;
+            --brand-c: #0f172a;
+            --surface: #ffffff;
+            --ink: #0f172a;
+            --muted: #5f6b7a;
+            --line: rgba(15, 23, 42, 0.08);
+            --shadow-sm: 0 6px 18px rgba(15, 23, 42, 0.06);
+            --shadow-md: 0 16px 40px rgba(15, 23, 42, 0.12);
+            --radius-lg: 24px;
+            --radius-md: 16px;
             --sidebar-height: 72px;
-            --radius: 14px;
         }
 
         * {
@@ -161,431 +171,458 @@ try {
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #F8F9FF 0%, #F3F5FF 100%);
-            color: var(--dark-navy);
+            font-family: 'Manrope', 'Segoe UI', sans-serif;
+            background: radial-gradient(1200px 600px at 10% -10%, #fff1e4 0%, transparent 60%),
+                linear-gradient(135deg, #fff8f1 0%, #ffffff 100%);
+            color: var(--ink);
             line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
         }
 
         .main-content {
             margin-bottom: var(--sidebar-height);
             min-height: 100vh;
-            padding: 0;
-        }
-
-        @media (max-width: 992px) {
-            .main-content {
-                margin-left: 0;
-                padding-bottom: calc(var(--sidebar-height) + 8px);
-            }
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--white) 0%, #F8FAFB 100%);
-            border-bottom: 1px solid rgba(15, 20, 25, 0.08);
-            padding: 28px 40px;
-            position: sticky;
-            top: 0;
-            z-index: 90;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-        }
-
-        .page-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--dark-navy);
-            letter-spacing: -0.5px;
-        }
-
-        .page-subtitle {
-            font-size: 15px;
-            color: #5A6B7C;
-            margin-top: 6px;
-            font-weight: 400;
         }
 
         .container {
-            padding: 40px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 28px 80px;
         }
 
-        /* Hero Section */
-        .info-grid {
+        .hero {
+            position: relative;
+            padding: 48px 0 24px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(600px 300px at 85% 10%, rgba(255, 140, 66, 0.18), transparent 60%),
+                radial-gradient(420px 260px at 20% 20%, rgba(255, 170, 105, 0.2), transparent 60%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
             display: grid;
+            gap: 32px;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 48px;
+            align-items: stretch;
         }
 
-        .info-item {
-            background: var(--white);
-            padding: 28px;
-            border-radius: 16px;
-            text-align: center;
-            border: 2px solid rgba(var(--primary-rgb),0.1);
-            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+        .hero-copy {
+            padding: 12px 8px;
         }
 
-        .info-item:hover {
-            border-color: var(--cyber-yellow);
-            box-shadow: 0 8px 32px rgba(var(--primary-rgb),0.12);
-            transform: translateY(-4px);
-        }
-
-        .info-item i {
-            font-size: 40px;
-            color: var(--cyber-yellow);
-            margin-bottom: 14px;
-            display: block;
-        }
-
-        .info-label {
-            font-size: 13px;
-            color: #6B7C8F;
-            font-weight: 600;
+        .eyebrow {
             text-transform: uppercase;
-            letter-spacing: 0.6px;
-            margin-bottom: 8px;
+            letter-spacing: 0.18em;
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(15, 23, 42, 0.55);
         }
 
-        .info-value {
+        .hero-title {
+            font-size: clamp(28px, 3vw, 44px);
+            font-weight: 700;
+            margin: 10px 0 8px;
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            color: var(--muted);
+            max-width: 520px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn.primary {
+            background: linear-gradient(135deg, var(--brand-a), #ff7a20);
+            color: #ffffff;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn.ghost {
+            background: rgba(255, 255, 255, 0.7);
+            color: var(--ink);
+            border: 1px solid var(--line);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pill {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .tier-gold {
+            background: rgba(234, 179, 8, 0.16);
+            border-color: rgba(234, 179, 8, 0.4);
+        }
+
+        .tier-silver {
+            background: rgba(100, 116, 139, 0.16);
+            border-color: rgba(100, 116, 139, 0.4);
+        }
+
+        .tier-bronze {
+            background: rgba(255, 140, 66, 0.16);
+            border-color: rgba(255, 140, 66, 0.4);
+        }
+
+        .hero-progress-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            display: grid;
+            gap: 18px;
+        }
+
+        .progress-ring {
+            --progress: 0;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: conic-gradient(var(--brand-a) calc(var(--progress) * 1%), #f5e3d4 0);
+            display: grid;
+            place-items: center;
+            position: relative;
+        }
+
+        .progress-ring::after {
+            content: '';
+            position: absolute;
+            inset: 14px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+        }
+
+        .progress-center {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .progress-value {
+            font-size: 44px;
+            font-weight: 800;
+            color: var(--ink);
+            margin: 2px 0;
+        }
+
+        .progress-meta {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .progress-details {
+            display: grid;
+            gap: 12px;
+        }
+
+        .detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .detail strong {
+            color: var(--ink);
+        }
+
+        .motivation {
+            background: linear-gradient(135deg, rgba(255, 170, 105, 0.16), rgba(255, 140, 66, 0.12));
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-weight: 600;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .motivation i {
+            color: #FF8C42;
+        }
+
+        .section {
+            margin-top: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .section-title {
             font-size: 24px;
             font-weight: 700;
-            color: var(--dark-navy);
         }
 
-        /* Stats Grid - Learning Progress */
-        .stats-grid {
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .grid-split {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
-            margin-bottom: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         }
 
-        .stat-card {
-            background: var(--white);
-            border: 2px solid rgba(15, 20, 25, 0.06);
-            border-radius: 14px;
-            padding: 28px;
-            text-align: center;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            transition: all 0.3s ease;
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .challenge-meta {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .achievement-grid {
+            display: grid;
+            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            margin-top: 12px;
+        }
+
+        .achievement {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .achievement strong {
+            display: block;
+            font-size: 18px;
+            color: var(--ink);
+        }
+
+        .course-grid {
+            display: grid;
+            gap: 22px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .course-card {
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            text-decoration: none;
+            color: var(--ink);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
             position: relative;
             overflow: hidden;
         }
 
-        .stat-card::before {
+        .course-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--cyber-yellow), var(--cyber-gold));
+            inset: 0;
+            background: radial-gradient(120px 80px at 80% 10%, rgba(255, 140, 66, 0.18), transparent 60%);
+            opacity: 0.6;
         }
 
-        .stat-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.12) 0%, rgba(var(--primary-rgb),0.06) 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-        }
-
-        .stat-icon i {
-            font-size: 28px;
-            color: var(--cyber-yellow);
-        }
-
-        .stat-value {
-            font-size: 40px;
-            font-weight: 800;
-            color: var(--cyber-yellow);
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 13px;
-            color: #6B7C8F;
-            font-weight: 600;
-            margin-top: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Main Dashboard Grid */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 32px;
-            margin-bottom: 40px;
-        }
-
-        @media (min-width: 992px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-/* Progress Card - Learning Path (LinkedIn-style) */
-        .card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 24px;
+        .course-card:hover {
+            transform: translateY(-6px);
             box-shadow: var(--shadow-md);
-            transition: all 0.25s ease;
-            border: 1px solid var(--border-light);
         }
 
-        .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-6px); }
-
-        .card h3 { display:none; }
-
-        /* Local LinkedIn-like header used inside markup */
-        .card .card-header { margin-bottom: 14px; }
-        .card .card-header .avatar { background: linear-gradient(135deg, rgba(var(--primary-rgb),0.08), rgba(var(--primary-rgb),0.02)); color:var(--primary); width:44px; height:44px; border-radius:50%; display:grid; place-items:center; font-size:18px; }
-        .card .card-meta .title { font-size: 16px; font-weight: 700; }
-        .card .card-meta .muted { font-size: 13px; color: var(--grey-500); }
-
-        .card .card-body { padding: 8px 0 12px; }
-        .card .card-actions { display:flex; gap:10px; justify-content:flex-end; }
-        .module-list { padding:0; list-style:none; margin:0; display:flex; flex-direction:column; gap:10px; }
-        .module-list li { margin:0; }
-        .module-link { display:flex; align-items:center; justify-content:space-between; gap:12px; text-decoration:none; color:var(--text-dark); padding:10px 12px; border-radius:10px; }
-        .module-link .left { display:flex; align-items:center; gap:12px; }
-        .module-link .left i { font-size:18px; color:var(--primary); }
-        .module-link:hover { box-shadow: var(--shadow-sm); transform: translateY(-3px); }
-
-        /* Progress Visualization */
-        .progress-section {
-            margin: 32px 0;
-        }
-
-        .progress-header {
+        .course-top {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            font-weight: 700;
-            color: var(--dark-navy);
-            font-size: 15px;
+            position: relative;
+            z-index: 1;
         }
 
-        .progress-bar-outer {
-            height: 10px;
-            background: #E8EDF5;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--cyber-yellow) 0%, var(--cyber-gold) 100%);
-            border-radius: 10px;
-            transition: width 1.2s ease;
-            box-shadow: 0 0 8px rgba(var(--primary-rgb),0.4);
-        }
-
-        .progress-value {
-            text-align: center;
-            font-size: 64px;
-            font-weight: 800;
-            color: var(--cyber-yellow);
-            margin: 32px 0;
-            text-shadow: 0 2px 8px rgba(var(--primary-rgb),0.15);
-            line-height: 1;
-        }
-
-        .meta-info {
+        .course-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 32px;
+            place-items: center;
+            background: rgba(255, 140, 66, 0.12);
+            color: var(--brand-a);
+            font-size: 20px;
         }
 
-        .meta-item {
-            background: linear-gradient(135deg, #F8FAFB 0%, #F3F5FF 100%);
-            padding: 20px;
-            border-radius: 12px;
+        .course-badge {
+            background: rgba(255, 140, 66, 0.18);
+            color: #b45309;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
+
+        .course-card h3 {
+            font-size: 18px;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .course-card p {
             font-size: 14px;
-            color: #6B7C8F;
-            border-left: 4px solid var(--cyber-yellow);
+            color: var(--muted);
+            position: relative;
+            z-index: 1;
         }
 
-        .meta-item strong {
-            display: block;
-            color: var(--dark-navy);
-            font-size: 18px;
-            margin-top: 8px;
-            font-weight: 700;
-        }
-
-        /* Risk Badge */
-        .risk-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 700;
-            margin-top: 28px;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-        }
-
-        .risk-badge i {
-            font-size: 18px;
-        }
-
-        .risk-low { 
-            background: rgba(16, 185, 129, 0.12);
-            color: var(--shield-green);
-        }
-        .risk-medium { 
-            background: rgba(245, 158, 11, 0.12);
-            color: var(--cyber-yellow);
-        }
-        .risk-high { 
-            background: rgba(239, 68, 68, 0.12);
-            color: var(--alert-red);
-        }
-
-        /* Course Modules List */
-        .module-list {
-            list-style: none;
-        }
-
-        .module-list li {
-            margin: 12px 0;
-        }
-
-        .module-link {
+        .course-meta {
             display: flex;
-            align-items: center;
-            gap: 18px;
-            padding: 20px 24px;
-            background: linear-gradient(135deg, #F8FAFB 0%, #F3F5FF 100%);
-            border-radius: 12px;
-            text-decoration: none;
-            color: var(--dark-navy);
-            font-weight: 600;
-            font-size: 15px;
-            border: 2px solid transparent;
-            border-left: 5px solid var(--cyber-yellow);
-            transition: all 0.3s ease;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--muted);
+            position: relative;
+            z-index: 1;
         }
 
-        .module-link i {
-            font-size: 24px;
-            color: var(--cyber-yellow);
-            min-width: 28px;
-            text-align: center;
-        }
-
-        .module-link:hover {
-            background: linear-gradient(135deg, var(--cyber-yellow) 0%, var(--cyber-gold) 100%);
-            color: var(--dark-navy);
-            border-left-color: var(--dark-navy);
-            transform: translateX(6px);
-            box-shadow: 0 8px 24px rgba(var(--primary-rgb),0.2);
-        }
-
-        .module-link:hover i {
-            color: var(--dark-navy);
-        }
-
-        /* Recommendation Box */
-        .advice-box {
-            margin-top: 32px;
-            padding: 24px;
-            background: linear-gradient(135deg, rgba(var(--primary-rgb),0.08) 0%, rgba(var(--primary-rgb),0.03) 100%);
-            border-radius: 12px;
-            border-left: 5px solid var(--cyber-yellow);
-            line-height: 1.8;
-            font-size: 15px;
-            color: #2C3E50;
-        }
-
-        .advice-box strong {
-            color: var(--dark-navy);
-            display: block;
-            margin-bottom: 12px;
-            font-size: 15px;
+        .course-cta {
+            margin-top: auto;
             font-weight: 700;
+            color: var(--brand-a);
+            position: relative;
+            z-index: 1;
         }
 
-        /* Campaign/Current Exercise Info */
-        .campaign-info {
-            background: linear-gradient(135deg, #F8FAFB 0%, #F3F5FF 100%);
-            padding: 24px;
-            border-radius: 12px;
-            margin-top: 28px;
-            border-left: 5px solid var(--cyber-yellow);
-            border: 2px solid rgba(var(--primary-rgb),0.15);
+        .coach-card {
+            margin-top: 22px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            border-radius: var(--radius-md);
+            padding: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
         }
 
-        .campaign-info h4 {
-            margin: 0 0 16px 0;
-            font-size: 16px;
-            color: var(--dark-navy);
-            font-weight: 700;
+        .coach-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 140, 66, 0.2);
+            display: grid;
+            place-items: center;
+            color: #b45309;
+            flex-shrink: 0;
         }
 
-        .campaign-info p {
-            margin: 10px 0;
-            font-size: 14px;
-            color: #5A6B7C;
-            font-weight: 500;
-            line-height: 1.6;
+        .reveal {
+            opacity: 0;
+            transform: translateY(12px);
+            animation: fadeUp 0.8s ease forwards;
         }
 
-        @media (max-width: 992px) {
-            .container {
-                padding: 24px 24px;
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
+        }
 
-            .stats-grid,
-            .info-grid {
+        @media (max-width: 768px) {
+            .hero-inner {
                 grid-template-columns: 1fr;
             }
 
-            .meta-info {
-                grid-template-columns: 1fr;
+            .progress-ring {
+                width: 190px;
+                height: 190px;
             }
 
-            .card {
-                padding: 28px;
-            }
-
-            .page-title {
-                font-size: 26px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .page-title {
-                font-size: 22px;
-            }
-
-            .progress-value {
-                font-size: 48px;
-            }
-
-            .stat-value {
-                font-size: 32px;
-            }
-
-            .card h3 {
-                font-size: 22px;
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -595,187 +632,175 @@ try {
 <?php include 'trainee-sidebar.php'; ?>
 
 <main class="main-content">
-    <header class="header">
-        <div>
-            <h2 class="page-title">Welcome, <?= htmlspecialchars($name) ?></h2>
-            <p class="page-subtitle">Continue your cybersecurity learning journey</p>
-        </div>
-    </header>
-
     <div class="container">
-        <!-- Department & Campaign Info -->
-        <div class="info-grid">
-            <div class="info-item">
-                <i class="fas fa-building"></i>
-                <div class="info-label">Your Department</div>
-                <div class="info-value"><?= htmlspecialchars($department) ?></div>
-            </div>
-
-            <div class="info-item">
-                <i class="fas fa-bullhorn"></i>
-                <div class="info-label">Assigned Campaign</div>
-                <div class="info-value"><?= htmlspecialchars($campaign_name) ?></div>
-            </div>
-        </div>
-
-        <!-- Quick Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
-                <div class="stat-value"><?= $completed ?></div>
-                <div class="stat-label">Modules Completed</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="stat-value"><?= $understanding ?>%</div>
-                <div class="stat-label">Understanding Score</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-tasks"></i>
-                </div>
-                <div class="stat-value"><?= $progress_percent ?>%</div>
-                <div class="stat-label">Overall Progress</div>
-            </div>
-        </div>
-
-        <div class="dashboard-grid">
-            <!-- Learning Progress Card (LinkedIn-style) -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-avatar"><i class="fas fa-user-graduate"></i></div>
-                    <div class="card-meta">
-                        <div class="title">Learning Progress</div>
-                        <div class="muted">Updated: <?= htmlspecialchars($last_activity) ?></div>
+        <section class="hero">
+            <div class="hero-inner">
+                <div class="hero-copy reveal">
+                    <div class="eyebrow">Your learning studio</div>
+                    <h1 class="hero-title">Welcome back, <?= htmlspecialchars($name) ?></h1>
+                    <p class="hero-subtitle">A calm space to level up your security instincts. Short lessons, real-world scenarios, and quick wins.</p>
+                    <div class="hero-actions">
+                        <a class="btn primary" href="modules/phishing.php"><i class="fas fa-play"></i> Continue learning</a>
+                        <a class="btn ghost" href="progress.php"><i class="fas fa-chart-line"></i> View progress</a>
                     </div>
-                    <div style="margin-left:auto;">
-                        <button class="btn-ghost">Export</button>
+                    <div class="pill-row">
+                        <span class="pill">XP <?= $xp ?></span>
+                        <span class="pill <?= $tier_class ?>">Shield Tier: <?= $tier ?></span>
+                        <span class="pill"><?= htmlspecialchars($department) ?></span>
                     </div>
                 </div>
-
-                <div class="card-body">
-                    <div class="progress-section">
-                        <div class="progress-header">
-                            <span>Overall Proficiency</span>
-                            <span><?= $understanding ?>%</span>
-                        </div>
-                        <div class="progress-bar-outer">
-                            <div class="progress-fill" style="width: <?= $understanding ?>%"></div>
-                        </div>
-                        <div class="progress-value"><?= $understanding ?>%</div>
-                    </div>
-
-                    <div class="meta-info">
-                        <div class="meta-item">
-                            <span>Courses Completed</span>
-                            <strong><?= $completed ?>/<?= $total_modules ?></strong>
-                        </div>
-                        <div class="meta-item">
-                            <span>Last Activity</span>
-                            <strong><?= htmlspecialchars($last_activity) ?></strong>
+                <div class="hero-progress-card reveal delay-1">
+                    <div class="progress-ring" data-progress="<?= $progress_percent ?>" style="--progress: <?= $progress_percent ?>;">
+                        <div class="progress-center">
+                            <div class="progress-label">Course progress</div>
+                            <div class="progress-value"><?= $progress_percent ?>%</div>
+                            <div class="progress-meta"><?= $completed ?>/<?= $total_modules ?> modules</div>
                         </div>
                     </div>
-
-                    <div class="risk-badge risk-<?= $risk_class ?>">
-                        <i class="fas fa-shield-alt"></i>
-                        Risk Level: <?= $risk_level ?>
+                    <div class="progress-details">
+                        <div class="detail"><span>Understanding</span><strong><?= $understanding ?>%</strong></div>
+                        <div class="detail"><span>Momentum</span><strong><?= htmlspecialchars($momentum) ?></strong></div>
+                        <div class="detail"><span>Last activity</span><strong><?= htmlspecialchars($last_activity) ?></strong></div>
                     </div>
+                    <div class="motivation">
+                        <i class="fas fa-sparkles"></i>
+                        <span><?= htmlspecialchars($hero_message) ?></span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                    <!-- Assigned Campaign Details -->
+        <section class="section">
+            <div class="section-header reveal delay-2">
+                <div>
+                    <div class="eyebrow">Your challenge</div>
+                    <div class="section-title">Spotlight and milestones</div>
+                    <div class="section-subtitle"><?= htmlspecialchars($next_goal) ?></div>
+                </div>
+            </div>
+            <div class="grid-split">
+                <div class="card reveal delay-2">
+                    <h3><i class="fas fa-rocket"></i> Challenge spotlight</h3>
                     <?php if ($current_campaign): ?>
-                    <div class="campaign-info">
-                        <h4><i class="fas fa-rocket"></i> Current Exercise</h4>
-                        <p><strong>Name:</strong> <?= htmlspecialchars($campaign_desc) ?></p>
-                        <p><strong>Duration:</strong> <?= htmlspecialchars($campaign_dates) ?></p>
+                    <p><?= htmlspecialchars($campaign_name) ?></p>
+                    <div class="challenge-meta">
+                        <div><strong>Focus:</strong> <?= htmlspecialchars($campaign_desc) ?></div>
+                        <div><strong>Dates:</strong> <?= htmlspecialchars($campaign_dates) ?></div>
                     </div>
                     <?php else: ?>
-                    <div class="campaign-info">
-                        <p>No active exercise is currently assigned to your department. Check back soon!</p>
-                    </div>
+                    <p>No active exercise is assigned yet. We will drop one soon.</p>
                     <?php endif; ?>
                 </div>
-
-                <div class="card-actions">
-                    <button class="btn">View Progress</button>
-                    <button class="btn-ghost">Share</button>
+                <div class="card reveal delay-3">
+                    <h3><i class="fas fa-trophy"></i> Wins so far</h3>
+                    <p>Small wins stack fast. Keep collecting them.</p>
+                    <div class="achievement-grid">
+                        <div class="achievement"><strong><?= $completed ?></strong>Modules finished</div>
+                        <div class="achievement"><strong><?= $total_sessions ?></strong>Sessions logged</div>
+                        <div class="achievement"><strong><?= $understanding ?>%</strong>Skill accuracy</div>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Available Courses (LinkedIn-style rows) -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-avatar"><i class="fas fa-book-open"></i></div>
-                    <div class="card-meta">
-                        <div class="title">Course Catalog</div>
-                        <div class="muted">Choose a course to begin or resume</div>
-                    </div>
-                    <div style="margin-left:auto;">
-                        <button class="btn-ghost">Browse All</button>
-                    </div>
+        <section class="section">
+            <div class="section-header reveal delay-2">
+                <div>
+                    <div class="eyebrow">Course cards</div>
+                    <div class="section-title">Choose your next mission</div>
+                    <div class="section-subtitle">Bite-sized lessons with real-world scenarios.</div>
                 </div>
+                <a class="btn ghost" href="modules/phishing.php"><i class="fas fa-compass"></i> Start next</a>
+            </div>
 
-                <div class="card-body">
-                    <ul class="module-list">
-                        <li>
-                            <a href="modules/phishing.php" class="module-link">
-                                <div class="left"><i class="fas fa-envelope"></i><span class="title">Phishing Recognition</span></div>
-                                <div><button class="btn">Start</button></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="modules/credentials.php" class="module-link">
-                                <div class="left"><i class="fas fa-key"></i><span class="title">Fake Login Pages</span></div>
-                                <div><button class="btn">Start</button></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="modules/social.php" class="module-link">
-                                <div class="left"><i class="fas fa-phone-alt"></i><span class="title">Social Engineering</span></div>
-                                <div><button class="btn">Start</button></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="modules/attachments.php" class="module-link">
-                                <div class="left"><i class="fas fa-paperclip"></i><span class="title">Dangerous Attachments</span></div>
-                                <div><button class="btn">Start</button></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="modules/links.php" class="module-link">
-                                <div class="left"><i class="fas fa-link"></i><span class="title">Suspicious Links</span></div>
-                                <div><button class="btn">Start</button></div>
-                            </a>
-                        </li>
-                    </ul>
-
-                    <div class="advice-box">
-                        <strong><i class="fas fa-bulb"></i> Next Steps:</strong>
-                        <?= $recommendation ?>
+            <div class="course-grid">
+                <a href="modules/phishing.php" class="course-card reveal delay-1">
+                    <div class="course-top">
+                        <div class="course-icon"><i class="fas fa-envelope"></i></div>
+                        <span class="course-badge">Core</span>
                     </div>
-                </div>
+                    <h3>Phishing Recognition</h3>
+                    <p>Learn to spot the telltale signs in emails, texts, and social messages.</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 8 min</span>
+                        <span><i class="fas fa-signal"></i> Beginner</span>
+                    </div>
+                    <div class="course-cta">Start now</div>
+                </a>
+                <a href="modules/credentials.php" class="course-card reveal delay-1">
+                    <div class="course-top">
+                        <div class="course-icon"><i class="fas fa-key"></i></div>
+                        <span class="course-badge">Hands-on</span>
+                    </div>
+                    <h3>Fake Login Pages</h3>
+                    <p>Catch the subtle UI traps that steal credentials before you click.</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 10 min</span>
+                        <span><i class="fas fa-signal"></i> Intermediate</span>
+                    </div>
+                    <div class="course-cta">Start now</div>
+                </a>
+                <a href="modules/social.php" class="course-card reveal delay-1">
+                    <div class="course-top">
+                        <div class="course-icon"><i class="fas fa-phone-alt"></i></div>
+                        <span class="course-badge">Scenario</span>
+                    </div>
+                    <h3>Social Engineering</h3>
+                    <p>Build confidence in high-pressure conversations and requests.</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 12 min</span>
+                        <span><i class="fas fa-signal"></i> Intermediate</span>
+                    </div>
+                    <div class="course-cta">Start now</div>
+                </a>
+                <a href="modules/attachments.php" class="course-card reveal delay-2">
+                    <div class="course-top">
+                        <div class="course-icon"><i class="fas fa-paperclip"></i></div>
+                        <span class="course-badge">Quick win</span>
+                    </div>
+                    <h3>Dangerous Attachments</h3>
+                    <p>Know the file types and red flags before you open anything.</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 7 min</span>
+                        <span><i class="fas fa-signal"></i> Beginner</span>
+                    </div>
+                    <div class="course-cta">Start now</div>
+                </a>
+                <a href="modules/links.php" class="course-card reveal delay-2">
+                    <div class="course-top">
+                        <div class="course-icon"><i class="fas fa-link"></i></div>
+                        <span class="course-badge">Deep dive</span>
+                    </div>
+                    <h3>Suspicious Links</h3>
+                    <p>Decode URLs and previews so you can click with confidence.</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-clock"></i> 9 min</span>
+                        <span><i class="fas fa-signal"></i> Beginner</span>
+                    </div>
+                    <div class="course-cta">Start now</div>
+                </a>
+            </div>
 
-                <div class="card-actions">
-                    <button class="btn-ghost">Manage Learning Path</button>
-                    <button class="btn">Enroll</button>
+            <div class="coach-card reveal delay-3">
+                <div class="coach-avatar"><i class="fas fa-bolt"></i></div>
+                <div>
+                    <h3>Coach's note</h3>
+                    <p><?= $recommendation ?></p>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </main>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const progressFill = document.querySelector('.progress-fill');
-    if (progressFill) {
-        const targetWidth = progressFill.style.width;
-        progressFill.style.width = '0%';
+    const progressRing = document.querySelector('.progress-ring');
+    if (progressRing) {
+        const targetProgress = progressRing.dataset.progress || '0';
+        progressRing.style.setProperty('--progress', '0');
         setTimeout(() => {
-            progressFill.style.width = targetWidth;
-        }, 100);
+            progressRing.style.setProperty('--progress', targetProgress);
+        }, 120);
     }
 });
 </script>

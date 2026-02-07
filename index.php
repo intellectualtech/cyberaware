@@ -17,7 +17,7 @@ if (isLoggedIn()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CyberAware - Security Awareness Training Platform</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
@@ -28,6 +28,8 @@ if (isLoggedIn()) {
             --cyber-gold: #FF8C42;
             --white: #FFFFFF;
             --cyber-light: #F3F4F6;
+            --primary-rgb: 255,140,66;
+            --platinum: #E5E4E2;
 
             /* Grey Tones */
             --grey-50: #F3F4F6;
@@ -1024,6 +1026,137 @@ if (isLoggedIn()) {
                 font-size: 42px;
             }
 
+
+        /* Orange + White + Platinum Grey refresh */
+        body {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(1000px 520px at 15% -10%, #fff1e4 0%, transparent 60%),
+                linear-gradient(135deg, #ffffff 0%, var(--platinum) 100%);
+            color: var(--dark-navy);
+        }
+
+        h1, h2, h3, .section-title {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid rgba(255, 140, 66, 0.25);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-menu a {
+            color: var(--dark-navy);
+        }
+
+        .nav-menu a:hover {
+            background: rgba(255, 140, 66, 0.14);
+            color: var(--primary);
+        }
+
+        .menu-toggle {
+            color: var(--dark-navy);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #FF8C42 0%, #FFC8A3 100%);
+            border-radius: 24px;
+            box-shadow: 0 18px 40px rgba(255, 140, 66, 0.22);
+        }
+
+        .hero-btn-primary {
+            color: var(--dark-navy);
+        }
+
+        .hero-btn-secondary {
+            border-color: rgba(255, 255, 255, 0.85);
+        }
+
+        .purpose-section,
+        .stats-section,
+        .org-stats-section,
+        .achievements-section {
+            background: var(--white);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            border-radius: 22px;
+            padding: 48px;
+            box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+        }
+
+        .features-grid .feature-card,
+        .modules-grid .module-card {
+            border-radius: 18px;
+            border: 1px solid rgba(255, 140, 66, 0.12);
+        }
+
+        .features-grid .feature-card:hover,
+        .modules-grid .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 32px rgba(255, 140, 66, 0.18);
+        }
+
+        .compliance-strip {
+            margin: 60px 0;
+            padding: 40px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #ffffff 0%, #fff4eb 100%);
+            border: 1px solid rgba(255, 140, 66, 0.2);
+            display: grid;
+            gap: 24px;
+        }
+
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .compliance-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+        }
+
+        .contact-panel {
+            margin: 60px 0 20px;
+            padding: 50px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--platinum) 0%, #ffffff 100%);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            display: grid;
+            gap: 28px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        }
+
+        .contact-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 22px;
+            border: 1px solid rgba(255, 140, 66, 0.16);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            font-family: inherit;
+        }
+
+        .contact-form button {
+            margin-top: 12px;
+            padding: 12px 20px;
+            border-radius: 999px;
+            border: none;
+            background: var(--primary);
+            color: var(--white);
+            font-weight: 700;
+            cursor: pointer;
+        }
             .hero p {
                 font-size: 18px;
             }
@@ -1206,6 +1339,8 @@ if (isLoggedIn()) {
                 font-size: 32px;
             }
         }
+
+        .module-card:hover {
             background: var(--white);
             box-shadow: var(--shadow-lg);
             transform: translateY(-10px);
@@ -1437,9 +1572,9 @@ if (isLoggedIn()) {
                     <a href="help.php">Help</a>
                 <?php else: ?>
                     <a href="#features">Features</a>
-                    <a href="about.php">About</a>
-                    <a href="compliance.php">Compliance</a>
-                    <a href="contact.php">Contact</a>
+                    <a href="#about">About</a>
+                    <a href="#compliance">Compliance</a>
+                    <a href="#contact">Contact</a>
                 <?php endif; ?>
             </nav>
 
@@ -1579,6 +1714,52 @@ if (isLoggedIn()) {
                 </div>
                 <h3>Compliance Ready</h3>
                 <p>Aligned with ISO 27001 and NIST frameworks. Generate audit-ready reports for regulatory compliance.</p>
+            </div>
+        </div>
+
+        <div class="compliance-strip" id="compliance">
+            <div>
+                <h2 class="section-title" style="margin-bottom: 12px;">Compliance, built in</h2>
+                <p style="color: var(--charcoal); font-size: 18px; max-width: 720px;">
+                    Map training outcomes to real-world frameworks and keep audit evidence ready without slowing teams down.
+                </p>
+            </div>
+            <div class="compliance-grid">
+                <div class="compliance-card">
+                    <h4>ISO 27001</h4>
+                    <p>Policy-aligned modules and completion trails.</p>
+                </div>
+                <div class="compliance-card">
+                    <h4>NIST CSF</h4>
+                    <p>Identify, protect, detect, respond, recover.</p>
+                </div>
+                <div class="compliance-card">
+                    <h4>GDPR + POPIA</h4>
+                    <p>Privacy-first training with measurable proof.</p>
+                </div>
+                <div class="compliance-card">
+                    <h4>Audit Reports</h4>
+                    <p>Exportable summaries for internal and external reviews.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-panel" id="contact">
+            <div>
+                <h2 class="section-title" style="margin-bottom: 12px;">Contact the team</h2>
+                <p style="color: var(--charcoal); font-size: 18px; max-width: 520px;">
+                    Get a demo, ask about pricing, or set up a pilot for your organization.
+                </p>
+                <div class="contact-card" style="margin-top: 18px;">
+                    <p><strong>Email:</strong> hello@cyberaware.com</p>
+                    <p><strong>Phone:</strong> +264 61 123 4567</p>
+                    <p><strong>Office:</strong> Windhoek, Namibia</p>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3 style="margin-bottom: 10px;">Request a demo</h3>
+                <p style="color: var(--charcoal);">Tell us about your team size and goals, and we will respond fast.</p>
+                <a href="contact.php" class="btn btn-primary" style="margin-top: 16px;">Start a request</a>
             </div>
         </div>
         

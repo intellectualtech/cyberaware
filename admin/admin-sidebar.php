@@ -59,133 +59,145 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
 
 <style>
     :root {
-        --cyber-yellow: #FF8C42;
-        --primary: #FF8C42;
-        --cyber-gold: #FF8C42;
-        --white: #FFFFFF;
-        --cyber-light: #F3F4F6;
-        --dark-navy: #111827;
-        --dark-slate: #374151;
-        --grey-50: #F3F4F6;
-        --grey-100: #E5E7EB;
-        --grey-200: #D1D5DB;
-        --grey-600: #475569;
-        --grey-700: #374151;
-        --grey-800: #1e293b;
+        --admin-bg: #0b1120;
+        --admin-panel: #111827;
+        --admin-card: #ffffff;
+        --admin-accent: #FF8C42;
+        --admin-muted: #94a3b8;
+        --admin-line: rgba(148, 163, 184, 0.18);
         --sidebar-width: 260px;
-        --shadow-md: 0 6px 18px rgba(0,0,0,0.09);
-        --radius: 12px;
+        --sidebar-height: 72px;
+        --radius: 14px;
+        --shadow-sm: 0 8px 18px rgba(15, 23, 42, 0.18);
+        --shadow-md: 0 18px 40px rgba(15, 23, 42, 0.28);
+    }
+
+    body {
+        font-family: 'Manrope', 'Segoe UI', sans-serif;
+        background: radial-gradient(900px 520px at 15% -10%, #1f2937 0%, transparent 60%),
+            linear-gradient(140deg, #0b1120 0%, #111827 100%);
+        color: #e2e8f0;
+    }
+
+    .main-content {
+        margin-left: var(--sidebar-width);
+        margin-bottom: 0;
+        padding: 32px 36px 80px;
+        min-height: 100vh;
+    }
+
+    .header {
+        background: rgba(17, 24, 39, 0.9);
+        border: 1px solid var(--admin-line);
+        border-radius: 18px;
+        padding: 24px 28px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .container {
+        padding: 0;
+    }
+
+    .card,
+    .stat-card {
+        background: var(--admin-card);
+        color: #111827;
+        border-radius: 18px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .btn,
+    .btn-primary {
+        border-radius: 999px;
+        font-weight: 700;
     }
 
     .sidebar {
         position: fixed;
+        top: 0;
         left: 0;
-        right: 0;
         bottom: 0;
-        height: var(--sidebar-height);
-        background: var(--grey-800);
-        border-top: 4px solid var(--primary);
-        box-shadow: 0 -8px 30px rgba(0,0,0,0.12);
+        width: var(--sidebar-width);
+        background: rgba(15, 23, 42, 0.98);
+        border-right: 1px solid var(--admin-line);
+        box-shadow: 12px 0 24px rgba(0, 0, 0, 0.35);
         display: flex;
-        align-items: center;
-        justify-content: space-around;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 28px 18px;
         z-index: 1000;
-        padding: 0 12px;
     }
 
     .sidebar-header {
-        display: none;
+        display: block;
+        margin-bottom: 28px;
     }
-
-    .sidebar a {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 6px;
-        color: var(--white);
-        text-decoration: none;
-        font-size: 13px;
-        padding: 8px 10px;
-        border-radius: 8px;
-    }
-
-    .sidebar a i { font-size: 18px; }
-
-    .sidebar a.active { color: var(--primary); }
-
-    .sidebar .footer-note { display:none; }
 
     .sidebar-header h1 {
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: var(--cyber-yellow);
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #f8fafc;
         margin: 0;
     }
 
     .sidebar-header p {
-        color: rgba(var(--primary-rgb),0.9);
-        font-size: 0.95rem;
-        margin: 0.3rem 0 0 0;
+        color: var(--admin-muted);
+        margin: 0.4rem 0 0;
+        font-size: 0.9rem;
     }
 
     .sidebar-nav {
         list-style: none;
         padding: 0;
         margin: 0;
-        display: flex; /* horizontal layout by default */
-        gap: 0.5rem;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .sidebar-nav li {
-        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
     }
 
     .sidebar-nav a {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        padding: 0.6rem 0.9rem;
-        color: rgba(255, 255, 255, 0.85);
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
         text-decoration: none;
-        font-weight: 500;
-        transition: all 0.3s;
-        border-top: 3px solid transparent;
-        background: transparent;
-    }
-
-    .sidebar-nav a:hover {
-        background: rgba(var(--primary-rgb),0.12);
-        color: var(--white);
-    }
-
-    .sidebar-nav a.active {
-        background: rgba(var(--primary-rgb),0.18);
-        color: var(--primary);
-        border-left-color: var(--primary);
+        color: #e2e8f0;
         font-weight: 600;
+        transition: all 0.2s ease;
     }
 
     .sidebar-nav a i {
-        margin: 0 0 0.3rem 0;
-        font-size: 1.2rem;
-        width: auto;
+        font-size: 1rem;
+        width: 20px;
         text-align: center;
     }
 
-    /* Mobile Responsive */
+    .sidebar-nav a:hover {
+        background: rgba(255, 140, 66, 0.12);
+        color: #ffffff;
+    }
+
+    .sidebar-nav a.active {
+        background: rgba(255, 140, 66, 0.2);
+        color: #ffffff;
+        box-shadow: inset 0 0 0 1px rgba(255, 140, 66, 0.35);
+    }
+
     @media (max-width: 992px) {
         .sidebar {
-            position: fixed;
-            width: 100%;
-            height: auto;
-            border-right: none;
-            border-bottom: 1px solid var(--gray-200);
-            padding: 1rem 0;
-            bottom: 0;
             top: auto;
-            box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: var(--sidebar-height);
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 10px;
         }
 
         .sidebar-header {
@@ -193,55 +205,23 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         }
 
         .sidebar-nav {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
+            flex-direction: row;
+            gap: 8px;
             overflow-x: auto;
-        }
-
-        .sidebar-nav li {
-            margin: 0;
-            flex: 1;
+            width: 100%;
+            justify-content: space-around;
         }
 
         .sidebar-nav a {
             flex-direction: column;
-            padding: 0.6rem 0.5rem;
-            border-left: none;
-            border-top: 3px solid transparent;
-            text-align: center;
-            font-size: 0.75rem;
-        }
-
-        .sidebar-nav a i {
-            margin-right: 0;
-            margin-bottom: 0.3rem;
-            font-size: 1.2rem;
-        }
-
-        .sidebar-nav a span {
-            display: block;
-            white-space: nowrap;
-        }
-
-        .sidebar-nav a.active {
-            border-left-color: transparent;
-            border-top-color: var(--primary);
-        }
-    }
-
-    @media (max-width: 576px) {
-        .sidebar-nav a {
             font-size: 0.7rem;
-            padding: 0.5rem 0.3rem;
+            padding: 6px 8px;
         }
 
-        .sidebar-nav a i {
-            font-size: 1rem;
-        }
-
-        .sidebar-nav a span {
-            font-size: 0.65rem;
+        .main-content {
+            margin-left: 0;
+            margin-bottom: var(--sidebar-height);
+            padding: 24px 20px 80px;
         }
     }
 </style>

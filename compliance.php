@@ -20,19 +20,21 @@ if (isLoggedIn()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compliance & Standards – CyberAware</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
 :root {
             --cyber-yellow: #FF8C42;
             --primary: #FF8C42;
+            --primary-rgb: 255,140,66;
             --cyber-gold: #FF8C42;
             --white: #FFFFFF;
             --cyber-light: #F3F4F6;
+            --platinum: #E5E4E2;
             --dark-navy: #111827;
             --dark-slate: #374151;
             --charcoal: #6B7280;
-            --shield-green: #10B981;
+            --shield-green: #FF8C42;
             --alert-red: #EF4444;
             --info-blue: #3B82F6;
             --grey-50: #F3F4F6;
@@ -487,6 +489,40 @@ if (isLoggedIn()) {
                 position: absolute;
                 top: 100%;
                 left: 0;
+
+        /* Orange + White + Platinum Grey refresh */
+        body {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(1000px 520px at 15% -10%, #fff1e4 0%, transparent 60%),
+                linear-gradient(135deg, #ffffff 0%, var(--platinum) 100%);
+            color: var(--dark-navy);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid rgba(255, 140, 66, 0.2);
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #ff8c42 0%, #ffd2b3 100%);
+            color: var(--dark-navy);
+            border: 1px solid rgba(255, 140, 66, 0.2);
+        }
+
+        .data-protection {
+            background: linear-gradient(135deg, #ffffff 0%, #fff1e4 100%);
+            border: 1px solid rgba(255, 140, 66, 0.2);
+        }
+
+        .compliance-features li::before {
+            color: var(--primary);
+        }
                 width: 100%;
                 background: var(--white);
                 flex-direction: column;

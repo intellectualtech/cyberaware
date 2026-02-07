@@ -46,21 +46,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us & Request Demo – CyberAware</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --cyber-yellow: #FF8C42;
             --primary: #FF8C42;
+            --primary-rgb: 255,140,66;
             --cyber-gold: #FF8C42;
             --white: #FFFFFF;
             --cyber-light: #F3F4F6;
             --dark-navy: #111827;
             --dark-slate: #374151;
+            --dark: #1f2937;
             --charcoal: #6B7280;
-            --shield-green: #10B981;
+            --shield-green: #FF8C42;
             --alert-red: #EF4444;
             --info-blue: #3B82F6;
+            --platinum: #E5E4E2;
             --grey-50: #F3F4F6;
             --grey-100: #E5E7EB;
             --grey-200: #D1D5DB;
@@ -93,6 +96,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .header {
             background: var(--dark-navy);
             border-bottom: 5px solid var(--cyber-yellow);
+    /* Orange + White + Platinum Grey refresh */
+    body {
+        font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: radial-gradient(1000px 520px at 12% -10%, #fff1e4 0%, transparent 60%),
+            linear-gradient(135deg, #ffffff 0%, var(--platinum) 100%);
+        color: var(--dark-navy);
+    }
             position: sticky;
             top: 0;
             z-index: 1000;

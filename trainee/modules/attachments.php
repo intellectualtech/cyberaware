@@ -220,21 +220,22 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
     <title><?= htmlspecialchars($module_title) ?> - Chapter <?= $current_chapter_num ?> – CyberAware</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         /* Style merged from original attachments.php (danger theme) + needed elements from phishing.php */
         :root {
             --cyber-yellow: #FF8C42;
             --primary: #FF8C42;
+            --primary-rgb: 255,140,66;
             --cyber-gold: #FF8C42;
             --white: #FFFFFF;
-            --cyber-light: #F3F4F6;
+            --cyber-light: #F7F7FB;
             --dark-navy: #111827;
             --dark-slate: #374151;
             --primary-dark: #E65F00;
-            --success: #10b981;
-            --success-light: #d1fae5;
+            --success: #FF8C42;
+            --success-light: #FFF1E4;
             --danger: #dc2626;
             --danger-light: #fef2f2;
             --warning: #FF8C42;
@@ -252,20 +253,26 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
             --sidebar-height: 72px;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.6; }
+        body {
+            font-family: 'Manrope', system-ui, sans-serif;
+            background: radial-gradient(1000px 560px at 85% -10%, #fff1e4 0%, transparent 60%),
+                linear-gradient(135deg, #fff9f3 0%, #ffffff 100%);
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
         .main-content { margin-bottom: var(--sidebar-height); padding: 2.5rem 2rem; min-height: 100vh; }
         .container { max-width: 1100px; margin: 0 auto; }
         .page-header {
-            background: linear-gradient(135deg, var(--dark-navy), var(--dark-slate));
+            background: linear-gradient(135deg, #fff2e6 0%, #ffffff 100%);
             border-radius: var(--radius);
             padding: 3rem 2.5rem;
             margin-bottom: 2.5rem;
             box-shadow: var(--shadow-md);
-            color: white;
+            color: var(--dark-navy);
             text-align: center;
-            border-left: 8px solid var(--cyber-yellow);
+            border: 1px solid rgba(255,140,66,0.2);
         }
-        .page-header h2 { font-size: 2.4rem; font-weight: 700; margin-bottom: 0.8rem; }
+        .page-header h2 { font-size: 2.4rem; font-weight: 700; margin-bottom: 0.8rem; color: var(--dark-navy); }
         .page-header p { font-size: 1.2rem; opacity: 0.95; }
         .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
         .stat-card { background: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow-sm); text-align: center; border-left: 5px solid var(--cyber-yellow); }
@@ -297,7 +304,7 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
         .btn-danger { background: var(--danger); color: white; }
         .btn-danger:hover { background: #b91c1c; transform: translateY(-4px); }
         .btn-safe { background: var(--success); color: white; }
-        .btn-safe:hover { background: #047857; transform: translateY(-4px); }
+        .btn-safe:hover { background: #ff7a20; transform: translateY(-4px); }
         .btn-neutral { background: var(--gray-300); color: var(--gray-800); }
         .btn-neutral:hover { background: var(--gray-400); }
         .feedback { padding: 2rem; border-radius: var(--radius); margin: 2rem 0; font-size: 1.2rem; line-height: 1.7; border-left: 6px solid; box-shadow: var(--shadow-md); display: flex; gap: 1.2rem; align-items: start; }

@@ -68,22 +68,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register – CyberAware</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
             --cyber-yellow: #FF8C42;
             --primary: #FF8C42;
+            --primary-rgb: 255,140,66;
             --cyber-gold: #FF8C42;
             --white: #FFFFFF;
             --cyber-light: #F3F4F6;
             --dark-navy: #111827;
             --dark-slate: #374151;
             --charcoal: #6B7280;
-            --shield-green: #10B981;
+            --shield-green: #FF8C42;
             --alert-red: #EF4444;
             --info-blue: #3B82F6;
+            --platinum: #E5E4E2;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
             --shadow-md: 0 6px 18px rgba(0,0,0,0.09);
             --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
@@ -352,6 +354,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 padding: 35px 24px;
             }
 
+
+        /* Orange + White + Platinum Grey refresh */
+        body {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(900px 480px at 10% -10%, #fff1e4 0%, transparent 60%),
+                linear-gradient(135deg, #ffffff 0%, var(--platinum) 100%);
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+        }
+
+        .register-container {
+            border-left: 0;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 140, 66, 0.18);
+        }
+
+        .logo-icon {
+            background: rgba(255, 140, 66, 0.12);
+            border-color: rgba(255, 140, 66, 0.4);
+        }
+
+        .logo-icon i {
+            color: var(--primary);
+        }
             h1 {
                 font-size: 30px;
             }

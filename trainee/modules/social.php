@@ -240,7 +240,7 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
     <title><?= htmlspecialchars($module_title) ?> - Chapter <?= $current_chapter_num ?> – CyberAware</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -248,14 +248,15 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
         :root {
             --cyber-yellow: #FF8C42;
             --primary: #FF8C42;
+            --primary-rgb: 255,140,66;
             --cyber-gold: #FF8C42;
             --white: #FFFFFF;
-            --cyber-light: #F3F4F6;
+            --cyber-light: #F7F7FB;
             --dark-navy: #111827;
             --dark-slate: #374151;
-            --success: #10b981;
-            --success-light: #d1fae5;
-            --success-dark: #047857;
+            --success: #FF8C42;
+            --success-light: #FFF1E4;
+            --success-dark: #C25A12;
             --info: #3b82f6;
             --info-light: #eff6ff;
             --danger: #dc2626;
@@ -279,8 +280,9 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
         * { margin:0; padding:0; box-sizing:border-box; }
 
         body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: var(--gray-50);
+            font-family: 'Manrope', system-ui, sans-serif;
+            background: radial-gradient(1000px 560px at 5% -10%, #fff1e4 0%, transparent 60%),
+                linear-gradient(135deg, #fff9f3 0%, #ffffff 100%);
             color: var(--gray-800);
             line-height: 1.6;
             min-height: 100vh;
@@ -298,20 +300,20 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
 
         /* Page Header */
         .page-header {
-            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--dark-slate) 100%);
+            background: linear-gradient(135deg, #fff2e6 0%, #ffffff 100%);
             border-radius: var(--radius);
             padding: 2.5rem 2rem;
             margin-bottom: 2.5rem;
             box-shadow: var(--shadow-md);
-            color: white;
-            border-left: 8px solid var(--cyber-yellow);
+            color: var(--dark-navy);
+            border: 1px solid rgba(255,140,66,0.2);
         }
 
         .page-header h2 {
             font-size: 2.2rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
-            color: white;
+            color: var(--dark-navy);
         }
 
         .page-header p {
@@ -372,7 +374,6 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
         .progress-fill {
             height: 100%;
             background: var(--primary);
-            width: <?= $module_progress ?>%;
             transition: width 0.8s ease;
         }
 
@@ -754,7 +755,7 @@ $scenario = $scenarios[$current_chapter_num] ?? $scenarios[1];
                 <span><?= $completed_chapters ?> / <?= $total_chapters ?> Chapters (<?= $module_progress ?>%)</span>
             </div>
             <div class="progress-bar">
-                <div class="progress-fill"></div>
+                <div class="progress-fill" style="width: <?= $module_progress ?>%"></div>
             </div>
         </div>
 
