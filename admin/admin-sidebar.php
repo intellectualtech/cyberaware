@@ -43,6 +43,18 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
             </a>
         </li>
         <li>
+            <a href="risk-heatmap.php" <?= $current_page === 'risk-heatmap' ? 'class="active"' : '' ?>>
+                <i class="fas fa-fire"></i>
+                <span>Risk Heatmap</span>
+            </a>
+        </li>
+        <li>
+            <a href="compliance-snapshot.php" <?= $current_page === 'compliance-snapshot' ? 'class="active"' : '' ?>>
+                <i class="fas fa-clipboard-check"></i>
+                <span>Compliance Snapshot</span>
+            </a>
+        </li>
+        <li>
             <a href="export-report.php" <?= $current_page === 'export-report' ? 'class="active"' : '' ?>>
                 <i class="fas fa-file-export"></i>
                 <span>Export Report</span>

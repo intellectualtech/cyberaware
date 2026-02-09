@@ -7,6 +7,7 @@ $is_in_modules = (strpos($script_path, '/modules/') !== false);
 // Correct relative paths
 $dashboard_link = $is_in_modules ? '../dashboard.php' : 'dashboard.php';
 $progress_link  = $is_in_modules ? '../progress.php' : 'progress.php';
+$inbox_link     = $is_in_modules ? '../phish-inbox.php' : 'phish-inbox.php';
 $modules_prefix = $is_in_modules ? '' : 'modules/';
 $logout_link    = $is_in_modules ? '../../logout.php' : '../logout.php';
 
@@ -54,6 +55,12 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
             <a href="<?= $modules_prefix ?>links.php" <?= $current_page === 'links' ? 'class="active"' : '' ?>>
                 <i class="fas fa-link"></i>
                 <span>Suspicious Links</span>
+            </a>
+        </li>
+        <li>
+            <a href="<?= $inbox_link ?>" <?= $current_page === 'phish-inbox' ? 'class="active"' : '' ?>>
+                <i class="fas fa-inbox"></i>
+                <span>Phish Inbox</span>
             </a>
         </li>
         <li>

@@ -133,6 +133,60 @@ try {
         $end = $current_campaign['end_date'] ? date('M j, Y', strtotime($current_campaign['end_date'])) : 'Ongoing';
         $campaign_dates = "$start – $end";
     }
+
+    // Weekly mission + streak (uses inbox actions when available)
+    $week_start = date('Y-m-d', strtotime('monday this week'));
+    $week_label = date('M j', strtotime($week_start)) . ' - ' . date('M j', strtotime($week_start . ' +6 days'));
+    $mission_goal = 5;
+    $mission_done = 0;
+    $mission_correct = 0;
+    $mission_accuracy = null;
+
+    try {
+        $stmt = $pdo->prepare("
+            SELECT COUNT(*) as total,
+                   SUM(CASE WHEN is_correct = 1 THEN 1 ELSE 0 END) as correct
+            FROM inbox_actions
+            WHERE user_id = ? AND week_start = ?
+        ");
+        $stmt->execute([$user_id, $week_start]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            $mission_done = (int)$row['total'];
+            $mission_correct = (int)$row['correct'];
+            $mission_accuracy = $mission_done > 0 ? round(($mission_correct / $mission_done) * 100) : null;
+        }
+    } catch (Exception $e) {
+        // Inbox tables may not exist yet; keep defaults.
+    }
+
+    $week_starts = [];
+    $stmt = $pdo->prepare("
+        SELECT DISTINCT DATE_SUB(DATE(completed_at), INTERVAL WEEKDAY(completed_at) DAY) as week_start
+        FROM training_sessions
+        WHERE user_id = ? AND completed_at IS NOT NULL
+    ");
+    $stmt->execute([$user_id]);
+    $week_starts = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    try {
+        $stmt = $pdo->prepare("SELECT DISTINCT week_start FROM inbox_actions WHERE user_id = ?");
+        $stmt->execute([$user_id]);
+        $inbox_weeks = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        foreach ($inbox_weeks as $ws) {
+            $week_starts[] = $ws;
+        }
+    } catch (Exception $e) {
+        // Inbox tables may not exist yet; ignore.
+    }
+
+    $week_set = array_fill_keys(array_unique($week_starts), true);
+    $weekly_streak = 0;
+    $cursor = $week_start;
+    while (isset($week_set[$cursor])) {
+        $weekly_streak++;
+        $cursor = date('Y-m-d', strtotime($cursor . ' -7 days'));
+    }
 } catch (Exception $e) {
     die("Database error: " . htmlspecialchars($e->getMessage()));
 }
@@ -471,6 +525,42 @@ try {
             color: var(--muted);
         }
 
+        .mission-bar {
+            height: 10px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .mission-bar span {
+            display: block;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #FF8C42, #FFB070);
+        }
+
+        .mission-meta {
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--muted);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(255, 140, 66, 0.12);
+            color: var(--brand-a);
+            font-weight: 700;
+        }
+
         .achievement strong {
             display: block;
             font-size: 18px;
@@ -641,6 +731,7 @@ try {
                     <p class="hero-subtitle">A calm space to level up your security instincts. Short lessons, real-world scenarios, and quick wins.</p>
                     <div class="hero-actions">
                         <a class="btn primary" href="modules/phishing.php"><i class="fas fa-play"></i> Continue learning</a>
+                        <a class="btn ghost" href="phish-inbox.php"><i class="fas fa-inbox"></i> Phish inbox</a>
                         <a class="btn ghost" href="progress.php"><i class="fas fa-chart-line"></i> View progress</a>
                     </div>
                     <div class="pill-row">
@@ -698,6 +789,17 @@ try {
                         <div class="achievement"><strong><?= $completed ?></strong>Modules finished</div>
                         <div class="achievement"><strong><?= $total_sessions ?></strong>Sessions logged</div>
                         <div class="achievement"><strong><?= $understanding ?>%</strong>Skill accuracy</div>
+                    </div>
+                </div>
+                <div class="card reveal delay-3">
+                    <h3><i class="fas fa-bolt"></i> Weekly streak</h3>
+                    <p>Complete a mission each week to keep your streak alive.</p>
+                    <div class="badge-pill"><i class="fas fa-fire"></i> <?= $weekly_streak ?> week streak</div>
+                    <?php $mission_progress = $mission_goal > 0 ? min(100, round(($mission_done / $mission_goal) * 100)) : 0; ?>
+                    <div class="mission-bar"><span style="width: <?= $mission_progress ?>%"></span></div>
+                    <div class="mission-meta">
+                        <div><strong><?= $mission_done ?></strong> of <?= $mission_goal ?> inbox tags (<?= htmlspecialchars($week_label) ?>)</div>
+                        <div>Accuracy: <strong><?= $mission_accuracy !== null ? $mission_accuracy . '%' : 'n/a' ?></strong></div>
                     </div>
                 </div>
             </div>
