@@ -47,11 +47,12 @@
 
 <style>
     .footer {
-        background: var(--gray-800, #1e293b);
-        color: var(--gray-200, #e2e8f0);
-        padding: 48px 32px 32px;
+        background: rgba(255, 255, 255, 0.96);
+        color: var(--dark-navy);
+        padding: 24px 32px 20px;
         margin-top: 80px;
-        border-top: 4px solid var(--primary, #FF8C42);
+        border-top: 5px solid var(--cyber-yellow, #FF8C42);
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
     }
 
     .footer-container {
@@ -61,17 +62,17 @@
     }
 
     .footer-brand {
-        margin-bottom: 24px;
+        margin-bottom: 12px;
     }
 
     .footer-logo {
         display: inline-flex;
         align-items: center;
         gap: 12px;
-        font-size: 28px;
+        font-size: 24px;
         font-weight: 700;
-        color: var(--primary, #FF8C42);
-        margin-bottom: 12px;
+        color: var(--orange-600, #ea580c);
+        margin-bottom: 4px;
     }
 
     .footer-logo i {
@@ -79,34 +80,34 @@
     }
 
     .footer-tagline {
-        font-size: 15px;
-        color: var(--gray-400, #B8B8B8);
+        font-size: 13px;
+        color: var(--slate-600);
         font-weight: 500;
     }
 
     .footer-info {
-        margin: 24px 0;
+        margin: 12px 0;
     }
 
     .footer-compliance {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        font-size: 14px;
-        color: var(--gray-300, #D4D4D4);
+        font-size: 12px;
+        color: var(--dark-navy);
         font-weight: 500;
-        padding: 8px 16px;
-        background: rgba(255, 140, 66, 0.1);
+        padding: 6px 12px;
+        background: rgba(251, 146, 60, 0.1);
         border-radius: 20px;
     }
 
     .footer-compliance i {
-        color: var(--primary, #FF8C42);
+        color: var(--orange-500, #f97316);
         font-size: 16px;
     }
 
     .footer-links {
-        margin: 28px 0;
+        margin: 12px 0;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -115,21 +116,21 @@
     }
 
     .footer-links a {
-        color: var(--gray-300, #D4D4D4);
+        color: var(--dark-navy);
         text-decoration: none;
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 500;
-        transition: color 0.2s;
+        transition: all 0.3s;
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 6px 12px;
+        padding: 4px 8px;
         border-radius: 4px;
     }
 
     .footer-links a:hover {
-        color: var(--primary, #FF8C42);
-        background: rgba(255, 140, 66, 0.1);
+        color: var(--orange-500, #f97316);
+        background: rgba(251, 146, 60, 0.08);
     }
 
     .footer-links a i {
@@ -137,19 +138,19 @@
     }
 
     .footer-divider {
-        color: var(--gray-600, #475569);
+        color: var(--slate-300);
         margin: 0 4px;
     }
 
     .footer-copyright {
-        margin-top: 28px;
-        padding-top: 24px;
-        border-top: 1px solid var(--gray-700, #334155);
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--slate-200);
     }
 
     .footer-copyright p {
-        font-size: 13px;
-        color: var(--gray-500, #9E9E9E);
+        font-size: 12px;
+        color: var(--slate-600);
         display: inline-flex;
         align-items: center;
         gap: 6px;
@@ -202,4 +203,51 @@
             font-size: 13px;
         }
     }
+
+<!-- Scroll-activated Nav Popup (Injected) -->
+<div id="nav-popup" class="nav-popup" aria-hidden="true" role="dialog" aria-label="Quick navigation">
+    <a class="nav-item" href="/cyberaware/index.php"><i class="fas fa-home"></i><span>Home</span></a>
+    <a class="nav-item" href="/cyberaware/training.php"><i class="fas fa-graduation-cap"></i><span>Training</span></a>
+    <a class="nav-item" href="/cyberaware/trainee/dashboard.php"><i class="fas fa-chart-line"></i><span>Progress</span></a>
+    <a class="nav-item" href="/cyberaware/compliance.php"><i class="fas fa-clipboard-check"></i><span>Compliance</span></a>
+    <button id="nav-popup-close" class="nav-popup-close" aria-label="Close quick navigation"><i class="fas fa-times"></i></button>
+</div>
+
+<script>
+(function(){
+    var popup = document.getElementById('nav-popup');
+    var closeBtn = document.getElementById('nav-popup-close');
+    var timeoutId = null;
+
+    function showPopup() {
+        if (!popup) return;
+        popup.classList.add('show');
+        popup.setAttribute('aria-hidden','false');
+        if (timeoutId) clearTimeout(timeoutId);
+        timeoutId = setTimeout(hidePopup, 2200);
+    }
+
+    function hidePopup() {
+        if (!popup) return;
+        popup.classList.remove('show');
+        popup.setAttribute('aria-hidden','true');
+    }
+
+    // Show on any wheel movement (up or down)
+    window.addEventListener('wheel', function(e){
+        try {
+            showPopup();
+        } catch(err) { /* ignore */ }
+    }, { passive: true });
+
+    if (closeBtn) closeBtn.addEventListener('click', hidePopup);
+
+    document.addEventListener('click', function(e){
+        if (!popup.classList.contains('show')) return;
+        if (!popup.contains(e.target) && !e.target.closest('.sidebar')) {
+            hidePopup();
+        }
+    });
+})();
+</script>
 </style>

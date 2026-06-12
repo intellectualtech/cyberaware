@@ -1,642 +1,766 @@
 <?php
-// contact.php - Contact & Request Demo Page for CyberAware
-
 require_once 'config/database.php';
 
-// Redirect if already logged in
-if (isLoggedIn()) {
-    if (hasRole('admin') || hasRole('manager')) {
-        header('Location: admin_dashboard.php');
-    } else {
-        header('Location: trainee/dashboard.php');
-    }
-    exit();
-}
+$message = '';
+$message_type = '';
 
 // Handle form submission
-$success_message = '';
-$error_message = '';
-$name = $email = $company = $phone = $message = '';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $company = trim($_POST['company'] ?? '');
+    $team_size = trim($_POST['team_size'] ?? '');
+    $message_text = trim($_POST['message'] ?? '');
+    $requested_modules = $_POST['modules'] ?? [];
     $phone = trim($_POST['phone'] ?? '');
-    $message = trim($_POST['message'] ?? '');
-
-    if (empty($name) || empty($email) || empty($company) || empty($message)) {
-        $error_message = 'Please fill in all required fields.';
+    $contact_preference = trim($_POST['contact_preference'] ?? 'email');
+    
+    // Validate inputs
+    if (empty($name) || empty($email) || empty($company) || empty($message_text)) {
+        $message = 'Please fill in all required fields.';
+        $message_type = 'error';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error_message = 'Please enter a valid email address.';
+        $message = 'Please enter a valid email address.';
+        $message_type = 'error';
+    } elseif ($contact_preference === 'phone' && empty($phone)) {
+        $message = 'Please enter your phone number if you prefer phone contact.';
+        $message_type = 'error';
     } else {
-        // In a real implementation, send email or save to DB
-        // Here: just show success
-        $success_message = 'Thank you for your request! We will contact you shortly.';
-        
-        // Clear form fields after success
-        $name = $email = $company = $phone = $message = '';
+        try {
+            $pdo = getDBConnection();
+            
+            // Insert into database
+            $stmt = $pdo->prepare("
+                INSERT INTO contact_requests (name, email, company, team_size, message, requested_modules, phone, contact_preference, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
+            ");
+            
+            $stmt->execute([
+                $name,
+                $email,
+                $company,
+                $team_size ?: 'Not specified',
+                $message_text,
+                !empty($requested_modules) ? implode(',', array_map('intval', $requested_modules)) : '',
+                $phone,
+                $contact_preference
+            ]);
+            
+            // Send email to admin
+            $to = 'info@intellectualtechnology.com.na';
+            $subject = "New Demo Request from " . htmlspecialchars($name);
+            $email_body = "
+            <html>
+            <head>
+            <style>
+            body { font-family: Arial, sans-serif; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #FF8C42; color: white; padding: 20px; border-radius: 8px; }
+            .content { padding: 20px; background: #f9f9f9; margin: 20px 0; border-radius: 8px; }
+            .field { margin: 15px 0; }
+            .label { font-weight: bold; color: #333; }
+            .value { color: #666; margin-top: 5px; }
+            .contact-pref { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 4px; margin-top: 10px; }
+            </style>
+            </head>
+            <body>
+            <div class='container'>
+            <div class='header'>
+            <h1>New Demo Request</h1>
+            </div>
+            <div class='content'>
+            <div class='field'>
+            <div class='label'>Name:</div>
+            <div class='value'>" . htmlspecialchars($name) . "</div>
+            </div>
+            <div class='field'>
+            <div class='label'>Email:</div>
+            <div class='value'>" . htmlspecialchars($email) . "</div>
+            </div>
+            <div class='field'>
+            <div class='label'>Company:</div>
+            <div class='value'>" . htmlspecialchars($company) . "</div>
+            </div>
+            <div class='field'>
+            <div class='label'>Team Size:</div>
+            <div class='value'>" . htmlspecialchars($team_size ?: 'Not specified') . "</div>
+            </div>
+            <div class='field'>
+            <div class='label'>Message:</div>
+            <div class='value'>" . nl2br(htmlspecialchars($message_text)) . "</div>
+            </div>
+            <div class='field'>
+            <div class='label'>Contact Preference:</div>
+            <div class='contact-pref'>
+            <strong>" . ($contact_preference === 'phone' ? '📱 Phone' : '📧 Email') . "</strong><br>
+            " . ($contact_preference === 'phone' ? 'Phone: ' . htmlspecialchars($phone) : 'Email: ' . htmlspecialchars($email)) . "
+            </div>
+            </div>
+            </div>
+            </div>
+            </body>
+            </html>
+            ";
+            
+            $headers = "MIME-Version: 1.0\r\n";
+            $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+            $headers .= "From: noreply@cyberaware.local\r\n";
+            
+            @mail($to, $subject, $email_body, $headers);
+            
+            // Get module names for the selected modules
+            $module_names = [
+                1 => 'Phishing Email Recognition',
+                2 => 'Credential Harvesting Awareness',
+                3 => 'Social Engineering Defense',
+                4 => 'Malware & Attachment Safety',
+                5 => 'Website & Link Safety',
+                6 => 'Password Security',
+                7 => 'Ransomware Awareness'
+            ];
+            
+            $selected_modules = [];
+            foreach ($requested_modules as $module_id) {
+                $module_id = (int)$module_id;
+                if (isset($module_names[$module_id])) {
+                    $selected_modules[] = $module_names[$module_id];
+                }
+            }
+            
+            $modules_list = !empty($selected_modules) ? implode('<br>', array_map(function($m) { return '✓ ' . htmlspecialchars($m); }, $selected_modules)) : 'No modules selected';
+            
+            // Send approval email to user
+            $user_subject = "✅ Your CyberAware Demo Request Has Been Approved!";
+            $user_body = "
+            <html>
+            <head>
+            <style>
+            body { font-family: 'Arial', sans-serif; background: #f5f5f5; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #FF8C42 0%, #ffd2b3 100%); color: white; padding: 30px 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
+            .header h1 { margin: 0; font-size: 28px; }
+            .header p { margin: 8px 0 0 0; font-size: 16px; opacity: 0.95; }
+            .content { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+            .section { margin: 20px 0; }
+            .section-title { font-weight: bold; color: #FF8C42; font-size: 16px; margin-bottom: 12px; }
+            .modules-box { background: #f9f9f9; border-left: 4px solid #FF8C42; padding: 15px; border-radius: 6px; margin: 15px 0; }
+            .module-item { padding: 8px 0; color: #333; }
+            .cta-button { display: inline-block; background: #FF8C42; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 20px; }
+            .cta-button:hover { background: #E67A2E; }
+            .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666; text-align: center; }
+            .credentials-box { background: #f0fdf4; border: 1px solid #86efac; padding: 15px; border-radius: 8px; margin: 15px 0; }
+            .credentials-box strong { color: #065f46; }
+            </style>
+            </head>
+            <body>
+            <div class='container'>
+            <div class='header'>
+            <h1>🎉 Demo Approved!</h1>
+            <p>Your CyberAware demo request has been approved</p>
+            </div>
+            
+            <div class='content'>
+            <p>Hi <strong>" . htmlspecialchars($name) . "</strong>,</p>
+            
+            <p>Great news! Your demo request for <strong>" . htmlspecialchars($company) . "</strong> has been <strong style='color: #10b981;'>APPROVED</strong>! 🚀</p>
+            
+            <div class='section'>
+            <div class='section-title'>📋 Your Selected Training Modules:</div>
+            <div class='modules-box'>
+            " . $modules_list . "
+            </div>
+            </div>
+            
+            <div class='section'>
+            <div class='section-title'>📞 Next Steps:</div>
+            <p>David from our team will contact you shortly to:</p>
+            <ul>
+            <li>Schedule your personalized demo</li>
+            <li>Discuss your team's security needs</li>
+            <li>Answer any questions you have</li>
+            <li>Set up your training modules</li>
+            </ul>
+            </div>
+            
+            <div class='section'>
+            <div class='section-title'>📧 Contact Information:</div>
+            <p><strong>Email:</strong> " . htmlspecialchars($email) . "</p>
+            <p><strong>Company:</strong> " . htmlspecialchars($company) . "</p>
+            <p><strong>Team Size:</strong> " . htmlspecialchars($team_size ?: 'Not specified') . "</p>
+            </div>
+            
+            <div class='section'>
+            <div class='section-title'>🔐 Your Demo Access:</div>
+            <div class='credentials-box'>
+            <p><strong>You'll receive your login credentials shortly!</strong></p>
+            <p>Once you log in, you'll have immediate access to:</p>
+            <ul>
+            <li>All selected training modules</li>
+            <li>Interactive lessons and simulations</li>
+            <li>Real-world phishing scenarios</li>
+            <li>Progress tracking and certificates</li>
+            </ul>
+            </div>
+            </div>
+            
+            <p style='margin-top: 30px;'>If you have any questions in the meantime, feel free to reach out to us at <strong>info@intellectualtechnology.com.na</strong> or call <strong>+264 81 870 6257</strong>.</p>
+            
+            <a href='http://" . $_SERVER['HTTP_HOST'] . "/cyberaware/' class='cta-button'>Visit CyberAware Platform</a>
+            
+            <div class='footer'>
+            <p>CyberAware - Cybersecurity Awareness Training Platform</p>
+            <p>Windhoek, Namibia | info@intellectualtechnology.com.na</p>
+            <p style='margin-top: 10px;'>© 2026 Intellectual Technology cc. All rights reserved.</p>
+            </div>
+            </div>
+            </div>
+            </body>
+            </html>
+            ";
+            
+            @mail($email, $user_subject, $user_body, $headers);
+            
+            // Send SMS if phone contact preference selected
+            if ($contact_preference === 'phone' && !empty($phone)) {
+                require_once '../includes/sms-notifications.php';
+                $sms_modules = array_slice($selected_modules, 0, 3);
+                sendDemoApprovalSMS($phone, $name, $company, $sms_modules);
+            }
+            
+            $message = 'Thank you! Your demo request has been sent. We will contact you shortly.';
+            $message_type = 'success';
+            
+            // Clear form
+            $name = $email = $company = $team_size = $message_text = '';
+            
+        } catch (Exception $e) {
+            $message = 'Error submitting request. Please try again.';
+            $message_type = 'error';
+            error_log("Contact form error: " . $e->getMessage());
+        }
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us & Request Demo – CyberAware</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #FF8C42;
-            --primary-dark: #E67A2E;
-            --primary-light: #FFF4ED;
-            --primary-lighter: #FFEAD9;
-            --success: #00A65A;
-            --warning: #F39C12;
-            --danger: #DD4B39;
-            --dark: #2C2C2C;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-300: #D4D4D4;
-            --gray-400: #B8B8B8;
-            --gray-500: #9E9E9E;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1e293b;
-            --white: #FFFFFF;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
-            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Contact – CyberAware</title>
+	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<style>
+		:root {
+			--orange-400: #fb923c;
+			--orange-500: #f97316;
+			--orange-600: #ea580c;
+			--slate-50: #f8fafc;
+			--slate-100: #f1f5f9;
+			--slate-200: #e2e8f0;
+			--slate-500: #64748b;
+			--slate-600: #475569;
+			--slate-700: #334155;
+			--slate-900: #0f172a;
+			--white: #ffffff;
+			
+			/* Additional colors for styling */
+			--primary: #f97316;
+			--primary-dark: #ea580c;
+		}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+		* { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--gray-50);
-            color: var(--dark);
-            line-height: 1.6;
-        }
+		body {
+			font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			background: linear-gradient(135deg, var(--slate-50) 0%, var(--white) 50%, var(--slate-100) 100%);
+			color: var(--slate-900);
+			overflow-x: hidden;
+		}
 
-        /* Header */
-        .header {
-            background: var(--white);
-            border-bottom: 1px solid var(--gray-200);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: var(--shadow-sm);
-        }
+		body::before {
+			content: '';
+			position: fixed;
+			top: -10%;
+			left: -5%;
+			width: 24rem;
+			height: 24rem;
+			background: radial-gradient(circle, rgba(251, 146, 60, 0.2), transparent 70%);
+			border-radius: 50%;
+			filter: blur(120px);
+			opacity: 0.4;
+			z-index: 1;
+			pointer-events: none;
+		}
 
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px 32px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+		body::after {
+			content: '';
+			position: fixed;
+			bottom: 10%;
+			right: -10%;
+			width: 32rem;
+			height: 32rem;
+			background: radial-gradient(circle, rgba(107, 114, 128, 0.3), transparent 70%);
+			border-radius: 50%;
+			filter: blur(120px);
+			opacity: 0.3;
+			z-index: 1;
+			pointer-events: none;
+		}
 
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
+		.grid-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-image: 
+				linear-gradient(rgba(100, 100, 100, 0.03) 1px, transparent 1px),
+				linear-gradient(90deg, rgba(100, 100, 100, 0.03) 1px, transparent 1px);
+			background-size: 100px 100px;
+			z-index: 1;
+			pointer-events: none;
+		}
 
-        .logo i {
-            font-size: 28px;
-        }
+		.header {
+			background: backdrop-filter blur(10px);
+			background-color: rgba(255, 255, 255, 0.8);
+			border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+			position: sticky;
+			top: 0;
+			z-index: 1000;
+		}
 
-        .nav-menu {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
+		.header-content {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 18px 28px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
 
-        .nav-menu a {
-            color: var(--gray-700);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 15px;
-            transition: color 0.2s;
-        }
+		.logo {
+			text-decoration: none;
+			font-weight: 800;
+			color: var(--orange-600);
+			font-size: 1.375rem;
+			display: flex;
+			gap: 0.625rem;
+			align-items: center;
+		}
 
-        .nav-menu a:hover, .nav-menu a.active {
-            color: var(--primary);
-        }
+		.logo i {
+			width: 2.5rem;
+			height: 2.5rem;
+			background: linear-gradient(135deg, var(--orange-400), var(--orange-600));
+			border-radius: 0.75rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: var(--white);
+			font-size: 1.25rem;
+			box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+		}
 
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+		.nav-menu {
+			display: flex;
+			gap: 32px;
+			flex: 1;
+			margin-left: 64px;
+			justify-content: center;
+		}
 
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 28px;
-            color: var(--gray-700);
-            cursor: pointer;
-            padding: 8px;
-        }
+		.nav-menu a {
+			text-decoration: none;
+			color: var(--slate-700);
+			font-weight: 600;
+			font-size: 0.95rem;
+			transition: 0.3s ease;
+			white-space: nowrap;
+			position: relative;
+		}
 
-        .btn {
-            padding: 10px 24px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: inline-block;
-        }
+		.nav-menu a::after {
+			content: '';
+			position: absolute;
+			bottom: -0.25rem;
+			left: 0;
+			width: 0;
+			height: 0.15rem;
+			background: linear-gradient(90deg, var(--orange-400), var(--orange-600));
+			transition: width 0.3s ease;
+		}
 
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
+		.nav-menu a:hover::after {
+			width: 100%;
+		}
 
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
-        }
+		.nav-menu a:hover,
+		.nav-menu a.active {
+			color: var(--orange-500);
+		}
 
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 60px 32px;
-        }
+		.header-right {
+			display: flex;
+			gap: 16px;
+			align-items: center;
+		}
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 120px 40px;
-            text-align: center;
-            border-radius: 16px;
-            margin-bottom: 80px;
-            box-shadow: var(--shadow-lg);
-        }
+		.header-right a {
+			padding: 0.625rem 1.25rem;
+			background: linear-gradient(135deg, var(--orange-500), var(--orange-600));
+			color: white;
+			border-radius: 0.5rem;
+			text-decoration: none;
+			font-weight: 700;
+			font-size: 0.875rem;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+			border: none;
+		}
 
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 800;
-            margin-bottom: 24px;
-            letter-spacing: -1px;
-        }
+		.header-right a:hover {
+			transform: scale(1.05) translateY(-3px);
+			box-shadow: 0 8px 24px rgba(251, 146, 60, 0.4);
+		}
 
-        .hero p {
-            font-size: 22px;
-            max-width: 900px;
-            margin: 0 auto;
-            opacity: 0.95;
-        }
+		.container {
+			max-width: 1100px;
+			margin: 0 auto;
+			padding: 50px 24px 80px;
+		}
 
-        /* Contact Content */
-        .contact-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: start;
-            margin-bottom: 80px;
-        }
+		.hero {
+			background: linear-gradient(135deg, #ff8c42 0%, #ffd2b3 100%);
+			border-radius: 1.625rem;
+			padding: 3.125rem 2.5rem;
+			box-shadow: 0 18px 40px rgba(255, 140, 66, 0.2);
+			margin-bottom: 1.875rem;
+			color: var(--dark-navy);
+			position: relative;
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			border: 1px solid rgba(255, 140, 66, 0.25);
+		}
 
-        .contact-info {
-            background: var(--white);
-            padding: 50px;
-            border-radius: 16px;
-            box-shadow: var(--shadow-md);
-        }
+		.hero-content {
+			flex: 1;
+		}
 
-        .contact-info h2 {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: var(--dark);
-        }
+		.hero h1 {
+			font-family: 'Space Grotesk', sans-serif;
+			font-size: 2rem;
+			margin-bottom: 0.625rem;
+			color: var(--dark-navy);
+			font-weight: 800;
+		}
 
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
+		.hero p {
+			color: var(--dark-navy);
+			font-size: 1rem;
+		}
 
-        .contact-item i {
-            font-size: 28px;
-            color: var(--primary);
-            margin-top: 4px;
-        }
+		.hero-actions {
+			display: flex;
+			gap: 10px;
+			flex-shrink: 0;
+		}
 
-        .contact-item div h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
-            color: var(--dark);
-        }
+		.hero-actions a {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding: 10px 18px;
+			border-radius: 999px;
+			text-decoration: none;
+			font-weight: 700;
+			font-size: 13px;
+			transition: all 0.2s;
+			white-space: nowrap;
+		}
 
-        .contact-item div p {
-            color: var(--gray-700);
-            line-height: 1.6;
-        }
+		.hero-actions a.primary {
+			background: rgba(255, 255, 255, 0.3);
+			color: white;
+			border: 2px solid white;
+		}
 
-        .contact-item div a {
-            color: var(--primary);
-            text-decoration: none;
-        }
+		.hero-actions a.primary:hover {
+			background: white;
+			color: #FF8C42;
+		}
 
-        .contact-item div a:hover {
-            text-decoration: underline;
-        }
+		.hero-actions a.secondary {
+			background: white;
+			color: #FF8C42;
+		}
 
-        .demo-form {
-            background: var(--white);
-            padding: 50px;
-            border-radius: 16px;
-            box-shadow: var(--shadow-md);
-        }
+		.hero-actions a.secondary:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		}
 
-        .demo-form h2 {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: var(--dark);
-            text-align: center;
-        }
+		.contact-grid {
+			display: grid;
+			gap: 24px;
+			grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+		}
 
-        .form-group {
-            margin-bottom: 24px;
-        }
+		.contact-card {
+			background: backdrop-filter blur(10px);
+			background-color: rgba(255, 255, 255, 0.8);
+			border-radius: 1.125rem;
+			padding: 1.375rem;
+			border: 1px solid rgba(226, 232, 240, 0.5);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+			transition: all 0.3s ease;
+		}
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
+		.contact-card:hover {
+			box-shadow: 0 12px 32px rgba(251, 146, 60, 0.15);
+			border-color: var(--orange-500);
+		}
 
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid var(--gray-300);
-            border-radius: 8px;
-            font-size: 16px;
-            font-family: inherit;
-        }
+		.contact-card h3 { margin-bottom: 10px; }
 
-        .form-group textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
+		.contact-form {
+			display: grid;
+			gap: 12px;
+		}
 
-        .form-message {
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 24px;
-            text-align: center;
-            font-weight: 500;
-        }
+		.contact-form input,
+		.contact-form textarea,
+		.contact-form select {
+			width: 100%;
+			padding: 0.75rem 0.875rem;
+			border-radius: 0.75rem;
+			border: 1px solid rgba(226, 232, 240, 0.5);
+			font-family: inherit;
+			font-size: 0.875rem;
+			transition: all 0.3s ease;
+			outline: none;
+			background: rgba(255, 255, 255, 0.9);
+		}
 
-        .form-success {
-            background: #E8F5E9;
-            color: var(--success);
-            border: 1px solid var(--success);
-        }
+		.contact-form input:focus,
+		.contact-form select:focus,
+		.contact-form textarea:focus {
+			border-color: var(--orange-500);
+			background: var(--white);
+			box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.1);
+		}
 
-        .form-error {
-            background: #FFEBEE;
-            color: var(--danger);
-            border: 1px solid var(--danger);
-        }
+		.contact-form button {
+			padding: 0.75rem 1.25rem;
+			border-radius: 9999px;
+			border: none;
+			background: linear-gradient(135deg, var(--orange-500), var(--orange-600));
+			color: var(--white);
+			font-weight: 700;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+		}
 
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+		.contact-form button:hover {
+			transform: scale(1.05) translateY(-3px);
+			box-shadow: 0 8px 24px rgba(251, 146, 60, 0.4);
+		}
 
-        .submit-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(255, 140, 66, 0.3);
-        }
+		.message {
+			padding: 15px 20px;
+			border-radius: 10px;
+			margin-bottom: 20px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
 
-        .cta-section {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 80px 40px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: var(--shadow-lg);
-        }
+		.message.success {
+			background: #d1fae5;
+			color: #065f46;
+			border-left: 4px solid #10b981;
+		}
 
-        .cta-section h2 {
-            font-size: 42px;
-            margin-bottom: 20px;
-        }
+		.message.error {
+			background: #fee2e2;
+			color: #991b1b;
+			border-left: 4px solid #ef4444;
+		}
 
-        .cta-section p {
-            font-size: 20px;
-            margin-bottom: 40px;
-            opacity: 0.95;
-        }
+		.action-buttons {
+			display: flex;
+			gap: 12px;
+			justify-content: center;
+			margin-top: 20px;
+			flex-wrap: wrap;
+		}
 
-        .cta-btn {
-            padding: 18px 48px;
-            font-size: 18px;
-            background: white;
-            color: var(--primary);
-            border-radius: 8px;
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-        }
+		.action-buttons a {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 12px 24px;
+			border-radius: 999px;
+			text-decoration: none;
+			font-weight: 700;
+			transition: all 0.2s;
+		}
 
-        .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
-        }
+		.action-buttons a.primary {
+			background: var(--primary);
+			color: white;
+		}
 
-        /* Responsive */
-        @media (max-width: 992px) {
-            .header-content {
-                padding: 16px 20px;
-            }
+		.action-buttons a.primary:hover {
+			background: #E67A2E;
+			transform: translateY(-2px);
+		}
 
-            .nav-menu {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: var(--white);
-                flex-direction: column;
-                gap: 12px;
-                align-items: center;
-                padding: 32px 0;
-                box-shadow: var(--shadow-lg);
-                z-index: 999;
-                display: none;
-            }
+		.action-buttons a.secondary {
+			background: var(--white);
+			color: var(--ink);
+			border: 2px solid var(--platinum);
+		}
 
-            .nav-menu.active {
-                display: flex;
-            }
+		.action-buttons a.secondary:hover {
+			border-color: var(--primary);
+			color: var(--primary);
+		}
 
-            .nav-menu a {
-                font-size: 17px;
-                padding: 14px 40px;
-                border-radius: 8px;
-                width: auto;
-                text-align: center;
-            }
+		/* Responsive navbar */
+		@media (max-width: 768px) {
+			.nav-menu {
+				display: none;
+			}
 
-            .nav-menu a:hover {
-                background: var(--primary-lighter);
-                color: var(--primary);
-            }
+			.header-content {
+				padding: 12px 16px;
+			}
 
-            .menu-toggle {
-                display: block;
-            }
-
-            .header-right {
-                gap: 12px;
-            }
-
-            .contact-content {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .hero h1 {
-                font-size: 42px;
-            }
-
-            .hero p {
-                font-size: 20px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 40px 20px;
-            }
-
-            .hero {
-                padding: 80px 20px;
-                margin-bottom: 40px;
-            }
-
-            .hero h1 {
-                font-size: 36px;
-            }
-
-            .hero p {
-                font-size: 18px;
-            }
-
-            .contact-info,
-            .demo-form {
-                padding: 40px 24px;
-            }
-
-            .cta-section {
-                padding: 60px 24px;
-            }
-        }
-    </style>
+			.header-right {
+				gap: 8px;
+			}
+		}
+	</style>
 </head>
 <body>
+	<header class="header">
+		<div class="header-content">
+			<a class="logo" href="index.php"><i class="fas fa-shield-alt"></i> CyberAware</a>
 
-    <!-- Header -->
-    <div class="header">
-        <div class="header-content">
-            <a href="index.php" class="logo">
-                <i class="fas fa-shield-alt"></i>
-                CyberAware
-            </a>
+			<nav class="nav-menu">
+				<a href="index.php">Home</a>
+				<a href="index.php#features">Features</a>
+				<a href="services.php">Services</a>
+				<a href="about.php">About Us</a>
+				<a href="compliance.php">Compliance</a>
+				<a href="contact.php" class="active">Contact Us</a>
+			</nav>
 
-            <nav class="nav-menu">
-                <a href="index.php">Home</a>
-                <a href="about.php">About</a>
-                <a href="compliance.php">Compliance</a>
-                <a href="privacy.php">Privacy</a>
-                <a href="contact.php" class="active">Contact</a>
-            </nav>
+			<div class="header-right" style="display: flex; gap: 16px;">
+				<a href="pages/login.php" style="padding: 10px 20px; background: linear-gradient(135deg, var(--orange-500), var(--orange-600)); color: white; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px;"><i class="fas fa-sign-in-alt"></i> Login</a>
+			</div>
+		</div>
+	</header>
 
-            <div class="header-right">
-                <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu">
-                    <i class="fas fa-bars"></i>
-                </button>
+	<main class="container">
+		<section class="hero">
+			<div class="hero-content">
+				<h1>Let's connect</h1>
+				<p>Send a quick note and we will respond with next steps.</p>
+			</div>
+			<?php if ($message && $message_type === 'success'): ?>
+				<div class="hero-actions">
+					<a href="pages/login.php" class="primary">
+						<i class="fas fa-sign-in-alt"></i> Login
+					</a>
+				</div>
+			<?php endif; ?>
+		</section>
 
-                <a href="pages/login.php" class="btn btn-primary">Login</a>
-            </div>
-        </div>
-    </div>
+		<?php if ($message): ?>
+			<div class="message <?= htmlspecialchars($message_type) ?>">
+				<i class="fas <?= $message_type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle' ?>"></i>
+				<?= htmlspecialchars($message) ?>
+			</div>
+		<?php endif; ?>
 
-    <!-- Hero -->
-    <div class="hero">
-        <h1>Contact Us</h1>
-        <p>Get in touch or request a free demo of CyberAware</p>
-    </div>
+		<section class="contact-grid">
+			<div class="contact-card">
+				<h3>Direct lines</h3>
+				<p><strong>Email:</strong> info@intellectualtechnology.com.na</p>
+				<p><strong>Phone:</strong> +264 81 870 6257</p>
+				<p><strong>Office:</strong> Windhoek, Namibia</p>
+			</div>
+			<div class="contact-card">
+				<h3>Request a demo</h3>
+				<form class="contact-form" method="POST">
+					<input type="text" name="name" placeholder="Full name" value="<?= htmlspecialchars($name ?? '') ?>" required>
+					<input type="email" name="email" placeholder="Work email" value="<?= htmlspecialchars($email ?? '') ?>" required>
+					<input type="text" name="company" placeholder="Company" value="<?= htmlspecialchars($company ?? '') ?>" required>
+					<select name="team_size">
+						<option value="">Select team size</option>
+						<option value="1–10 employees" <?= ($team_size ?? '') === '1–10 employees' ? 'selected' : '' ?>>1–10 employees</option>
+						<option value="11–50 employees" <?= ($team_size ?? '') === '11–50 employees' ? 'selected' : '' ?>>11–50 employees</option>
+						<option value="51–200 employees" <?= ($team_size ?? '') === '51–200 employees' ? 'selected' : '' ?>>51–200 employees</option>
+						<option value="200+ employees" <?= ($team_size ?? '') === '200+ employees' ? 'selected' : '' ?>>200+ employees</option>
+					</select>
+					<textarea name="message" rows="4" placeholder="Tell us what you need" required><?= htmlspecialchars($message_text ?? '') ?></textarea>
+					
+					<div style="margin-top: 20px; padding: 16px; background: rgba(255, 140, 66, 0.08); border-radius: 12px; border: 1px solid rgba(255, 140, 66, 0.2);">
+						<label style="display: block; font-weight: 700; margin-bottom: 12px; font-size: 14px; color: var(--ink);">
+							<i class="fas fa-phone" style="color: var(--primary); margin-right: 6px;"></i>How should we contact you?
+						</label>
+						<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+							<label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 12px 14px; border-radius: 10px; border: 2px solid rgba(255, 140, 66, 0.3); background: white; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.background='rgba(255, 140, 66, 0.05)';" onmouseout="this.style.borderColor='rgba(255, 140, 66, 0.3)'; this.style.background='white';">
+								<input type="radio" name="contact_preference" value="email" checked style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary);">
+								<div style="flex: 1;">
+									<div style="font-weight: 600; font-size: 13px; color: var(--ink);"><i class="fas fa-envelope" style="color: var(--primary); margin-right: 6px;"></i>Email</div>
+									<div style="font-size: 11px; color: var(--muted);">Fastest response</div>
+								</div>
+							</label>
+							<label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 12px 14px; border-radius: 10px; border: 2px solid rgba(59, 130, 246, 0.3); background: white; transition: all 0.2s;" onmouseover="this.style.borderColor='#3B82F6'; this.style.background='rgba(59, 130, 246, 0.05)';" onmouseout="this.style.borderColor='rgba(59, 130, 246, 0.3)'; this.style.background='white';">
+								<input type="radio" name="contact_preference" value="phone" style="width: 18px; height: 18px; cursor: pointer; accent-color: #3B82F6;">
+								<div style="flex: 1;">
+									<div style="font-weight: 600; font-size: 13px; color: var(--ink);"><i class="fas fa-mobile-alt" style="color: #3B82F6; margin-right: 6px;"></i>Phone/SMS</div>
+									<div style="font-size: 11px; color: var(--muted);">Direct contact</div>
+								</div>
+							</label>
+						</div>
+						<input type="tel" name="phone" placeholder="Your phone number (if phone contact preferred)" style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(15, 23, 42, 0.1); font-family: inherit; font-size: 14px; display: none;" id="phone_input">
+					</div>
+					
+					<button type="submit" style="margin-top: 16px;"><i class="fas fa-paper-plane"></i> Send request</button>
+				</form>
+			</div>
+		</section>
+	</main>
 
-    <div class="container">
-        <div class="contact-content">
-            <!-- Contact Info -->
-            <div class="contact-info">
-                <h2>Get in Touch</h2>
-                
-                <div class="contact-item">
-                    <i class="fas fa-building"></i>
-                    <div>
-                        <h3>Intellectual Technology</h3>
-                        <p>Windhoek, Namibia<br>
-                        Leading provider of innovative technology solutions</p>
-                    </div>
-                </div>
-                
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <div>
-                        <h3>Email</h3>
-                        <p><a href="mailto:info@intellectualtechnology.com.na">info@intellectualtechnology.com.na</a></p>
-                    </div>
-                </div>
-                
-                <div class="contact-item">
-                    <i class="fas fa-globe"></i>
-                    <div>
-                        <h3>Website</h3>
-                        <p><a href="https://intellectualtechnology.com.na" target="_blank">intellectualtechnology.com.na</a></p>
-                    </div>
-                </div>
-                
-                <div class="contact-item">
-                    <i class="fas fa-shield-alt"></i>
-                    <div>
-                        <h3>CyberAware Demo</h3>
-                        <p>Fill out the form to request a personalized demo</p>
-                    </div>
-                </div>
-            </div>
+	<script>
+		// Show/hide phone input based on contact preference
+		const contactPreferenceRadios = document.querySelectorAll('input[name="contact_preference"]');
+		const phoneInput = document.getElementById('phone_input');
 
-            <!-- Demo Request Form -->
-            <div class="demo-form">
-                <h2>Request a Free Demo</h2>
+		function updatePhoneInputVisibility() {
+			const selectedPreference = document.querySelector('input[name="contact_preference"]:checked').value;
+			if (selectedPreference === 'phone') {
+				phoneInput.style.display = 'block';
+				phoneInput.required = true;
+			} else {
+				phoneInput.style.display = 'none';
+				phoneInput.required = false;
+			}
+		}
 
-                <?php if ($success_message): ?>
-                <div class="form-message form-success">
-                    <?= htmlspecialchars($success_message) ?>
-                </div>
-                <?php endif; ?>
+		contactPreferenceRadios.forEach(radio => {
+			radio.addEventListener('change', updatePhoneInputVisibility);
+		});
 
-                <?php if ($error_message): ?>
-                <div class="form-message form-error">
-                    <?= htmlspecialchars($error_message) ?>
-                </div>
-                <?php endif; ?>
-
-                <form method="POST">
-                    <div class="form-group">
-                        <label for="name">Your Name *</label>
-                        <input type="text" id="name" name="name" value="<?= htmlspecialchars($name) ?>" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email Address *</label>
-                        <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="company">Company / Organization *</label>
-                        <input type="text" id="company" name="company" value="<?= htmlspecialchars($company) ?>" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone">Phone Number (optional)</label>
-                        <input type="tel" id="phone" name="phone" value="<?= htmlspecialchars($phone) ?>">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message">Message *</label>
-                        <textarea id="message" name="message" required><?= htmlspecialchars($message) ?></textarea>
-                    </div>
-
-                    <button type="submit" class="submit-btn">
-                        Submit Request
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <div class="cta-section">
-            <h2>Ready to Get Started?</h2>
-            <p>Contact us today for a personalized demonstration of CyberAware</p>
-            <a href="pages/login.php" class="cta-btn">
-                Login to Platform
-            </a>
-        </div>
-    </div>
-
-    <?php include 'includes/footer.php'; ?>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.getElementById('menu-toggle');
-            if (menuToggle) {
-                const navMenu = document.querySelector('.nav-menu');
-                const icon = menuToggle.querySelector('i');
-
-                menuToggle.addEventListener('click', function() {
-                    navMenu.classList.toggle('active');
-
-                    if (navMenu.classList.contains('active')) {
-                        icon.classList.remove('fa-bars');
-                        icon.classList.add('fa-times');
-                        document.body.style.overflow = 'hidden';
-                    } else {
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                        document.body.style.overflow = '';
-                    }
-                });
-
-                // Close menu when a link is clicked
-                document.querySelectorAll('.nav-menu a').forEach(function(link) {
-                    link.addEventListener('click', function() {
-                        navMenu.classList.remove('active');
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                        document.body.style.overflow = '';
-                    });
-                });
-            }
-        });
-    </script>
-
+		// Initialize on page load
+		updatePhoneInputVisibility();
+	</script>
 </body>
 </html>

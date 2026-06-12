@@ -1,9 +1,11 @@
 <?php
 require_once 'config/database.php';
-
-// Redirect if already logged in
 if (isLoggedIn()) {
-    if (hasRole('admin') || hasRole('manager')) {
+    if (hasRole('superadmin')) {
+        header('Location: superadmin/dashboard.php');
+    } elseif (hasRole('manager')) {
+        header('Location: manager/dashboard.php');
+    } elseif (hasRole('admin')) {
         header('Location: admin/dashboard.php');
     } else {
         header('Location: trainee/dashboard.php');
@@ -14,872 +16,376 @@ if (isLoggedIn()) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberAware - Security Awareness Training Platform</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #FF8C42;
-            --primary-dark: #E67A2E;
-            --primary-light: #FFF4ED;
-            --primary-lighter: #FFEAD9;
-            --success: #00A65A;
-            --warning: #F39C12;
-            --danger: #DD4B39;
-            --dark: #2C2C2C;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-300: #D4D4D4;
-            --gray-400: #B8B8B8;
-            --gray-500: #9E9E9E;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1e293b;
-            --white: #FFFFFF;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
-            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--gray-50);
-            color: var(--dark);
-            line-height: 1.6;
-        }
-
-        /* Header */
-        .header {
-            background: var(--white);
-            border-bottom: 1px solid var(--gray-200);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px 32px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .logo i {
-            font-size: 28px;
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-
-        .nav-menu a {
-            color: var(--gray-700);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 15px;
-            transition: color 0.2s;
-        }
-
-        .nav-menu a:hover {
-            color: var(--primary);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 28px;
-            color: var(--gray-700);
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .badge {
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .badge-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .badge-warning {
-            background: var(--warning);
-            color: white;
-        }
-
-        .badge-info {
-            background: #3498db;
-            color: white;
-        }
-
-        .btn {
-            padding: 10px 24px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-large {
-            padding: 16px 40px;
-            font-size: 16px;
-        }
-
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 32px;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 100px 32px;
-            text-align: center;
-            border-radius: 16px;
-            margin: 40px 32px;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .hero-icon {
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 30px;
-        }
-
-        .hero-icon i {
-            font-size: 50px;
-            color: white;
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            margin-bottom: 20px;
-            color: white;
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
-
-        .hero p {
-            font-size: 24px;
-            margin-bottom: 40px;
-            opacity: 0.95;
-            font-weight: 400;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .hero-btn {
-            padding: 18px 48px;
-            font-size: 18px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .hero-btn-primary {
-            background: white;
-            color: var(--primary);
-        }
-
-        .hero-btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
-        }
-
-        .hero-btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .hero-btn-secondary:hover {
-            background: white;
-            color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        /* Purpose Statement */
-        .purpose-statement {
-            background: var(--white);
-            padding: 60px 40px;
-            border-radius: 16px;
-            margin: 60px 0;
-            box-shadow: var(--shadow-md);
-            text-align: center;
-        }
-
-        .purpose-statement h2 {
-            color: var(--primary);
-            font-size: 36px;
-            margin-bottom: 24px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .purpose-statement h2 i {
-            font-size: 40px;
-        }
-
-        .purpose-statement p {
-            font-size: 20px;
-            line-height: 1.8;
-            color: var(--gray-700);
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .purpose-statement .subtitle {
-            margin-top: 20px;
-            font-size: 16px;
-            color: var(--gray-600);
-            font-weight: 500;
-        }
-
-        /* Section Title */
-        .section-title {
-            text-align: center;
-            font-size: 42px;
-            margin: 80px 0 50px 0;
-            font-weight: 700;
-            color: var(--dark);
-        }
-
-        /* Features Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin: 50px 0;
-        }
-
-        .feature-card {
-            background: var(--white);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s;
-            border: 1px solid var(--gray-200);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary-lighter);
-        }
-
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            background: var(--primary-lighter);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
-
-        .feature-icon i {
-            font-size: 36px;
-            color: var(--primary);
-        }
-
-        .feature-card h3 {
-            color: var(--dark);
-            margin-bottom: 16px;
-            font-size: 22px;
-            font-weight: 600;
-        }
-
-        .feature-card p {
-            color: var(--gray-600);
-            line-height: 1.7;
-            font-size: 15px;
-        }
-
-        /* Stats Section */
-        .stats-section {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 80px 40px;
-            border-radius: 16px;
-            margin: 80px 0;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .stats-section h2 {
-            text-align: center;
-            font-size: 42px;
-            margin-bottom: 50px;
-            color: white;
-            font-weight: 700;
-        }
-
-        .stats-grid-home {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 40px;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 56px;
-            font-weight: 800;
-            margin-bottom: 10px;
-            color: white;
-        }
-
-        .stat-label {
-            font-size: 18px;
-            opacity: 0.95;
-            font-weight: 500;
-        }
-
-        /* Modules Grid */
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 30px;
-        }
-
-        .module-card {
-            background: var(--gray-50);
-            padding: 32px;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            transition: all 0.3s;
-        }
-
-        .module-card:hover {
-            background: var(--white);
-            box-shadow: var(--shadow-md);
-            transform: translateY(-5px);
-        }
-
-        .module-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--primary-lighter);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .module-icon i {
-            font-size: 30px;
-            color: var(--primary);
-        }
-
-        .module-card h3 {
-            color: var(--dark);
-            margin-bottom: 12px;
-            font-size: 19px;
-            font-weight: 600;
-        }
-
-        .module-card p {
-            color: var(--gray-600);
-            line-height: 1.6;
-            font-size: 14px;
-        }
-
-        /* Card */
-        .card {
-            background: var(--white);
-            padding: 60px 40px;
-            border-radius: 16px;
-            margin: 60px 0;
-            box-shadow: var(--shadow-md);
-        }
-
-        .card h2 {
-            font-size: 36px;
-            margin-bottom: 40px;
-            color: var(--dark);
-            font-weight: 700;
-            text-align: center;
-        }
-
-        /* CTA disappearing */
-        .cta-section {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 80px 40px;
-            border-radius: 16px;
-            margin: 80px 0;
-            text-align: center;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .cta-section h2 {
-            font-size: 42px;
-            color: white;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .cta-section p {
-            font-size: 20px;
-            color: white;
-            margin-bottom: 40px;
-            opacity: 0.95;
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .header-content {
-                padding: 16px 20px;
-            }
-
-            .nav-menu {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: var(--white);
-                flex-direction: column;
-                gap: 12px;
-                align-items: center;
-                padding: 32px 0;
-                box-shadow: var(--shadow-lg);
-                z-index: 999;
-                display: none;
-            }
-
-            .nav-menu.active {
-                display: flex;
-            }
-
-            .nav-menu a {
-                font-size: 17px;
-                padding: 14px 40px;
-                border-radius: 8px;
-                width: auto;
-                text-align: center;
-            }
-
-            .nav-menu a:hover {
-                background: var(--primary-lighter);
-                color: var(--primary);
-            }
-
-            .menu-toggle {
-                display: block;
-            }
-
-            .header-right {
-                gap: 12px;
-            }
-
-            .user-info {
-                gap: 12px;
-                font-size: 14px;
-            }
-
-            .user-info .btn {
-                padding: 8px 16px;
-                font-size: 13px;
-            }
-
-            .hero h1 {
-                font-size: 42px;
-            }
-
-            .hero p {
-                font-size: 20px;
-            }
-
-            .section-title {
-                font-size: 32px;
-            }
-
-            .features-grid,
-            .modules-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero {
-                padding: 60px 24px;
-                margin: 20px 16px;
-            }
-
-            .hero h1 {
-                font-size: 32px;
-            }
-
-            .hero p {
-                font-size: 18px;
-            }
-
-            .hero-btn {
-                padding: 14px 32px;
-                font-size: 16px;
-            }
-
-            .container {
-                padding: 0 16px;
-            }
-
-            .purpose-statement,
-            .card,
-            .stats-section,
-            .cta-section {
-                padding: 40px 24px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberAware — Security Awareness Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--orange:#FF8C42;--orange-light:#FFF4EC;--orange-mid:#FFD4B3;--white:#FFFFFF;--grey:#F5F5F5;--grey2:#E8E8E8;--dark:#1A1A2E;--text:#333;}
+body{font-family:'Manrope',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;}
+/* NAV */
+nav{background:var(--white);border-bottom:2px solid var(--grey2);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:70px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+.nav-logo .icon{width:40px;height:40px;background:var(--orange);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;}
+.nav-logo span{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--dark);}
+.nav-links{display:flex;align-items:center;gap:32px;position:absolute;left:50%;transform:translateX(-50%);}
+.nav-links a{text-decoration:none;color:var(--text);font-weight:600;font-size:15px;transition:.2s;white-space:nowrap;}
+.nav-links a:hover{color:var(--orange);}
+.nav-cta{background:var(--orange);color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;transition:.2s;flex-shrink:0;}
+.nav-cta:hover{background:#e07030;transform:translateY(-1px);}
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--orange-light) 0%,var(--white) 60%);padding:90px 5% 80px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;min-height:88vh;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--orange-mid);color:#b85a00;padding:7px 16px;border-radius:20px;font-size:13px;font-weight:700;margin-bottom:24px;}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:52px;font-weight:700;line-height:1.15;color:var(--dark);margin-bottom:20px;}
+.hero h1 span{color:var(--orange);}
+.hero p{font-size:18px;color:#555;line-height:1.7;margin-bottom:36px;max-width:480px;}
+.hero-buttons{display:flex;gap:16px;flex-wrap:wrap;}
+.btn-primary{background:var(--orange);color:#fff;padding:15px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:16px;display:inline-flex;align-items:center;gap:10px;transition:.2s;}
+.btn-primary:hover{background:#e07030;transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,140,66,.3);}
+.btn-secondary{background:var(--white);color:var(--dark);padding:15px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:16px;border:2px solid var(--grey2);display:inline-flex;align-items:center;gap:10px;transition:.2s;}
+.btn-secondary:hover{border-color:var(--orange);color:var(--orange);}
+.hero-visual{position:relative;}
+.hero-card{background:var(--white);border-radius:20px;padding:32px;box-shadow:0 20px 60px rgba(0,0,0,.1);border:1px solid var(--grey2);}
+.hero-card-top{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.hc-icon{width:48px;height:48px;background:var(--orange-light);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:22px;}
+.hc-title{font-weight:700;font-size:16px;color:var(--dark);}
+.hc-sub{font-size:13px;color:#888;}
+.progress-row{margin-bottom:14px;}
+.progress-label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text);}
+.progress-bar{height:10px;background:var(--grey2);border-radius:5px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:5px;background:var(--orange);}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px;}
+.stat-box{background:var(--grey);border-radius:10px;padding:14px;text-align:center;}
+.stat-num{font-size:22px;font-weight:800;color:var(--orange);}
+.stat-lbl{font-size:11px;color:#888;font-weight:600;}
+.float-badge{position:absolute;top:-20px;right:-20px;background:var(--orange);color:#fff;border-radius:12px;padding:12px 18px;font-weight:700;font-size:13px;box-shadow:0 8px 24px rgba(255,140,66,.4);}
+/* LOGOS */
+.logos{background:var(--grey);padding:60px 5%;text-align:center;}
+.logos p{font-size:13px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:40px;}
+.logo-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:30px;max-width:1200px;margin:0 auto;align-items:center;justify-items:center;}
+.logo-item{background:var(--white);border-radius:14px;padding:24px;display:flex;align-items:center;justify-content:center;min-height:100px;border:2px solid transparent;transition:.3s;box-shadow:0 4px 12px rgba(0,0,0,.05);}
+.logo-item:hover{border-color:var(--orange);transform:translateY(-4px);box-shadow:0 8px 20px rgba(255,140,66,.15);}
+.logo-item img{max-width:100%;max-height:80px;object-fit:contain;}
+.logo-item-text{font-size:13px;font-weight:700;color:#666;letter-spacing:.05em;text-align:center;}
+/* FEATURES */
+.features{padding:90px 5%;background:var(--white);}
+.section-label{text-align:center;font-size:13px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;}
+.section-title{text-align:center;font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;color:var(--dark);margin-bottom:16px;}
+.section-sub{text-align:center;font-size:17px;color:#666;max-width:560px;margin:0 auto 60px;}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;}
+.feat-card{background:var(--grey);border-radius:16px;padding:32px;border:2px solid transparent;transition:.2s;}
+.feat-card:hover{border-color:var(--orange);background:var(--orange-light);transform:translateY(-4px);}
+.feat-icon{width:56px;height:56px;background:var(--orange);border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;margin-bottom:20px;}
+.feat-card h3{font-size:19px;font-weight:700;color:var(--dark);margin-bottom:10px;}
+.feat-card p{font-size:15px;color:#666;line-height:1.6;}
+/* MODULES */
+.modules{padding:90px 5%;background:var(--orange-light);}
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:48px;}
+.mod-card{background:var(--white);border-radius:14px;padding:24px;text-align:center;border:2px solid var(--grey2);transition:.2s;cursor:pointer;}
+.mod-card:hover{border-color:var(--orange);transform:translateY(-4px);box-shadow:0 12px 32px rgba(255,140,66,.15);}
+.mod-icon{width:56px;height:56px;border-radius:14px;background:var(--orange-light);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--orange);margin:0 auto 14px;}
+.mod-card h4{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:6px;}
+.mod-card span{font-size:12px;color:#999;}
+/* GAMIFICATION */
+.gamify{padding:90px 5%;background:var(--white);display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.gamify-visual{background:var(--dark);border-radius:24px;padding:36px;color:#fff;}
+.game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;}
+.game-lives{display:flex;gap:6px;}
+.heart{color:#ff4757;font-size:20px;}
+.game-xp{background:var(--orange);color:#fff;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:700;}
+.game-streak{background:#ffd700;color:#333;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:700;}
+.lesson-path{display:flex;flex-direction:column;align-items:center;gap:16px;}
+.lesson-node{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;border:3px solid rgba(255,255,255,.2);cursor:pointer;transition:.2s;}
+.lesson-node.done{background:var(--orange);border-color:var(--orange);color:#fff;}
+.lesson-node.active{background:var(--white);color:var(--dark);border-color:var(--white);box-shadow:0 0 0 6px rgba(255,255,255,.2);}
+.lesson-node.locked{background:rgba(255,255,255,.1);color:rgba(255,255,255,.3);}
+.gamify-text h2{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:700;color:var(--dark);margin-bottom:16px;}
+.gamify-text p{font-size:16px;color:#666;line-height:1.7;margin-bottom:24px;}
+.gamify-pills{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px;}
+.pill{background:var(--orange-light);color:#b85a00;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:700;}
+/* STATS */
+.stats{background:var(--orange);padding:70px 5%;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;max-width:900px;margin:0 auto;text-align:center;}
+.stats-num{font-size:52px;font-weight:800;color:#fff;margin-bottom:6px;}
+.stats-lbl{font-size:15px;color:rgba(255,255,255,.8);font-weight:600;}
+/* DEMO */
+.demo{padding:90px 5%;background:var(--grey);display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.demo h2{font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:700;color:var(--dark);margin-bottom:16px;}
+.demo p{font-size:16px;color:#666;line-height:1.7;margin-bottom:32px;}
+.demo-form{background:var(--white);border-radius:20px;padding:36px;box-shadow:0 8px 32px rgba(0,0,0,.08);}
+.demo-form h3{font-size:22px;font-weight:700;color:var(--dark);margin-bottom:24px;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:13px;font-weight:700;color:var(--dark);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 16px;border:2px solid var(--grey2);border-radius:10px;font-size:15px;font-family:'Manrope',sans-serif;transition:.2s;outline:none;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--orange);}
+.form-group textarea{height:100px;resize:vertical;}
+.btn-submit{width:100%;background:var(--orange);color:#fff;padding:14px;border-radius:10px;border:none;font-size:16px;font-weight:700;cursor:pointer;transition:.2s;font-family:'Manrope',sans-serif;}
+.btn-submit:hover{background:#e07030;}
+/* FOOTER */
+footer{background:var(--dark);color:rgba(255,255,255,.7);padding:48px 5% 32px;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:40px;}
+.footer-brand .icon{width:44px;height:44px;background:var(--orange);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;margin-bottom:12px;}
+.footer-brand h3{color:#fff;font-size:20px;font-weight:700;margin-bottom:8px;}
+.footer-brand p{font-size:14px;line-height:1.6;}
+.footer-col h4{color:#fff;font-size:14px;font-weight:700;margin-bottom:16px;text-transform:uppercase;letter-spacing:.08em;}
+.footer-col a{display:block;color:rgba(255,255,255,.6);text-decoration:none;font-size:14px;margin-bottom:10px;transition:.2s;}
+.footer-col a:hover{color:var(--orange);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:24px;display:flex;justify-content:space-between;align-items:center;font-size:13px;}
+.btn-submit {
+    padding: 12px 20px;
+    border-radius: 999px;
+    border: none;
+    background: var(--orange);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-submit:hover {
+    background: #e07030;
+    transform: translateY(-2px);
+}
+@media(max-width:900px){
+.hero,.gamify,.demo{grid-template-columns:1fr;}
+.hero-visual,.float-badge{display:none;}
+.hero h1{font-size:36px;}
+.nav-links{display:none;}
+.footer-top{grid-template-columns:1fr;}
+}
+</style>
 </head>
 <body>
-    <div class="header">
-        <div class="header-content">
-            <?php if (isLoggedIn()): ?>
-                <a href="<?php echo (hasRole('admin') || hasRole('manager')) ? 'admin_dashboard.php' : 'trainee_dashboard.php'; ?>" class="logo">
-                    <i class="fas fa-shield-alt"></i> CyberAware
-                </a>
-            <?php else: ?>
-                <a href="index.php" class="logo">
-                    <i class="fas fa-shield-alt"></i> CyberAware
-                </a>
-            <?php endif; ?>
-            
-            <nav class="nav-menu">
-                <?php if (isLoggedIn()): ?>
-                    <?php if (hasRole('admin') || hasRole('manager')): ?>
-                        <a href="admin_dashboard.php">Dashboard</a>
-                        <a href="create_campaign.php">Campaigns</a>
-                        <a href="manage_users.php">Users</a>
-                        <a href="phishing_templates.php">Templates</a>
-                        <a href="reports.php">Reports</a>
-                    <?php else: ?>
-                        <a href="trainee_dashboard.php">Dashboard</a>
-                        <a href="my_progress.php">My Progress</a>
-                        <a href="modules.php">Training Modules</a>
-                    <?php endif; ?>
-                    <a href="compliance.php">Compliance</a>
-                    <a href="help.php">Help</a>
-                <?php else: ?>
-                    <a href="#features">Features</a>
-                    <a href="about.php">About</a>
-                    <a href="compliance.php">Compliance</a>
-                    <a href="contact.php">Contact</a>
-                <?php endif; ?>
-            </nav>
 
-            <div class="header-right">
-                <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu">
-                    <i class="fas fa-bars"></i>
-                </button>
-
-                <div class="user-info">
-                    <?php if (isLoggedIn()): ?>
-                        <span>👤 <?php echo htmlspecialchars($_SESSION['full_name']); ?></span>
-                        <span class="badge <?php 
-                            echo hasRole('admin') ? 'badge-danger' : 
-                                (hasRole('manager') ? 'badge-warning' : 'badge-info'); 
-                        ?>">
-                            <?php echo strtoupper($_SESSION['role']); ?>
-                        </span>
-                        <a href="logout.php" class="btn btn-secondary">Logout</a>
-                    <?php else: ?>
-                        <a href="pages/login.php" class="btn btn-primary">Login</a>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
+<!-- NAV -->
+<nav>
+    <a href="index.php" class="nav-logo">
+        <div class="icon"><i class="fas fa-shield-alt"></i></div>
+        <span>CyberAware</span>
+    </a>
+    <div class="nav-links">
+        <a href="index.php">Home</a>
+        <a href="#features">Features</a>
+        <a href="services.php">Services</a>
+        <a href="about.php">About Us</a>
+        <a href="compliance.php">Compliance</a>
+        <a href="contact.php">Contact Us</a>
     </div>
-    
-    <div class="hero">
-        <div class="hero-icon">
-            <i class="fas fa-shield-alt"></i>
-        </div>
-        <h1>CyberAware</h1>
-        <p>Empower your team to recognize and defend against cyber threats</p>
+    <a href="pages/login.php" class="nav-cta"><i class="fas fa-sign-in-alt"></i> Login</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-text">
+        <div class="hero-badge"><i class="fas fa-star"></i> Trusted by organisations in Namibia</div>
+        <h1>Turn your team into a <span>human firewall</span></h1>
+        <p>Gamified cybersecurity awareness training that actually works. Real phishing simulations, interactive lessons, and measurable results.</p>
         <div class="hero-buttons">
-            <a href="login.php" class="hero-btn hero-btn-primary">
-                <i class="fas fa-rocket"></i>
-                Get Started
-            </a>
-            <a href="#features" class="hero-btn hero-btn-secondary">
-                <i class="fas fa-arrow-down"></i>
-                Learn More
-            </a>
+            <a href="contact.php" class="btn-primary"><i class="fas fa-envelope"></i> Get in Touch</a>
+            <a href="pages/login.php" class="btn-secondary"><i class="fas fa-sign-in-alt"></i> Login</a>
         </div>
     </div>
-    
-    <div class="container">
-        <div class="purpose-statement">
-            <h2>
-                <i class="fas fa-bullseye"></i>
-                Our Mission
-            </h2>
-            <p>
-                <strong>This platform is designed to simulate cyberattack scenarios for employee awareness and training,
-                helping users recognize, avoid, and report threats.</strong>
-            </p>
-            <p class="subtitle">
-                <i class="fas fa-check-circle"></i> Compliant with ISO 27001 & NIST security awareness frameworks | Training-Only Use
-            </p>
-        </div>
-        
-        <h2 class="section-title" id="features">
-            Why Choose CyberAware?
-        </h2>
-        
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-crosshairs"></i>
-                </div>
-                <h3>Realistic Simulations</h3>
-                <p>Safe, controlled environment to practice identifying phishing emails, social engineering, and other threats without real-world risks.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <h3>Measurable Results</h3>
-                <p>Track click rates, report rates, and user improvement with detailed metrics and compliance-ready reports.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <h3>Complete Privacy</h3>
-                <p>No real credential capture, no external emails sent. Everything stays within your organization's controlled environment.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-bolt"></i>
-                </div>
-                <h3>Immediate Feedback</h3>
-                <p>Users learn from every decision with instant, detailed explanations of what they did right or wrong.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-users-cog"></i>
-                </div>
-                <h3>Role-Based Access</h3>
-                <p>Separate interfaces for trainees and administrators. Managers get powerful dashboards to track team progress.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-clipboard-check"></i>
-                </div>
-                <h3>Compliance Ready</h3>
-                <p>Aligned with ISO 27001 and NIST frameworks. Generate audit-ready reports for regulatory compliance.</p>
-            </div>
-        </div>
-        
-        <div class="stats-section">
-            <h2>Platform Impact</h2>
-            <div class="stats-grid-home">
-                <div class="stat-item">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">Training Modules</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">2h15min</div>
-                    <div class="stat-label">Avg Completion Time</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">85%</div>
-                    <div class="stat-label">Threat Awareness Increase</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">72%</div>
-                    <div class="stat-label">Incident Reduction</div>
+    <div class="hero-visual">
+        <div class="float-badge">🔥 7-day streak!</div>
+        <div class="hero-card">
+            <div class="hero-card-top">
+                <div class="hc-icon"><i class="fas fa-shield-alt"></i></div>
+                <div>
+                    <div class="hc-title">Security Progress</div>
+                    <div class="hc-sub">John Doe — Finance Dept</div>
                 </div>
             </div>
-        </div>
-        
-        <div class="card" id="about">
-            <h2>Training Modules</h2>
-            <div class="modules-grid">
-                <div class="module-card">
-                    <div class="module-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <h3>Phishing Email Recognition</h3>
-                    <p>Learn to identify suspicious emails and avoid phishing attacks with realistic simulations.</p>
-                </div>
-                
-                <div class="module-card">
-                    <div class="module-icon">
-                        <i class="fas fa-key"></i>
-                    </div>
-                    <h3>Credential Harvesting Awareness</h3>
-                    <p>Recognize fake login pages and protect your credentials from theft.</p>
-                </div>
-                
-                <div class="module-card">
-                    <div class="module-icon">
-                        <i class="fas fa-phone-alt"></i>
-                    </div>
-                    <h3>Social Engineering Defense</h3>
-                    <p>Identify manipulation tactics and respond appropriately to suspicious requests.</p>
-                </div>
-                
-                <div class="module-card">
-                    <div class="module-icon">
-                        <i class="fas fa-virus"></i>
-                    </div>
-                    <h3>Malware & Attachment Safety</h3>
-                    <p>Spot dangerous attachments before they infect your system.</p>
-                </div>
-                
-                <div class="module-card">
-                    <div class="module-icon">
-                        <i class="fas fa-link"></i>
-                    </div>
-                    <h3>Website & Link Safety</h3>
-                    <p>Verify URLs and detect malicious websites before clicking.</p>
-                </div>
+            <div class="progress-row">
+                <div class="progress-label"><span>Phishing Recognition</span><span>85%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div>
             </div>
-        </div>
-        
-        <div class="cta-section">
-            <h2>Ready to Strengthen Your Security?</h2>
-            <p>Join organizations worldwide using CyberAware to protect their teams</p>
-            <a href="login.php" class="hero-btn hero-btn-primary">
-                <i class="fas fa-arrow-right"></i>
-                Get Started Now
-            </a>
+            <div class="progress-row">
+                <div class="progress-label"><span>Password Security</span><span>72%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-label"><span>Social Engineering</span><span>91%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:91%"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-box"><div class="stat-num">840</div><div class="stat-lbl">XP Earned</div></div>
+                <div class="stat-box"><div class="stat-num">5/7</div><div class="stat-lbl">Modules</div></div>
+                <div class="stat-box"><div class="stat-num">Low</div><div class="stat-lbl">Risk Level</div></div>
+            </div>
         </div>
     </div>
-    
-    <?php include 'includes/footer.php'; ?>
+</section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.getElementById('menu-toggle');
-            if (menuToggle) {
-                const navMenu = document.querySelector('.nav-menu');
-                const icon = menuToggle.querySelector('i');
+<!-- LOGOS -->
+<div class="logos">
+    <p>Trusted by organisations across Namibia</p>
+    <div class="logo-row">
+        <div class="logo-item">
+            <div style="text-align:center;">
+                <img src="assets/logos/fist capital.jpg" alt="First Capital" style="max-width:100%;max-height:80px;object-fit:contain;margin:0 auto 8px;display:block;">
+                <div class="logo-item-text">FIRST CAPITAL</div>
+            </div>
+        </div>
+        <div class="logo-item">
+            <div style="text-align:center;">
+                <img src="assets/logos/agra co-op.png" alt="Agra Co-op" style="max-width:100%;max-height:80px;object-fit:contain;margin:0 auto 8px;display:block;">
+                <div class="logo-item-text">AGRA CO-OP</div>
+            </div>
+        </div>
+        <div class="logo-item">
+            <div style="text-align:center;">
+                <img src="assets/logos/intellectual technology.png" alt="Intellectual Technology" style="max-width:100%;max-height:80px;object-fit:contain;margin:0 auto 8px;display:block;">
+                <div class="logo-item-text">INTELLECTUAL TECHNOLOGY</div>
+            </div>
+        </div>
+        <div class="logo-item">
+            <div style="text-align:center;">
+                <img src="assets/logos/nust logo.jpg" alt="NUST" style="max-width:100%;max-height:80px;object-fit:contain;margin:0 auto 8px;display:block;">
+                <div class="logo-item-text">NUST</div>
+            </div>
+        </div>
+        <div class="logo-item">
+            <div style="text-align:center;">
+                <img src="assets/logos/your company.jpg" alt="Your Company" style="max-width:100%;max-height:80px;object-fit:contain;margin:0 auto 8px;display:block;">
+                <div class="logo-item-text">YOUR COMPANY</div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                menuToggle.addEventListener('click', function() {
-                    navMenu.classList.toggle('active');
+<!-- FEATURES -->
+<section class="features" id="features">
+    <div class="section-label">Why CyberAware</div>
+    <div class="section-title">Everything you need to protect your team</div>
+    <p class="section-sub">From phishing simulations to gamified lessons — built for real organisations.</p>
+    <div class="features-grid">
+        <div class="feat-card">
+            <div class="feat-icon"><i class="fas fa-fish"></i></div>
+            <h3>Real Phishing Simulations</h3>
+            <p>Send safe fake phishing emails to employees and track who clicks, who reports, and who ignores them.</p>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon"><i class="fas fa-gamepad"></i></div>
+            <h3>Gamified Like Duolingo</h3>
+            <p>XP points, lives, streaks and badges make training fun. Employees actually want to come back.</p>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon"><i class="fas fa-user-shield"></i></div>
+            <h3>Per-Employee Tracking</h3>
+            <p>See exactly where each employee passed or failed. Track improvement over time individually.</p>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon"><i class="fas fa-chart-bar"></i></div>
+            <h3>Security Posture Dashboard</h3>
+            <p>Get a real-time view of your organisation's human defence score — by department and individual.</p>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon"><i class="fas fa-bell"></i></div>
+            <h3>Auto Notifications</h3>
+            <p>Admins are automatically notified when new training content is available to assign to their teams.</p>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon"><i class="fas fa-file-contract"></i></div>
+            <h3>Compliance Ready</h3>
+            <p>Aligned with ISO 27001, NIST, GDPR and POPIA. Export audit-ready reports anytime.</p>
+        </div>
+    </div>
+</section>
 
-                    if (navMenu.classList.contains('active')) {
-                        icon.classList.remove('fa-bars');
-                        icon.classList.add('fa-times');
-                        document.body.style.overflow = 'hidden';
-                    } else {
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                        document.body.style.overflow = '';
-                    }
-                });
+<!-- MODULES -->
+<section class="modules" id="modules">
+    <div class="section-label">Training Content</div>
+    <div class="section-title">7 real-world security modules</div>
+    <p class="section-sub">Each module uses interactive simulations — not boring videos.</p>
+    <div class="modules-grid">
+        <div class="mod-card">
+            <div class="mod-icon"><i class="fas fa-envelope"></i></div>
+            <h4>Phishing Emails</h4>
+        </div>
+        <div class="mod-card">
+            <div class="mod-icon"><i class="fas fa-key"></i></div>
+            <h4>Fake Login Pages</h4>
+        </div>
+        <div class="mod-card">
+            <div class="mod-icon"><i class="fas fa-phone-alt"></i></div>
+            <h4>Social Engineering</h4>
+        </div>
+        <div class="mod-card">
+            <div class="mod-icon"><i class="fas fa-paperclip"></i></div>
+            <h4>Dangerous Attachments</h4>
+        </div>
+        <div class="mod-card">
+            <div class="mod-icon"><i class="fas fa-lock"></i></div>
+            <h4>Password Security</h4>
+        </div>
+        <div class="mod-card">
+            <div class="mod-icon"><i class="fas fa-virus"></i></div>
+            <h4>Ransomware Awareness</h4>
+        </div>
+        <div class="mod-card">
+            <div class="mod-icon"><i class="fas fa-home"></i></div>
+            <h4>Remote Work Security</h4>
+        </div>
+    </div>
+</section>
 
-                // Close menu when a link is clicked
-                document.querySelectorAll('.nav-menu a').forEach(function(link) {
-                    link.addEventListener('click', function() {
-                        navMenu.classList.remove('active');
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                        document.body.style.overflow = '';
-                    });
-                });
-            }
-        });
-    </script>
+<!-- STATS -->
+<section class="stats">
+    <div class="stats-grid">
+        <div><div class="stats-num">1,000+</div><div class="stats-lbl">Users Trained</div></div>
+        <div><div class="stats-num">7</div><div class="stats-lbl">Security Modules</div></div>
+        <div><div class="stats-num">85%</div><div class="stats-lbl">Threat Awareness Increase</div></div>
+        <div><div class="stats-num">72%</div><div class="stats-lbl">Incident Reduction</div></div>
+    </div>
+</section>
+
+<!-- GAMIFICATION -->
+<section class="gamify">
+    <div class="gamify-visual">
+        <div class="game-header">
+            <div class="game-lives">
+                <span class="heart">♥</span>
+                <span class="heart">♥</span>
+                <span class="heart">♥</span>
+                <span class="heart" style="opacity:.3">♥</span>
+                <span class="heart" style="opacity:.3">♥</span>
+            </div>
+            <span class="game-xp">⚡ 840 XP</span>
+            <span class="game-streak">🔥 7 streak</span>
+        </div>
+        <div class="lesson-path">
+            <div class="lesson-node done"><i class="fas fa-check"></i></div>
+            <div class="lesson-node done"><i class="fas fa-check"></i></div>
+            <div class="lesson-node active"><i class="fas fa-envelope"></i></div>
+            <div class="lesson-node locked"><i class="fas fa-lock"></i></div>
+            <div class="lesson-node locked"><i class="fas fa-lock"></i></div>
+        </div>
+        <div style="text-align:center;margin-top:20px;color:rgba(255,255,255,.6);font-size:14px;">Phishing Recognition — Level 3</div>
+    </div>
+    <div class="gamify-text">
+        <h2>Training that feels like a game</h2>
+        <p>We designed CyberAware inspired by Duolingo — short lessons, instant feedback, and a reward system that keeps employees coming back every day.</p>
+        <div class="gamify-pills">
+            <span class="pill">🏆 Earn XP</span>
+            <span class="pill">❤️ 5 Lives per day</span>
+            <span class="pill">🔥 Daily streaks</span>
+            <span class="pill">🥇 Leaderboard</span>
+            <span class="pill">🎓 Certificates</span>
+        </div>
+        <a href="#demo" class="btn-primary"><i class="fas fa-play"></i> See it in action</a>
+    </div>
+</section>
+
+
+<?php include 'includes/footer.php'; ?>
+
 </body>
 </html>

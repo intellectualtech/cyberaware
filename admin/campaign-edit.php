@@ -133,11 +133,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: var(--gray-100);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #EE8E46 0%, #E67A2E 100%);
             color: #1e293b;
         }
-        .main-content { margin-left: var(--sidebar-width); min-height: 100vh; }
+        .main-content { margin-bottom: var(--sidebar-height); min-height: 100vh; }
         .header {
             background: white;
             border-bottom: 1px solid var(--gray-200);
@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(255,140,66,0.15);
+            box-shadow: 0 0 0 3px rgba(var(--primary-rgb),0.15);
         }
         textarea { min-height: 100px; resize: vertical; }
         .checkbox-group {
