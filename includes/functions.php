@@ -26,7 +26,7 @@ if (!function_exists('require_admin')) {
     function require_admin() {
         require_login();
         if (!is_admin()) {
-            header("Location: ../pages/home.php?error=access_denied");
+            header("Location: ../pages/access-denied.php");
             exit;
         }
     }
@@ -34,7 +34,7 @@ if (!function_exists('require_admin')) {
 
 if (!function_exists('get_current_user')) {
     function get_current_user() {
-        $pdo = getDBConnection();  // ← Get connection here!
+        $pdo = getDBConnection();
         if (!is_logged_in()) return null;
         
         $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");

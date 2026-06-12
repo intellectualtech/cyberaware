@@ -118,8 +118,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Training Simulation - <?php echo htmlspecialchars($session['title']); ?></title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
     <style>
+        :root {
+            --primary: #FF8C42;
+            --platinum: #E5E4E2;
+            --ink: #1f2937;
+        }
+
+        body {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(1000px 520px at 12% -10%, #fff1e4 0%, transparent 60%),
+                linear-gradient(135deg, #ffffff 0%, var(--platinum) 100%);
+            color: var(--ink);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+        }
         .simulation-container {
             max-width: 1000px;
             margin: 0 auto;
@@ -127,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         }
         
         .simulation-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff8c42 0%, #ffd2b3 100%);
             color: white;
             padding: 30px;
             border-radius: 15px;
@@ -213,14 +230,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         }
         
         .action-btn-success {
-            background: #27ae60;
+            background: var(--primary);
             color: white;
         }
         
         .action-btn-success:hover {
-            background: #229954;
+            background: #ff7a20;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+            box-shadow: 0 5px 15px rgba(255, 140, 66, 0.35);
         }
         
         .action-btn-secondary {

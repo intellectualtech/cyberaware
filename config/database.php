@@ -3,8 +3,8 @@
 // Database Configuration
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
-define('DB_PASS', 'David');
-define('DB_NAME', 'cyberaware;');
+define('DB_PASS', '');
+define('DB_NAME', 'cyberaware'); // Project: CyberAware
 
 // Create database connection
 function getDBConnection() {

@@ -175,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             --white: #FFFFFF;
             --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
             --sidebar-width: 260px;
+            --sidebar-height: 72px;
             --radius: 12px;
         }
 
@@ -186,13 +187,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--gray-50);
+            background: linear-gradient(135deg, #EE8E46 0%, #E67A2E 100%);
             color: var(--dark);
             line-height: 1.6;
         }
 
         .main-content {
-            margin-left: var(--sidebar-width);
+            margin-bottom: var(--sidebar-height);
             padding: 3rem 2rem;
             min-height: 100vh;
         }

@@ -40,8 +40,10 @@ exit;
 
     <style>
         :root {
-            --primary: #1d4ed8;
-            --gray-50: #f8fafc;
+            --primary: #FF8C42;
+            --cyber-yellow: #FF8C42;
+            --white: #FFFFFF;
+            --gray-50: #F3F4F6;
             --gray-800: #1e293b;
         }
 

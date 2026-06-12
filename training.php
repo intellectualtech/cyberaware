@@ -45,15 +45,33 @@ $template_info = $stmt->fetch();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($module['title']); ?> - CyberShield</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
     <style>
+        :root {
+            --primary: #FF8C42;
+            --platinum: #E5E4E2;
+            --ink: #1f2937;
+        }
+
+        body {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(1000px 520px at 10% -10%, #fff1e4 0%, transparent 60%),
+                linear-gradient(135deg, #ffffff 0%, var(--platinum) 100%);
+            color: var(--ink);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+        }
+
         .module-detail {
             max-width: 900px;
             margin: 0 auto;
         }
         
         .module-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff8c42 0%, #ffd2b3 100%);
             color: white;
             padding: 50px;
             border-radius: 15px;
@@ -83,7 +101,7 @@ $template_info = $stmt->fetch();
         .meta-value {
             font-size: 32px;
             font-weight: bold;
-            color: #667eea;
+            color: var(--primary);
             margin: 10px 0;
         }
         
@@ -109,13 +127,13 @@ $template_info = $stmt->fetch();
             padding: 15px;
             margin: 10px 0;
             background: #f8f9fa;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid var(--primary);
             border-radius: 4px;
         }
         
         .learning-objectives li:before {
             content: "✓ ";
-            color: #27ae60;
+            color: var(--primary);
             font-weight: bold;
             margin-right: 10px;
         }
@@ -137,7 +155,7 @@ $template_info = $stmt->fetch();
         }
         
         .start-training-section {
-            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            background: linear-gradient(135deg, #ff8c42 0%, #ffb884 100%);
             color: white;
             padding: 40px;
             border-radius: 15px;
@@ -158,7 +176,7 @@ $template_info = $stmt->fetch();
             font-size: 20px;
             padding: 15px 40px;
             background: white;
-            color: #27ae60;
+            color: var(--primary);
         }
         
         .start-btn:hover {
